@@ -1,0 +1,93 @@
+import { useContext } from "react";
+import styled from "styled-components";
+
+import { SpotifyContext } from "../contexts/SpotifyContext";
+
+const BpmRange = ({ bpmRange, setBpmRange }) => {
+  const { MAX_BPM_RANGE } = useContext(SpotifyContext);
+
+  const handleBpmChange = (ev) => {
+    const value = Number(ev.target.value);
+    setBpmRange(value);
+  };
+
+  return (
+    <Wrapper>
+      <Text>BPM</Text>
+      <StyledContainer>
+        <StyledInput
+          type="range"
+          step={1}
+          max={MAX_BPM_RANGE}
+          value={bpmRange}
+          onChange={handleBpmChange}
+        />
+        <StyledTrack />
+        <StyledRange bpmRange={bpmRange} max={MAX_BPM_RANGE} />
+      </StyledContainer>
+      <Text style={{ width: "32px" }}>
+        {bpmRange < MAX_BPM_RANGE ? "±" + bpmRange : "All"}
+      </Text>
+    </Wrapper>
+  );
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+const Text = styled.p`
+  font-weight: bold;
+  line-height: 32px;
+`;
+
+const StyledContainer = styled.div`
+  position: relative;
+  width: 120px;
+  height: 24px;
+  margin: 0;
+`;
+
+const StyledInput = styled.input`
+  -webkit-appearance: none;
+  position: absolute;
+  width: 120px;
+  top: 12px;
+  height: 0;
+  margin: 0;
+  outline: none;
+  z-index: 3;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    width: 16px;
+    height: 24px;
+    background-color: var(--color-orange-accent);
+    cursor: pointer;
+  }
+`;
+
+const StyledTrack = styled.div`
+  position: absolute;
+  height: 24px;
+  width: 100%;
+  background-color: #282828;
+  left: 0;
+  top: 0;
+  z-index: 0;
+`;
+
+const StyledRange = styled.div`
+  position: absolute;
+  height: 24px;
+  width: ${(props) => (props.bpmRange / props.max) * 100}%;
+  background-color: rgba(255, 175, 65, 0.2);
+  left: 0;
+  top: 0;
+  z-index: 1;
+`;
+
+export default BpmRange;
