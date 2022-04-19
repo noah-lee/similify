@@ -36,4 +36,4 @@ app.get("/api/saved", getLiked);
 app.post("/api/popular-searches", addPopularSearches);
 app.get("/api/popular-searches", getPopularSearches)
 
-app.listen(PORT, () => console.log(`Listenening on ${PORT}`));
+app.listen(process.env.PORT || PORT, () => console.log(`Listenening on ${PORT}`));
