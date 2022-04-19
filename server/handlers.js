@@ -10,7 +10,8 @@ const options = {
   useUnifiedTopology: true,
 };
 
-const REDIRECT_URI = "http://localhost:3000/";
+const REDIRECT_URI = "https://similify.netlify.app/";
+// const REDIRECT_URI = "http://localhost:3000/";
 const SCOPES = "user-library-read";
 
 const logIn = async (req, res) => {
@@ -179,11 +180,10 @@ const getLiked = async (req, res) => {
   }
 };
 
-const getSavedTracks = async (req, res) =>{
+const getSavedTracks = async (req, res) => {
   const { access_token } = req.headers;
   const query = req.query;
-  
-}
+};
 
 const addPopularSearches = async (req, res) => {
   // Request body
