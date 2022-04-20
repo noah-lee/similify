@@ -20,7 +20,7 @@ const DisplayName = () => {
         });
         setDisplayName(res.data.display_name);
       } catch (err) {
-        // window.alert(err.response.data.message);
+        window.alert(err.response.data.message);
         setAccessToken("");
       }
     };
