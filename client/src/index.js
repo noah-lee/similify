@@ -4,9 +4,10 @@ import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 
+import { SpotifyContextProvider } from "./contexts/SpotifyContext";
+
 axios.defaults.baseURL = "https://similify-server.herokuapp.com";
 
-import { SpotifyContextProvider } from "./contexts/SpotifyContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
