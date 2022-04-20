@@ -98,6 +98,7 @@ const TrackNumber = styled.p``;
 
 const TrackLink = styled.div`
   position: relative;
+  height: 48px;
 `;
 
 const TrackUri = styled.button`
