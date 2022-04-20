@@ -1,4 +1,5 @@
 # Similify
+![alt text](https://github.com/noah-lee/similify/blob/main/client/public/logo192.png)
 
 Live preview: https://similify.netlify.app/
 
