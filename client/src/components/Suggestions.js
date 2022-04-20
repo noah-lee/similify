@@ -98,6 +98,7 @@ const Suggestion = styled.div`
   border-radius: 16px;
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
   &:hover {
     background-color: var(--color-orange-accent);
   }
