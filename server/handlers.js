@@ -13,7 +13,7 @@ const options = {
 const REDIRECT_URI = "https://similify.netlify.app/";
 // const REDIRECT_URI = "http://localhost:3000/";
 const SCOPES =
-  "user-read-private user-read-email user-library-read user-library-modify user-modify-playback-state";
+  "user-read-private user-read-email user-library-read user-library-modify user-modify-playback-state playlist-read-public playlist-read-private playlist-modify-public playlist-modify-private";
 
 // SPOTIFY ENDPOINTS
 
