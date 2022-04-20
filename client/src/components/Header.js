@@ -25,7 +25,7 @@ const Header = () => {
       <Container>
         {accessToken ? (
           <>
-            <DisplayName />
+            {/* <DisplayName /> */}
             <LogOut />
           </>
         ) : (
