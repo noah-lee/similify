@@ -138,6 +138,7 @@ const FilterSection = styled.div`
   width: 596px;
   display: flex;
   padding: 16px;
+  margin-top: 64px;
   justify-content: space-between;
   align-items: center;
   background-color: var(--color-dark-contrast);

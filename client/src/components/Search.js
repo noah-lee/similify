@@ -96,7 +96,6 @@ const Wrapper = styled.form`
   position: relative;
   padding: 4px 16px;
   border-radius: 48px;
-  margin-bottom: 64px;
   background-color: white;
 
   &:hover {

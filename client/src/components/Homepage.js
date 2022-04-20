@@ -20,13 +20,11 @@ const Homepage = () => {
 
 const Wrapper = styled.div`
   display: flex;
-  width: 100%;
+  margin: 64px 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 64px;
-  position: absolute;
-  top: 64px;
 `;
 
 const Instructions = styled.p`
