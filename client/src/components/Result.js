@@ -129,14 +129,12 @@ const Result = () => {
           )}
         </ResultContainer>
       </Wrapper>
-      {showScrollUp ? (
+      {showScrollUp && (
         <ScrollUpContainer>
           <ScrollUp onClick={handleReturnTopClick}>
             <FiChevronUp size="40px" />
           </ScrollUp>
         </ScrollUpContainer>
-      ) : (
-        <Divider />
       )}
       <Divider />
     </>
@@ -211,22 +209,22 @@ const HeaderKey = styled.button`
 const ScrollUpContainer = styled.div`
   position: sticky;
   bottom: 64px;
-  height: 64px;
-  display: flex;
-  justify-content: flex-end;
+  width: 64px;
+  float: right;
+  text-align: center;
   margin: 0 64px;
 `;
 
 const ScrollUp = styled.button`
   color: white;
-
+  height: 64px;
   &:hover {
     color: var(--color-orange-accent);
   }
 `;
 
 const Divider = styled.div`
-  height: 64px;
+  height: 128px;
 `;
 
 export default Result;

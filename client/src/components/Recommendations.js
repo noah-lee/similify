@@ -51,13 +51,13 @@ const Recommendations = ({
           bpmRange === MAX_BPM_RANGE
             ? 200
             : Number(seedFeatures.tempo.toFixed()) + bpmRange + 0.49,
-        // target_acousticness: seedFeatures.acousticness,
+        target_acousticness: seedFeatures.acousticness,
         target_danceability: seedFeatures.danceability,
         target_energy: seedFeatures.energy,
-        // target_instrumentalness: seedFeatures.instrumentalness,
-        // target_liveness: seedFeatures.liveness,
-        // target_loudness: seedFeatures.loudness,
-        // target_speechiness: seedFeatures.speechiness,
+        target_instrumentalness: seedFeatures.instrumentalness,
+        target_liveness: seedFeatures.liveness,
+        target_loudness: seedFeatures.loudness,
+        target_speechiness: seedFeatures.speechiness,
         target_time_signature: seedFeatures.time_signature,
         target_valence: seedFeatures.valence,
       });
