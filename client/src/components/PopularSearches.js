@@ -44,6 +44,7 @@ const PopularSearches = () => {
           {popularSearches.map((track) => (
             <Popular
               disabled={accessToken ? false : true}
+              style={{ pointerEvents: accessToken ? "auto" : "none" }}
               key={track.id}
               onClick={() => handlePopularClick(track)}
             >
@@ -64,7 +65,9 @@ const PopularSearches = () => {
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  position: relative;
+`;
 
 const PopularSearchesContainer = styled.div`
   display: grid;

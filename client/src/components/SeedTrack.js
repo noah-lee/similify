@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
-import { FiPlay, FiHeart } from "react-icons/fi";
+import { FiHeart } from "react-icons/fi";
+
+import spotifyLogoWhitePath from "../assets/Spotify_Icon_RGB_White.png";
 
 import { msToMinSec } from "../utils/time";
 import { toLetterKey, toCamelotKey, toColor } from "../utils/key";
@@ -59,7 +61,7 @@ const SeedTrack = ({ seed, seedFeatures, showCamelot }) => {
             target="_blank">
         <TrackArt src={seed.album.images[2].url} height="48px" />
         <TrackUri onClick={handleArtClick}>
-          <FiPlay size="20px" fill="#f3f3f3" />
+          <SpotifyLogo src={spotifyLogoWhitePath} />
         </TrackUri>
       </TrackLink>
       <TrackTitle>
@@ -119,6 +121,10 @@ const TrackUri = styled.button`
   &:hover {
     opacity: 1;
   }
+`;
+
+const SpotifyLogo = styled.img`
+  width: 24px;
 `;
 
 const TrackArt = styled.img``;
