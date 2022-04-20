@@ -143,7 +143,6 @@ const Recommendations = ({
         const sortedRecommendations = filteredRecommendations.sort((a, b) => {
           return b.popularity - a.popularity;
         });
-        console.log(sortedRecommendations);
         setRecommendations(sortedRecommendations);
       } catch (err) {
         window.alert(err.response.data.message);

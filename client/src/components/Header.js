@@ -13,9 +13,6 @@ import DisplayName from "./DisplayName";
 const Header = () => {
   const { accessToken } = useContext(SpotifyContext);
 
-  console.log("accessToken:");
-  console.log(accessToken);
-
   return (
     <Wrapper>
       <Brand to="/">
@@ -25,7 +22,7 @@ const Header = () => {
       <Container>
         {accessToken ? (
           <>
-            {/* <DisplayName /> */}
+            <DisplayName />
             <LogOut />
           </>
         ) : (
