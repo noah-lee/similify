@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
-import axios from "axios";
 
 import { SpotifyContextProvider } from "./contexts/SpotifyContext";
 
