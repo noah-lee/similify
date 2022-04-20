@@ -24,6 +24,7 @@ const {
   removeTrack,
   addPopularSearches,
   getPopularSearches,
+  startPlayback,
 } = require("./handlers.js");
 
 // SPOTIFY ENDPOINTS
@@ -35,6 +36,7 @@ app.get("/api/recommendations", getRecommendations);
 app.get("/api/check-saved-tracks", checkSavedTracks);
 app.put("/api/save-track", saveTrack);
 app.delete("/api/remove-track", removeTrack);
+app.put("/api/play/", startPlayback);
 
 // MONGODB ENDPOINTS
 app.post("/api/popular-searches", addPopularSearches);

@@ -59,6 +59,9 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
     axios.post("/api/popular-searches", {
       track,
     });
+    axios.put("/api/play", {
+      context_uri: track.uri,
+    });
     setSeed(track);
   };
 
@@ -69,7 +72,12 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
           <TrackNumber>{number}</TrackNumber>
           <TrackLink>
             <TrackArt src={track.album.images[2].url} height="48px" />
-            <TrackUri href={track.uri} onClick={(ev)=>{ev.stopPropagation()}}>
+            <TrackUri
+              href={track.uri}
+              onClick={(ev) => {
+                ev.stopPropagation();
+              }}
+            >
               <FiPlay size="20px" fill="#f3f3f3" />
             </TrackUri>
           </TrackLink>

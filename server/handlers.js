@@ -13,7 +13,7 @@ const options = {
 const REDIRECT_URI = "https://similify.netlify.app/";
 // const REDIRECT_URI = "http://localhost:3000/";
 const SCOPES =
-  "user-read-private user-read-email user-library-read user-library-modify";
+  "user-read-private user-read-email user-library-read user-library-modify user-modify-playback-state";
 
 // SPOTIFY ENDPOINTS
 
@@ -168,6 +168,26 @@ const removeTrack = async (req, res) => {
   }
 };
 
+// Start Playback
+const startPlayback = async (req, res) => {
+  const { access_token } = req.headers;
+  const query = req.body;
+  try {
+    const spotifyRes = await axios.put(
+      "https://api.spotify.com/v1/me/player/play",
+      { query },
+      {
+        headers: {
+          Authorization: "Bearer " + access_token,
+        },
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+    res.status(err.response.status).json(err.response.data.error);
+  }
+};
+
 // MONGODB ENDPOINTS
 
 const addPopularSearches = async (req, res) => {
@@ -235,6 +255,7 @@ module.exports = {
   checkSavedTracks,
   saveTrack,
   removeTrack,
+  startPlayback,
   addPopularSearches,
   getPopularSearches,
 };
