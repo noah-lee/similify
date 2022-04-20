@@ -10,7 +10,7 @@ import { msToMinSec } from "../utils/time";
 const PopularSearches = () => {
   const navigate = useNavigate();
 
-  const { seed, setSeed } = useContext(SpotifyContext);
+  const { seed, setSeed, accessToken } = useContext(SpotifyContext);
 
   const [popularSearches, setPopularSearches] = useState("");
 
@@ -37,7 +37,11 @@ const PopularSearches = () => {
       {popularSearches ? (
         <PopularSearchesContainer>
           {popularSearches.map((track) => (
-            <Popular key={track.id} onClick={() => handlePopularClick(track)}>
+            <Popular
+              disabled={accessToken ? false : true}
+              key={track.id}
+              onClick={() => handlePopularClick(track)}
+            >
               <Art src={track.album.images[2].url} height="48px" />
               <Title>
                 <Name>{track.name}</Name>
