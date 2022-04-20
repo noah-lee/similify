@@ -41,12 +41,23 @@ const SeedTrack = ({ seed, seedFeatures, showCamelot }) => {
     setSaved((prevState) => !prevState);
   };
 
+  // Handle art click
+  const handleArtClick = (ev) => {
+    ev.stopPropagation();
+    axios.put("/api/play", {
+      context_uri: seed.album.uri,
+      offset: {
+        position: seed.track_number - 1,
+      },
+    });
+  };
+
   return (
     <TrackArea>
       <TrackNumber>🌱</TrackNumber>
       <TrackLink>
         <TrackArt src={seed.album.images[2].url} height="48px" />
-        <TrackUri href={seed.uri}>
+        <TrackUri onClick={handleArtClick}>
           <FiPlay size="20px" fill="#f3f3f3" />
         </TrackUri>
       </TrackLink>
@@ -89,7 +100,7 @@ const TrackLink = styled.div`
   position: relative;
 `;
 
-const TrackUri = styled.a`
+const TrackUri = styled.button`
   position: absolute;
   left: 0;
   top: 0;

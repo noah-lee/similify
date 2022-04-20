@@ -59,10 +59,19 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
     axios.post("/api/popular-searches", {
       track,
     });
-    axios.put("/api/play", {
-      context_uri: track.uri,
-    });
+
     setSeed(track);
+  };
+
+  // Handle art click
+  const handleArtClick = (ev) => {
+    ev.stopPropagation();
+    axios.put("/api/play", {
+      context_uri: track.album.uri,
+      offset: {
+        position: track.track_number - 1,
+      },
+    });
   };
 
   return (
@@ -72,12 +81,7 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
           <TrackNumber>{number}</TrackNumber>
           <TrackLink>
             <TrackArt src={track.album.images[2].url} height="48px" />
-            <TrackUri
-              href={track.uri}
-              onClick={(ev) => {
-                ev.stopPropagation();
-              }}
-            >
+            <TrackUri onClick={handleArtClick}>
               <FiPlay size="20px" fill="#f3f3f3" />
             </TrackUri>
           </TrackLink>
@@ -141,7 +145,7 @@ const TrackLink = styled.div`
   height: 48px;
 `;
 
-const TrackUri = styled.a`
+const TrackUri = styled.button`
   position: absolute;
   left: 0;
   top: 0;

@@ -175,7 +175,7 @@ const startPlayback = async (req, res) => {
   try {
     const spotifyRes = await axios.put(
       "https://api.spotify.com/v1/me/player/play",
-      { query },
+      query,
       {
         headers: {
           Authorization: "Bearer " + access_token,
@@ -184,6 +184,7 @@ const startPlayback = async (req, res) => {
     );
     res.status(spotifyRes.status).json(spotifyRes.data);
   } catch (err) {
+    console.log(err.response.data.error);
     res.status(err.response.status).json(err.response.data.error);
   }
 };
