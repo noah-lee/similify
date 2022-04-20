@@ -1,9 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styled, { keyframes } from "styled-components";
-import { FiPlay } from "react-icons/fi";
-import { ReactComponent as SimilifyLoader } from "../assets/similify_loader.svg";
+import styled from "styled-components";
+import { FiPlay, FiHeart } from "react-icons/fi";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
 
@@ -14,8 +13,9 @@ import { toLetterKey, toCamelotKey, toColor } from "../utils/key";
 
 const Track = ({ track, number, camelotMatches, showCamelot }) => {
   const navigate = useNavigate();
-  const { accessToken, setAccessToken } = useContext(SpotifyContext);
+  const { accessToken, setAccessToken, setSeed } = useContext(SpotifyContext);
   const [features, setFeatures] = useState("");
+  const [saved, setSaved] = useState(track.saved);
 
   // Get result track data
   useEffect(() => {
@@ -28,23 +28,48 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
         });
         setFeatures(res.data);
       } catch (err) {
-        window.alert(err.response.data.message);
         setAccessToken("");
         navigate("/");
-        window.location.reload(false);
       }
     };
     getFeatures();
   }, [track]);
 
+  // Heart styling
+  const heartStyle = {
+    color: saved ? "var(--color-orange-accent)" : "gray",
+    fill: saved ? "var(--color-orange-accent)" : "none",
+  };
+
+  // Handle heart click
+  const handleHeartClick = (ev) => {
+    ev.stopPropagation();
+    if (saved) {
+      axios.delete(
+        "/api/remove-track?" + new URLSearchParams({ ids: track.id })
+      );
+    } else {
+      axios.put("/api/save-track?" + new URLSearchParams({ ids: track.id }));
+    }
+    setSaved((prevState) => !prevState);
+  };
+
+  // Handle track click
+  const handleTrackClick = () => {
+    axios.post("/api/popular-searches", {
+      track,
+    });
+    setSeed(track);
+  };
+
   return (
     <>
       {features ? (
-        <TrackArea>
+        <TrackArea onClick={handleTrackClick}>
           <TrackNumber>{number}</TrackNumber>
           <TrackLink>
             <TrackArt src={track.album.images[2].url} height="48px" />
-            <TrackUri href={track.uri}>
+            <TrackUri href={track.uri} onClick={(ev)=>{ev.stopPropagation()}}>
               <FiPlay size="20px" fill="#f3f3f3" />
             </TrackUri>
           </TrackLink>
@@ -74,6 +99,9 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
               ? toCamelotKey(features.key, features.mode)
               : toLetterKey(features.key, features.mode)}
           </TrackKey>
+          <TrackIsSaved onClick={handleHeartClick}>
+            <FiHeart size="20px" style={heartStyle} />
+          </TrackIsSaved>
         </TrackArea>
       ) : (
         <LoaderContainer>
@@ -86,11 +114,16 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
 
 const TrackArea = styled.div`
   display: grid;
-  grid-template-columns: 20px 48px 257px 48px 48px 64px;
+  grid-template-columns: 32px 48px 257px 48px 48px 64px 20px;
   gap: 16px;
   padding: 16px;
   background-color: var(--color-dark-contrast);
   align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-dark-light);
+  }
 `;
 
 const TrackNumber = styled.p``;
@@ -131,12 +164,13 @@ const TrackArtists = styled.p`
   color: gray;
 `;
 const TrackTime = styled.p``;
-const TrackGenres = styled.p``;
 const TrackBpm = styled.p``;
 const TrackKey = styled.p``;
 
 const LoaderContainer = styled.div`
   padding: 16px;
 `;
+
+const TrackIsSaved = styled.button``;
 
 export default Track;

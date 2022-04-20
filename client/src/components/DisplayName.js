@@ -13,22 +13,21 @@ const DisplayName = () => {
   useEffect(() => {
     const getUserInfo = async () => {
       try {
-        const res = await axios(`/api/user-info`, {
-          headers: {
-            access_token: accessToken,
-          },
-        });
+        const res = await axios("/api/user-info");
         setDisplayName(res.data.display_name);
       } catch (err) {
-        window.alert(err.response.data.message);
         setAccessToken("");
       }
     };
     getUserInfo();
-  }, [accessToken, setAccessToken]);
+  }, [accessToken]);
 
   return (
-    <>{displayName && <StyledDisplayName>Hello {displayName}</StyledDisplayName>}</>
+    <>
+      {displayName && (
+        <StyledDisplayName>Hello {displayName}</StyledDisplayName>
+      )}
+    </>
   );
 };
 

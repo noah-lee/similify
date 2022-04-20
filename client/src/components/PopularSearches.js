@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
 
-import { msToMinSec } from "../utils/time";
+import Loader from "./Loader";
 
 const PopularSearches = () => {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ const PopularSearches = () => {
 
   const [popularSearches, setPopularSearches] = useState("");
 
+  // Get popular searches from database
   useEffect(() => {
     const getPopularSearches = async () => {
       try {
@@ -26,7 +27,11 @@ const PopularSearches = () => {
     getPopularSearches();
   }, [seed]);
 
+  // Handle popular track click
   const handlePopularClick = (track) => {
+    axios.post("/api/popular-searches", {
+      track,
+    });
     setSeed(track);
     navigate("/result");
   };
@@ -53,15 +58,13 @@ const PopularSearches = () => {
           ))}
         </PopularSearchesContainer>
       ) : (
-        <Text>Nothing to see here..</Text>
+        <Loader />
       )}
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
-  /* width: 480px; */
-`;
+const Wrapper = styled.div``;
 
 const PopularSearchesContainer = styled.div`
   display: grid;

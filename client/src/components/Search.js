@@ -41,19 +41,12 @@ const Search = () => {
             "/api/search?" +
               new URLSearchParams({
                 q: query,
-              }),
-            {
-              headers: {
-                access_token: accessToken,
-              },
-            }
+              })
           );
           setSuggestions(res.data.tracks.items);
         } catch (err) {
-          // window.alert(err.response.data.message);
-          navigate("/");
           setAccessToken("");
-          window.location.reload(false);
+          navigate("/");
         }
       };
       getSearch();
@@ -71,9 +64,7 @@ const Search = () => {
         required={true}
         type="text"
         value={query}
-        placeholder={
-          accessToken ? "Look for a song" : "Please log in"
-        }
+        placeholder={accessToken ? "Look for a song" : "Please log in"}
         onChange={handleQueryChange}
       />
       {query && !suggestions && (
@@ -82,7 +73,11 @@ const Search = () => {
         </Loader>
       )}
       {suggestions && (
-        <Suggestions suggestions={suggestions} query={query} setQuery={setQuery} />
+        <Suggestions
+          suggestions={suggestions}
+          query={query}
+          setQuery={setQuery}
+        />
       )}
     </Wrapper>
   );

@@ -6,6 +6,7 @@ import { SpotifyContext } from "../contexts/SpotifyContext";
 const BpmRange = ({ bpmRange, setBpmRange }) => {
   const { MAX_BPM_RANGE } = useContext(SpotifyContext);
 
+  // Handle BPM change
   const handleBpmChange = (ev) => {
     const value = Number(ev.target.value);
     setBpmRange(value);
@@ -74,7 +75,7 @@ const StyledTrack = styled.div`
   position: absolute;
   height: 24px;
   width: 100%;
-  background-color: #282828;
+  background-color: var(--color-dark-light);
   left: 0;
   top: 0;
   z-index: 0;

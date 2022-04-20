@@ -4,16 +4,20 @@ const axios = require("axios");
 const { MongoClient } = require("mongodb");
 require("dotenv").config({ path: "../.env" });
 
+// CONFIG
 const { MONGO_URI, CLIENT_ID } = process.env;
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
-
 const REDIRECT_URI = "https://similify.netlify.app/";
 // const REDIRECT_URI = "http://localhost:3000/";
-const SCOPES = "user-read-private user-read-email user-library-read";
+const SCOPES =
+  "user-read-private user-read-email user-library-read user-library-modify";
 
+// SPOTIFY ENDPOINTS
+
+// Get Spotify login url
 const logIn = async (req, res) => {
   const spotifyAuthUrl =
     "https://accounts.spotify.com/authorize?" +
@@ -27,8 +31,11 @@ const logIn = async (req, res) => {
   res.status(200).json({ status: 200, url: spotifyAuthUrl });
 };
 
+// Get user info
 const getUserInfo = async (req, res) => {
   const { access_token } = req.headers;
+  console.log("get user info");
+  console.log(req.headers.access_token);
   try {
     const spotifyRes = await axios("https://api.spotify.com/v1/me", {
       headers: {
@@ -41,6 +48,7 @@ const getUserInfo = async (req, res) => {
   }
 };
 
+// Search track
 const search = async (req, res) => {
   const { access_token } = req.headers;
   const { q } = req.query;
@@ -63,21 +71,7 @@ const search = async (req, res) => {
   }
 };
 
-// const getTrack = async (req, res) => {
-//   const { access_token } = req.headers;
-//   const { id } = req.params;
-//   try {
-//     const spotifyRes = await axios(`https://api.spotify.com/v1/tracks/${id}`, {
-//       headers: {
-//         Authorization: "Bearer " + access_token,
-//       },
-//     });
-//     res.status(spotifyRes.status).json(spotifyRes.data);
-//   } catch (err) {
-//     res.status(err.response.status).json(err.response.data.error);
-//   }
-// };
-
+// Get track audio features (bpm, key, mode, etc.)
 const getAudioFeatures = async (req, res) => {
   const { access_token } = req.headers;
   const { id } = req.params;
@@ -96,59 +90,7 @@ const getAudioFeatures = async (req, res) => {
   }
 };
 
-// const getArtist = async (req, res) => {
-//   const { access_token } = req.headers;
-//   const { id } = req.params;
-//   try {
-//     const spotifyRes = await axios(`https://api.spotify.com/v1/artists/${id}`, {
-//       headers: {
-//         Authorization: "Bearer " + access_token,
-//       },
-//     });
-//     res.status(spotifyRes.status).json(spotifyRes.data);
-//   } catch (err) {
-//     res.status(err.response.status).json(err.response.data.error);
-//   }
-// };
-
-// const getTrackData = async (req, res) => {
-//   const { access_token } = req.headers;
-//   const { track_id, artist_id } = req.query;
-//   try {
-//     const trackInfo = await axios(
-//       `https://api.spotify.com/v1/tracks/${track_id}`,
-//       {
-//         headers: {
-//           Authorization: "Bearer " + access_token,
-//         },
-//       }
-//     );
-//     const audioFeatures = await axios(
-//       `https://api.spotify.com/v1/audio-features/${track_id}`,
-//       {
-//         headers: {
-//           Authorization: "Bearer " + access_token,
-//         },
-//       }
-//     );
-//     const artistInfo = await axios(
-//       `https://api.spotify.com/v1/artists/${artist_id}`,
-//       {
-//         headers: {
-//           Authorization: "Bearer " + access_token,
-//         },
-//       }
-//     );
-//     res.status(200).json({
-//       track_info: trackInfo.data,
-//       audio_features: audioFeatures.data,
-//       artist_info: artistInfo.data,
-//     });
-//   } catch (err) {
-//     res.status(err.response.status).json(err.response.data.error);
-//   }
-// };
-
+// Get recommendations
 const getRecommendations = async (req, res) => {
   const { access_token } = req.headers;
   const query = req.query;
@@ -166,24 +108,67 @@ const getRecommendations = async (req, res) => {
   }
 };
 
-const getLiked = async (req, res) => {
+// Get saved tracks
+const checkSavedTracks = async (req, res) => {
   const { access_token } = req.headers;
+  const query = req.query;
   try {
-    const spotifyRes = await axios("https://api.spotify.com/v1/me/tracks", {
-      headers: {
-        Authorization: "Bearer " + access_token,
-      },
-    });
+    const spotifyRes = await axios(
+      "	https://api.spotify.com/v1/me/tracks/contains?" +
+        new URLSearchParams(query),
+      {
+        headers: {
+          Authorization: "Bearer " + access_token,
+        },
+      }
+    );
     res.status(spotifyRes.status).json(spotifyRes.data);
   } catch (err) {
     res.status(err.response.status).json(err.response.data.error);
   }
 };
 
-const getSavedTracks = async (req, res) => {
+// Add track to user saved tracks
+const saveTrack = async (req, res) => {
   const { access_token } = req.headers;
   const query = req.query;
+  try {
+    const spotifyRes = await axios(
+      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(query),
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + access_token,
+        },
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+    console.log(err.response.data.error);
+    res.status(err.response.status).json(err.response.data.error);
+  }
 };
+
+// Add track to user saved tracks
+const removeTrack = async (req, res) => {
+  const { access_token } = req.headers;
+  const query = req.query;
+  try {
+    const spotifyRes = await axios.delete(
+      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(query),
+      {
+        headers: {
+          Authorization: "Bearer " + access_token,
+        },
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+    res.status(err.response.status).json(err.response.data.error);
+  }
+};
+
+// MONGODB ENDPOINTS
 
 const addPopularSearches = async (req, res) => {
   // Request body
@@ -225,6 +210,9 @@ const getPopularSearches = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db();
+  // Get popular searches from database
+  // Sort by popularity & last searched and
+  // Limit to top 8
   try {
     const sortedCollection = await db
       .collection("tracks")
@@ -242,12 +230,11 @@ module.exports = {
   logIn,
   getUserInfo,
   search,
-  // getTrack,
   getAudioFeatures,
-  // getArtist,
-  // getTrackData,
   getRecommendations,
-  getLiked,
+  checkSavedTracks,
+  saveTrack,
+  removeTrack,
   addPopularSearches,
   getPopularSearches,
 };

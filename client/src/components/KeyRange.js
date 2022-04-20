@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 const KeyRange = ({ keyRange, setKeyRange }) => {
 
-  const handleBpmChange = (ev) => {
+  // Handle key change
+  const handleKeyChange = (ev) => {
     const value = Number(ev.target.value);
     setKeyRange(value);
   };
@@ -16,7 +17,7 @@ const KeyRange = ({ keyRange, setKeyRange }) => {
           step={1}
           max={6}
           value={keyRange}
-          onChange={handleBpmChange}
+          onChange={handleKeyChange}
         />
         <StyledTrack />
         <StyledRange keyRange={keyRange} max={6} />
@@ -70,7 +71,7 @@ const StyledTrack = styled.div`
   position: absolute;
   height: 24px;
   width: 100%;
-  background-color: #282828;
+  background-color: var(--color-dark-light);
   left: 0;
   top: 0;
   z-index: 0;

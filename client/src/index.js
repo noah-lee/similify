@@ -6,15 +6,12 @@ import axios from "axios";
 
 import { SpotifyContextProvider } from "./contexts/SpotifyContext";
 
-axios.defaults.baseURL = "https://similify-server.herokuapp.com";
-
-
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
-  <SpotifyContextProvider>
-    <App />
-  </SpotifyContextProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <SpotifyContextProvider>
+      <App />
+    </SpotifyContextProvider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

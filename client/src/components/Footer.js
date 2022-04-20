@@ -10,19 +10,24 @@ const Footer = () => {
           <FiInfo />
           <p>About</p>
         </StyledLink>
-        <StyledA href="https://github.com/noah-lee" target="_blank">
+        <StyledA href="https://github.com/noah-lee/similify" target="_blank">
           <FiGithub />
           <p>GitHub</p>
         </StyledA>
       </LinkContainer>
-      <SpotifyText>Powered by Spotify</SpotifyText>
+      <SpotifyText>
+        Powered by{" "}
+        <SpotifyA href="http://spotify.com/" target="_blank">
+          Spotify
+        </SpotifyA>
+      </SpotifyText>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   background-color: var(--color-dark-contrast);
-  height:96px;
+  height: 96px;
   padding: 16px 32px;
   font-weight: bold;
   flex: none;
@@ -70,6 +75,11 @@ const SpotifyText = styled.p`
   color: gray;
   font-weight: normal;
   font-size: 12px;
-`
+`;
+
+const SpotifyA = styled.a`
+  text-decoration: none;
+  color: var(--color-orange-accent);
+`;
 
 export default Footer;

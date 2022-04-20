@@ -21,19 +21,20 @@ const Recommendations = ({
 }) => {
   const navigate = useNavigate();
 
-  const { accessToken, setAccessToken, MAX_BPM_RANGE } =
+  const { setAccessToken, MAX_BPM_RANGE } =
     useContext(SpotifyContext);
+
   const [recommendations, setRecommendations] = useState("");
-
   const [load, setLoad] = useState(10);
-  const [wait, setWait] = useState(false);
 
-  //Get result tracks
+  //Get recommendations tracks
   useEffect(() => {
     const getRecommendations = async () => {
+      // Reset recommendations
       setRecommendations("");
+      // Reset Load to 10
       setLoad(10);
-      const keyMode = toKeyModeMatches(
+      const keyModeMatches = toKeyModeMatches(
         seedFeatures.key,
         seedFeatures.mode,
         keyRange
@@ -61,124 +62,106 @@ const Recommendations = ({
         target_valence: seedFeatures.valence,
       });
       try {
-        const majLowRes = await axios(
-          "/api/recommendations?" +
-            defaultParams +
-            "&" +
-            new URLSearchParams({
-              min_key: keyMode.major.lower[0],
-              max_key: keyMode.major.lower[1],
-              min_mode: keyMode.major.mode,
-              max_mode: keyMode.major.mode,
-            }),
-          {
-            headers: {
-              access_token: accessToken,
-            },
+        // Get combined recommendations
+        const combinedRecommendations = [];
+        for (let match of keyModeMatches) {
+          const lowRes = await axios(
+            "/api/recommendations?" +
+              defaultParams +
+              "&" +
+              new URLSearchParams({
+                min_key: match.lower[0],
+                max_key: match.lower[1],
+                min_mode: match.mode,
+                max_mode: match.mode,
+              })
+          );
+          combinedRecommendations.push(lowRes.data.tracks);
+          const upRes = await axios(
+            "/api/recommendations?" +
+              defaultParams +
+              "&" +
+              new URLSearchParams({
+                min_key: match.upper[0],
+                max_key: match.upper[1],
+                min_mode: match.mode,
+                max_mode: match.mode,
+              })
+          );
+          combinedRecommendations.push(upRes.data.tracks);
+        }
+        // Flatten recommendations
+        const flattenedRecommendations = combinedRecommendations.flat();
+        // Remove all duplicate recommendations
+        const uniqueIds = [];
+        const uniqueRecommendations = flattenedRecommendations.filter(
+          (track) => {
+            const exists = uniqueIds.includes(track.id);
+            if (!exists) {
+              uniqueIds.push(track.id);
+              return true;
+            } else {
+              return false;
+            }
           }
         );
-        const majUpRes = await axios(
-          "/api/recommendations?" +
-            defaultParams +
-            "&" +
-            new URLSearchParams({
-              min_key: keyMode.major.upper[0],
-              max_key: keyMode.major.upper[1],
-              min_mode: keyMode.major.mode,
-              max_mode: keyMode.major.mode,
-            }),
-          {
-            headers: {
-              access_token: accessToken,
-            },
-          }
-        );
-        const minLowRes = await axios(
-          "/api/recommendations?" +
-            defaultParams +
-            "&" +
-            new URLSearchParams({
-              min_key: keyMode.minor.lower[0],
-              max_key: keyMode.minor.lower[1],
-              min_mode: keyMode.minor.mode,
-              max_mode: keyMode.minor.mode,
-            }),
-          {
-            headers: {
-              access_token: accessToken,
-            },
-          }
-        );
-        const minUpRes = await axios(
-          "/api/recommendations?" +
-            defaultParams +
-            "&" +
-            new URLSearchParams({
-              min_key: keyMode.minor.upper[0],
-              max_key: keyMode.minor.upper[1],
-              min_mode: keyMode.minor.mode,
-              max_mode: keyMode.minor.mode,
-            }),
-          {
-            headers: {
-              access_token: accessToken,
-            },
-          }
-        );
-        // Combine all key & mode responses
-        const combinedRecommendations =
-          keyRange === 0
-            ? [...majLowRes.data.tracks, ...minLowRes.data.tracks]
-            : [
-                ...majLowRes.data.tracks,
-                ...majUpRes.data.tracks,
-                ...minLowRes.data.tracks,
-                ...minUpRes.data.tracks,
-              ];
         // Remove same tracks as seed
-        const filteredRecommendations = combinedRecommendations.filter(
+        const filteredRecommendations = uniqueRecommendations.filter(
           (track) => track.external_ids.isrc !== seed.external_ids.isrc
         );
-        // Sort by popularity
+        // Sort by popularity & last searched time
         const sortedRecommendations = filteredRecommendations.sort((a, b) => {
           return b.popularity - a.popularity;
         });
+        // Get all recommendation track IDs (batches of 50)
+        const maxPerRequest = 50;
+        const temp = [...sortedRecommendations];
+        const recommendationIds = [];
+        while (temp.length) {
+          recommendationIds.push(
+            temp
+              .splice(0, maxPerRequest)
+              .map((track) => track.id)
+              .join(",")
+          );
+        }
+        // Check if recommended tracks are saved (max 50 IDs per request)
+        const savedBatches = [];
+        for (let batch of recommendationIds) {
+          const res = await axios(
+            "/api/check-saved-tracks?" +
+              new URLSearchParams({
+                ids: batch,
+              })
+          );
+          savedBatches.push(res.data);
+        }
+        // Flatten saved tracks
+        const savedTracks = savedBatches.flat();
+        // Add "saved" key/value pair
+        sortedRecommendations.forEach(
+          (track, index) => (track.saved = savedTracks[index])
+        );
+        // Set recommendations
         setRecommendations(sortedRecommendations);
       } catch (err) {
-        window.alert(err.response.data.message);
         setAccessToken("");
         navigate("/");
-        window.location.reload(false);
       }
     };
     getRecommendations();
   }, [seed, seedFeatures, refresh]);
 
-  // Load more recommendations (2 seconds delay)
+  // Load more recommendations
   const handleLoadMoreClick = async () => {
     setLoad((prevState) => prevState + 10);
-    setWait(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setWait(false);
   };
-
-  // useEffect(() => {
-  //   const getLiked = async () => {
-  //     const res = await axios("/api/saved", {
-  //       headers: {
-  //         access_token: accessToken,
-  //       },
-  //     });
-  //     console.log(res.data);
-  //   };
-  //   getLiked();
-  // }, []);
 
   return (
     <Wrapper>
       {recommendations ? (
         <>
-          <Title>Recommendations</Title>
+          <RecommendationsTitle>Recommendations</RecommendationsTitle>
           {recommendations.slice(0, load).map((recommendation, index) => (
             <Track
               key={recommendation.id}
@@ -189,15 +172,9 @@ const Recommendations = ({
             />
           ))}
           {load <= recommendations.length ? (
-            <>
-              {wait ? (
-                <Wait>Wait...</Wait>
-              ) : (
-                <LoadMore onClick={handleLoadMoreClick}>Load More</LoadMore>
-              )}
-            </>
+            <LoadMore onClick={handleLoadMoreClick}>Look for more 👀</LoadMore>
           ) : (
-            <LoadEnd>End</LoadEnd>
+            <LoadEnd>🏁 You've reached the end 🏁</LoadEnd>
           )}
         </>
       ) : (
@@ -209,12 +186,13 @@ const Recommendations = ({
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 645px;
+`;
 
-const Title = styled.h2`
+const RecommendationsTitle = styled.h2`
   font-weight: bold;
   padding: 16px;
-  width: 596px;
 `;
 
 const LoadMore = styled.button`
@@ -227,19 +205,9 @@ const LoadMore = styled.button`
   background-color: var(--color-dark-contrast);
 
   &:hover {
-    background-color: #282828;
+    background-color: var(--color-dark-light);
     color: var(--color-orange-accent);
   }
-`;
-
-const Wait = styled.p`
-  font-weight: bold;
-  width: 100%;
-  height: 48px;
-  padding: 16px;
-  display: flex;
-  justify-content: center;
-  background-color: var(--color-dark-contrast);
 `;
 
 const LoadEnd = styled.p`

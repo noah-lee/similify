@@ -12,7 +12,6 @@ const LogOut = () => {
   const handleLogOut = () => {
     setAccessToken("");
     navigate("/");
-    window.location.reload(false);
   };
 
   return <StyledButton onClick={handleLogOut}>Log Out</StyledButton>;
@@ -24,7 +23,7 @@ const StyledButton = styled.button`
   border-radius: 24px;
 
   &:hover {
-    background-color: #282828;
+    background-color: var(--color-dark-light);
     color: var(--color-orange-accent);
   }
 `;

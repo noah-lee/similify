@@ -60,6 +60,7 @@ export default createGlobalStyle`
     --color-orange-accent: #ffaf41;
     --color-dark-main: #0b0b0b;
     --color-dark-contrast: #121212;
+    --color-dark-light: #282828;
   }
 
   body {

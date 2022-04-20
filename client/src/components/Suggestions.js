@@ -13,18 +13,11 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   // On suggestion click
-  const handleTrackSelect = (suggestion) => {
-    const addSearch = async () => {
-      try {
-        const res = await axios.post("/api/popular-searches", {
-          track: suggestion,
-        });
-      } catch (err) {
-        return;
-      }
-    };
-    addSearch();
-    setSeed(suggestion);
+  const handleTrackSelect = (track) => {
+    axios.post("/api/popular-searches", {
+      track,
+    });
+    setSeed(track);
     setQuery("");
     navigate("/result");
   };

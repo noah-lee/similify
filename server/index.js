@@ -2,38 +2,42 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
+
+// Server
+const app = express();
+
+// Middlewares
+app.use(morgan("tiny"));
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+// Handlers
 const {
   logIn,
   getUserInfo,
   search,
-  // getTrack,
   getAudioFeatures,
-  // getArtist,
-  // getTrackData,
   getRecommendations,
-  getLiked,
+  checkSavedTracks,
+  saveTrack,
+  removeTrack,
   addPopularSearches,
   getPopularSearches,
 } = require("./handlers.js");
 
-const app = express();
-const PORT = 8000;
-
-app.use(morgan("tiny"));
-app.use(helmet());
-app.use(cors());
-app.use(express.json())
-
+// SPOTIFY ENDPOINTS
 app.get("/api/log-in", logIn);
 app.get("/api/user-info", getUserInfo);
 app.get("/api/search", search);
-// app.get("/api/tracks/:id", getTrack);
 app.get("/api/audio-features/:id", getAudioFeatures);
-// app.get("/api/artists/:id", getArtist);
-// app.get("/api/track-data", getTrackData);
 app.get("/api/recommendations", getRecommendations);
-app.get("/api/saved", getLiked);
-app.post("/api/popular-searches", addPopularSearches);
-app.get("/api/popular-searches", getPopularSearches)
+app.get("/api/check-saved-tracks", checkSavedTracks);
+app.put("/api/save-track", saveTrack);
+app.delete("/api/remove-track", removeTrack);
 
-app.listen(process.env.PORT || PORT, () => console.log(`Listenening on ${PORT}`));
+// MONGODB ENDPOINTS
+app.post("/api/popular-searches", addPopularSearches);
+app.get("/api/popular-searches", getPopularSearches);
+
+app.listen(process.env.PORT || 8000, () => console.log(`🌎 Listening on 8000`));

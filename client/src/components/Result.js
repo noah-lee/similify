@@ -9,9 +9,9 @@ import { SpotifyContext } from "../contexts/SpotifyContext";
 import Search from "./Search";
 import BpmRange from "./BpmRange";
 import KeyRange from "./KeyRange";
-import CamelotToggle from "./CamelotToggle";
 import Recommendations from "./Recommendations";
 import SeedTrack from "./SeedTrack";
+
 import { toCamelotMatches } from "../utils/key";
 
 import usePersistedState from "../hooks/use-persisted-state.hook";
@@ -19,7 +19,7 @@ import usePersistedState from "../hooks/use-persisted-state.hook";
 const Result = () => {
   const navigate = useNavigate();
 
-  const { accessToken, setAccessToken, seed } = useContext(SpotifyContext);
+  const { setAccessToken, seed } = useContext(SpotifyContext);
 
   // Seed track audio features, camelot matches
   const [seedFeatures, setSeedFeatures] = useState("");
@@ -40,25 +40,25 @@ const Result = () => {
   useEffect(() => {
     const getSeedFeatures = async () => {
       try {
-        const res = await axios(`/api/audio-features/${seed.id}`, {
-          headers: {
-            access_token: accessToken,
-          },
-        });
+        const res = await axios(`/api/audio-features/${seed.id}`);
         setCamelotMatches(toCamelotMatches(res.data.key, res.data.mode));
         setSeedFeatures(res.data);
       } catch (err) {
-        window.alert(err.response.data.message);
         setAccessToken("");
         navigate("/");
-        window.location.reload(false);
       }
     };
     getSeedFeatures();
   }, [seed]);
 
+  // Handle refresh button click
   const handleRefreshClick = () => {
     setRefresh((prevState) => !prevState);
+  };
+
+  // Handle Key Click
+  const handleKeyClick = () => {
+    setShowCamelot((prevState) => !prevState);
   };
 
   // Only show scroll up once user scrolls 100px down
@@ -95,7 +95,9 @@ const Result = () => {
         <HeaderTitle>Title</HeaderTitle>
         <HeaderTime>Time</HeaderTime>
         <HeaderBpm>BPM</HeaderBpm>
-        <CamelotToggle showCamelot={showCamelot} setShowCamelot={setShowCamelot} />
+        <HeaderKey onClick={handleKeyClick}>
+          {showCamelot ? "Camelot" : "Key"}
+        </HeaderKey>
       </HeaderArea>
       {seedFeatures && (
         <>
@@ -122,6 +124,7 @@ const Result = () => {
       ) : (
         <Divider />
       )}
+      <Divider />
     </Wrapper>
   );
 };
@@ -135,7 +138,7 @@ const Wrapper = styled.div`
 `;
 
 const FilterSection = styled.div`
-  width: 596px;
+  width: 645px;
   display: flex;
   padding: 16px;
   margin-top: 64px;
@@ -153,13 +156,13 @@ const RefreshButton = styled.button`
 
   &:hover {
     color: var(--color-orange-accent);
-    background-color: #282828;
+    background-color: var(--color-dark-light);
   }
 `;
 
 const HeaderArea = styled.div`
   display: grid;
-  grid-template-columns: 20px 320px 48px 48px 64px;
+  grid-template-columns: 32px 320px 48px 48px 64px 20px;
   gap: 16px;
   font-weight: bold;
   padding: 16px;
@@ -168,6 +171,9 @@ const HeaderNumber = styled.p``;
 const HeaderTitle = styled.p``;
 const HeaderTime = styled.p``;
 const HeaderBpm = styled.p``;
+const HeaderKey = styled.button`
+  text-align: left;
+`;
 
 const ScrollUp = styled.button`
   color: white;
