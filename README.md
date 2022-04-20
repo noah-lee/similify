@@ -1,3 +1,3 @@
 # Similify
 
-Live: https://similify.netlify.app/
+Live preview: https://similify.netlify.app/
