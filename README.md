@@ -1,5 +1,6 @@
 # Similify
 ![alt text](https://github.com/noah-lee/similify/blob/main/client/public/logo192.png)
+<img src="https://github.com/noah-lee/similify/blob/main/client/src/assets/similify_logo.svg" width="128"/>
 
 Live preview: https://similify.netlify.app/
 
