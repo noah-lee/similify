@@ -1,10 +1,12 @@
 import { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { FiChevronUp } from "react-icons/fi";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
+
+import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
 
 import Search from "./Search";
 import BpmRange from "./BpmRange";
@@ -81,42 +83,52 @@ const Result = () => {
   };
 
   return (
-    <Wrapper>
-      <Search />
-      {seedFeatures && (
-        <FilterSection>
-          <BpmRange bpmRange={bpmRange} setBpmRange={setBpmRange} />
-          <KeyRange keyRange={keyRange} setKeyRange={setKeyRange} />
-          <RefreshButton onClick={handleRefreshClick}>Refresh</RefreshButton>
-        </FilterSection>
-      )}
-      <HeaderArea>
-        <HeaderNumber>#</HeaderNumber>
-        <HeaderTitle>Title</HeaderTitle>
-        <HeaderTime>Time</HeaderTime>
-        <HeaderBpm>BPM</HeaderBpm>
-        <HeaderKey onClick={handleKeyClick}>
-          {showCamelot ? "Camelot" : "Key"}
-        </HeaderKey>
-      </HeaderArea>
-      {seedFeatures && (
-        <>
-          <SeedTrack
-            seed={seed}
-            seedFeatures={seedFeatures}
-            showCamelot={showCamelot}
-          />
-          <Recommendations
-            seed={seed}
-            seedFeatures={seedFeatures}
-            bpmRange={bpmRange}
-            keyRange={keyRange}
-            refresh={refresh}
-            camelotMatches={camelotMatches}
-            showCamelot={showCamelot}
-          />
-        </>
-      )}
+    <>
+      <Wrapper>
+        <LogoContainer to="/">
+          <SimilifyLogo width="64" height="64" />
+          <Name>Similify</Name>
+        </LogoContainer>
+        <Search />
+        <ResultContainer>
+          {seedFeatures && (
+            <FilterSection>
+              <BpmRange bpmRange={bpmRange} setBpmRange={setBpmRange} />
+              <KeyRange keyRange={keyRange} setKeyRange={setKeyRange} />
+              <RefreshButton onClick={handleRefreshClick}>
+                Refresh
+              </RefreshButton>
+            </FilterSection>
+          )}
+          <HeaderArea>
+            <HeaderNumber>#</HeaderNumber>
+            <HeaderTitle>Title</HeaderTitle>
+            <HeaderTime>Time</HeaderTime>
+            <HeaderBpm>BPM</HeaderBpm>
+            <HeaderKey onClick={handleKeyClick}>
+              {showCamelot ? "Camelot" : "Key"}
+            </HeaderKey>
+          </HeaderArea>
+          {seedFeatures && (
+            <>
+              <SeedTrack
+                seed={seed}
+                seedFeatures={seedFeatures}
+                showCamelot={showCamelot}
+              />
+              <Recommendations
+                seed={seed}
+                seedFeatures={seedFeatures}
+                bpmRange={bpmRange}
+                keyRange={keyRange}
+                refresh={refresh}
+                camelotMatches={camelotMatches}
+                showCamelot={showCamelot}
+              />
+            </>
+          )}
+        </ResultContainer>
+      </Wrapper>
       {showScrollUp ? (
         <ScrollUp onClick={handleReturnTopClick}>
           <FiChevronUp size="40px" />
@@ -125,7 +137,7 @@ const Result = () => {
         <Divider />
       )}
       <Divider />
-    </Wrapper>
+    </>
   );
 };
 
@@ -135,13 +147,32 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 64px;
+  gap: 64px;
+`;
+
+const LogoContainer = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  font-size: 3.6rem;
+  gap: 8px;
+`;
+
+const Name = styled.h1``;
+
+const ResultContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const FilterSection = styled.div`
   width: 645px;
   display: flex;
   padding: 16px;
-  margin-top: 64px;
   justify-content: space-between;
   align-items: center;
   background-color: var(--color-dark-contrast);
@@ -180,7 +211,9 @@ const ScrollUp = styled.button`
   position: sticky;
   align-self: flex-end;
   bottom: 64px;
-  margin-right: 64px;
+  width: 100%;
+  text-align: right;
+  padding-right: 64px;
   height: 64px;
 
   &:hover {

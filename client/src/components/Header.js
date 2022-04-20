@@ -15,10 +15,10 @@ const Header = () => {
 
   return (
     <Wrapper>
-      <LogoContainer to="/">
+      {/* <LogoContainer to="/">
         <SimilifyLogo width="56" height="56" />
         <Name>Similify</Name>
-      </LogoContainer>
+      </LogoContainer> */}
       <Container>
         {accessToken ? (
           <>
@@ -34,13 +34,12 @@ const Header = () => {
 };
 
 const Wrapper = styled.div`
-  background-color: var(--color-dark-contrast);
   height: 96px;
   padding: 16px 32px;
   line-height: 32px;
   font-weight: bold;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   flex: none;
 `;
