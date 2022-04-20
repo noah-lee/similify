@@ -28,9 +28,9 @@ const MediumText = styled.h3`
 `;
 
 const Text = styled.p`
-  font-size: 1.5rem;
   font-weight: bold;
   color: gray;
+  max-width: 480px;
 `;
 
 export default About;
