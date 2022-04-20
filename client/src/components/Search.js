@@ -57,7 +57,11 @@ const Search = () => {
   }, [delayToggle]);
 
   return (
-    <Wrapper noValidate={true} onSubmit={(ev) => ev.preventDefault()}>
+    <Wrapper
+      noValidate={true}
+      onSubmit={(ev) => ev.preventDefault()}
+      style={{ pointerEvents: accessToken ? "auto" : "none" }}
+    >
       <FiSearch color="gray" size="1.5rem" />
       <StyledInput
         disabled={accessToken ? false : true}
