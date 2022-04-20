@@ -79,7 +79,10 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
       {features ? (
         <TrackArea onClick={handleTrackClick}>
           <TrackNumber>{number}</TrackNumber>
-          <TrackLink>
+          <TrackLink
+            href={"https://open.spotify.com/track/" + track.id}
+            target="_blank"
+          >
             <TrackArt src={track.album.images[2].url} height="48px" />
             <TrackUri onClick={handleArtClick}>
               <FiPlay size="20px" fill="#f3f3f3" />
@@ -140,7 +143,7 @@ const TrackArea = styled.div`
 
 const TrackNumber = styled.p``;
 
-const TrackLink = styled.div`
+const TrackLink = styled.a`
   position: relative;
   height: 48px;
 `;

@@ -4,7 +4,9 @@ import styled from "styled-components";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
 
-const LogOut = () => {
+import spotifyLogoPath from "../assets/Spotify_Icon_RGB_Green.png";
+
+const Disconnect = () => {
   const navigate = useNavigate();
   const { setAccessToken } = useContext(SpotifyContext);
 
@@ -14,18 +16,26 @@ const LogOut = () => {
     navigate("/");
   };
 
-  return <StyledButton onClick={handleLogOut}>Log Out</StyledButton>;
+  return (
+    <StyledButton onClick={handleLogOut}>
+      <SpotifyLogo src={spotifyLogoPath} />
+      <p>Disconnect</p>
+    </StyledButton>
+  );
 };
 
 const StyledButton = styled.button`
-  background-color: var(--color-dark-main);
+  background-color: white;
   padding: 8px 16px;
   border-radius: 24px;
-
-  &:hover {
-    background-color: var(--color-dark-light);
-    color: var(--color-orange-accent);
-  }
+  color: var(--color-dark-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
-export default LogOut;
+const SpotifyLogo = styled.img`
+  width: 24px;
+`;
+
+export default Disconnect;

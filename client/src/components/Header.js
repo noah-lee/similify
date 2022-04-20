@@ -6,8 +6,8 @@ import { SpotifyContext } from "../contexts/SpotifyContext";
 
 import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
 
-import LogIn from "./LogIn";
-import LogOut from "./LogOut";
+import Connect from "./Connect";
+import Disconnect from "./Disconnect";
 import DisplayName from "./DisplayName";
 
 const Header = () => {
@@ -15,18 +15,18 @@ const Header = () => {
 
   return (
     <Wrapper>
-      <Brand to="/">
+      <LogoContainer to="/">
         <SimilifyLogo width="56" height="56" />
         <Name>Similify</Name>
-      </Brand>
+      </LogoContainer>
       <Container>
         {accessToken ? (
           <>
             <DisplayName />
-            <LogOut />
+            <Disconnect />
           </>
         ) : (
-          <LogIn />
+          <Connect />
         )}
       </Container>
     </Wrapper>
@@ -51,7 +51,7 @@ const Container = styled.div`
   gap: 20px;
 `;
 
-const Brand = styled(Link)`
+const LogoContainer = styled(Link)`
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -59,9 +59,6 @@ const Brand = styled(Link)`
   font-weight: bold;
   font-size: 2rem;
   gap: 8px;
-  /* &:focus  {
-    outline: solid;
-  } */
 `;
 
 const Name = styled.h1``;

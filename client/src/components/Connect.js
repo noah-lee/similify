@@ -6,8 +6,9 @@ import axios from "axios";
 import { getHashParams } from "../utils/hash";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
+import spotifyLogoPath from "../assets/Spotify_Icon_RGB_Green.png";
 
-const LogIn = () => {
+const Connect = () => {
   const navigate = useNavigate();
   const { setAccessToken } = useContext(SpotifyContext);
 
@@ -37,18 +38,26 @@ const LogIn = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <StyledButton onClick={handleLogIn}>Log In</StyledButton>;
+  return (
+    <StyledButton onClick={handleLogIn}>
+      <SpotifyLogo src={spotifyLogoPath} />
+      <p>Connect with Spotify</p>
+    </StyledButton>
+  );
 };
 
 const StyledButton = styled.button`
-  background-color: var(--color-dark-main);
+  background-color: white;
   padding: 8px 16px;
   border-radius: 24px;
-
-  &:hover {
-    background-color: var(--color-dark-light);
-    color: var(--color-orange-accent);
-  }
+  color: var(--color-dark-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;
 
-export default LogIn;
+const SpotifyLogo = styled.img`
+  width: 24px;
+`;
+
+export default Connect;

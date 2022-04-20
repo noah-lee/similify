@@ -55,7 +55,8 @@ const SeedTrack = ({ seed, seedFeatures, showCamelot }) => {
   return (
     <TrackArea>
       <TrackNumber>🌱</TrackNumber>
-      <TrackLink>
+      <TrackLink href={"https://open.spotify.com/track/" + seed.id}
+            target="_blank">
         <TrackArt src={seed.album.images[2].url} height="48px" />
         <TrackUri onClick={handleArtClick}>
           <FiPlay size="20px" fill="#f3f3f3" />
@@ -96,7 +97,7 @@ const TrackArea = styled.div`
 
 const TrackNumber = styled.p``;
 
-const TrackLink = styled.div`
+const TrackLink = styled.a`
   position: relative;
   height: 48px;
 `;
