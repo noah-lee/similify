@@ -12,7 +12,7 @@ const options = {
 
 const REDIRECT_URI = "https://similify.netlify.app/";
 // const REDIRECT_URI = "http://localhost:3000/";
-const SCOPES = "user-library-read";
+const SCOPES = "user-read-private user-read-email user-library-read";
 
 const logIn = async (req, res) => {
   const spotifyAuthUrl =
