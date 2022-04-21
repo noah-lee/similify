@@ -10,8 +10,8 @@ const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
-const REDIRECT_URI = "https://similify.netlify.app/";
-// const REDIRECT_URI = "http://localhost:3000/";
+// const REDIRECT_URI = "https://similify.netlify.app/";
+const REDIRECT_URI = "http://localhost:3000/";
 const SCOPES =
   "user-read-private user-read-email user-library-read user-library-modify user-modify-playback-state";
 
