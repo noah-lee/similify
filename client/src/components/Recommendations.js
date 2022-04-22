@@ -14,8 +14,6 @@ const Recommendations = ({
   seed,
   seedFeatures,
   camelotMatches,
-  bpmRange,
-  keyRange,
   showCamelot,
   refresh,
 }) => {
