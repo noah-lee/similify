@@ -15,14 +15,14 @@ const Header = () => {
 
   return (
     <Wrapper>
-        {accessToken ? (
+        {/* {accessToken ? (
           <>
             <DisplayName />
             <Disconnect />
           </>
         ) : (
           <Connect />
-        )}
+        )} */}
     </Wrapper>
   );
 };
