@@ -149,17 +149,18 @@ const getUserInfo = async (req, res) => {
 // Search track
 const search = async (req, res) => {
   const options = {
-    url : "https://api.spotify.com/v1/search?" +
-    new URLSearchParams(req.query),
+    url: "https://api.spotify.com/v1/search?" + new URLSearchParams(req.query),
     headers: CLIENT_HEADERS,
   };
   await spotifyRequest(options, res);
 };
 
-// Get track audio features (bpm, key, mode, etc.)
+// Get tracks audio features (bpm, key, mode, etc.)
 const getAudioFeatures = async (req, res) => {
   const options = {
-    url: `https://api.spotify.com/v1/audio-features/${req.params.id}`,
+    url:
+      "https://api.spotify.com/v1/audio-features?" +
+      new URLSearchParams(req.query),
     headers: CLIENT_HEADERS,
   };
   await spotifyRequest(options, res);
@@ -168,8 +169,9 @@ const getAudioFeatures = async (req, res) => {
 // Get recommendations
 const getRecommendations = async (req, res) => {
   const options = {
-    url: "https://api.spotify.com/v1/recommendations?" +
-    new URLSearchParams(req.query),
+    url:
+      "https://api.spotify.com/v1/recommendations?" +
+      new URLSearchParams(req.query),
     headers: CLIENT_HEADERS,
   };
   await spotifyRequest(options, res);

@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { FiHeart } from "react-icons/fi";
@@ -8,138 +7,132 @@ import { SpotifyContext } from "../contexts/SpotifyContext";
 
 import spotifyLogoWhitePath from "../assets/Spotify_Icon_RGB_White.png";
 
-import Loader from "./Loader";
-
 import { msToMinSec } from "../utils/time";
 import { toLetterKey, toCamelotKey, toColor } from "../utils/key";
 
-const Track = ({ track, number, camelotMatches, showCamelot }) => {
-  const navigate = useNavigate();
-  const { accessToken, setAccessToken, setSeed } = useContext(SpotifyContext);
-  const [features, setFeatures] = useState("");
-  const [saved, setSaved] = useState(track.saved);
+const SeedTrack = ({
+  track,
+  features,
+  number,
+  camelotMatches,
+  showCamelot,
+  isSeed,
+}) => {
+  // const [saved, setSaved] = useState("");
 
-  // Get result track data
-  useEffect(() => {
-    const getFeatures = async () => {
-      try {
-        const res = await axios(`/api/audio-features/${track.id}`, {
-          headers: {
-            access_token: accessToken,
-          },
-        });
-        setFeatures(res.data);
-      } catch (err) {
-        setAccessToken("");
-        navigate("/");
-      }
-    };
-    getFeatures();
-  }, [track]);
+  // // Check if seed track is saved
+  // useEffect(() => {
+  //   const checkSaved = async () => {
+  //     const res = await axios(
+  //       "/api/check-saved-tracks?" +
+  //         new URLSearchParams({
+  //           ids: seed.id,
+  //         })
+  //     );
+  //     setSaved(res.data[0]);
+  //   };
+  //   checkSaved();
+  // }, [seed]);
 
-  // Heart styling
-  const heartStyle = {
-    color: saved ? "var(--color-orange-accent)" : "gray",
-    fill: saved ? "var(--color-orange-accent)" : "none",
-  };
+  // // Heart styling
+  // const heartStyle = {
+  //   color: saved ? "var(--color-orange-accent)" : "gray",
+  //   fill: saved ? "var(--color-orange-accent)" : "none",
+  // };
 
-  // Handle heart click
-  const handleHeartClick = (ev) => {
-    ev.stopPropagation();
-    if (saved) {
-      axios.delete(
-        "/api/remove-track?" + new URLSearchParams({ ids: track.id })
-      );
-    } else {
-      axios.put("/api/save-track?" + new URLSearchParams({ ids: track.id }));
-    }
-    setSaved((prevState) => !prevState);
-  };
+  // // Handle heart click
+  // const handleHeartClick = () => {
+  //   if (saved) {
+  //     axios.delete(
+  //       "/api/remove-track?" + new URLSearchParams({ ids: seed.id })
+  //     );
+  //   } else {
+  //     axios.put("/api/save-track?" + new URLSearchParams({ ids: seed.id }));
+  //   }
+  //   setSaved((prevState) => !prevState);
+  // };
+
+  // // Handle art click
+  // const handleArtClick = (ev) => {
+  //   ev.stopPropagation();
+  //   axios.put("/api/play", {
+  //     context_uri: seed.album.uri,
+  //     offset: {
+  //       position: seed.track_number - 1,
+  //     },
+  //   });
+  // };
+
+  const { setSeed } = useContext(SpotifyContext);
 
   // Handle track click
   const handleTrackClick = () => {
-    axios.post("/api/popular-searches", {
-      track,
-    });
-
-    setSeed(track);
+    // axios.post("/api/popular-searches", {
+    //   track,
+    // });
+    if (!isSeed) setSeed(track);
   };
 
-  // Handle art click
-  const handleArtClick = (ev) => {
-    ev.stopPropagation();
-    axios.put("/api/play", {
-      context_uri: track.album.uri,
-      offset: {
-        position: track.track_number - 1,
-      },
-    });
+  // Show color only if it is a camelot match
+  const keyStyle = {
+    color: `${
+      showCamelot &&
+      !camelotMatches
+        .map((match) => JSON.stringify(match))
+        .includes(JSON.stringify({ key: features.key, mode: features.mode }))
+        ? "gray"
+        : toColor(features.key, features.mode)
+    }`,
   };
 
   return (
-    <>
-      {features ? (
-        <TrackArea onClick={handleTrackClick}>
-          <TrackNumber>{number}</TrackNumber>
-          <TrackLink
-            href={"https://open.spotify.com/track/" + track.id}
-            target="_blank"
-          >
-            <TrackArt src={track.album.images[2].url} height="48px" />
-            <TrackUri onClick={handleArtClick}>
-              <SpotifyLogo src={spotifyLogoWhitePath} />
-            </TrackUri>
-          </TrackLink>
-          <TrackTitle>
-            <TrackName>{track.name}</TrackName>
-            <TrackArtists>
-              {track.artists.map((artist) => artist.name).join(", ")}
-            </TrackArtists>
-          </TrackTitle>
-          <TrackTime>{msToMinSec(track.duration_ms)}</TrackTime>
-          <TrackBpm>{features.tempo.toFixed()}</TrackBpm>
-          <TrackKey
-            style={{
-              color: `${
-                showCamelot &&
-                !camelotMatches
-                  .map((match) => JSON.stringify(match))
-                  .includes(
-                    JSON.stringify({ key: features.key, mode: features.mode })
-                  )
-                  ? "gray"
-                  : toColor(features.key, features.mode)
-              }`,
-            }}
-          >
-            {showCamelot
-              ? toCamelotKey(features.key, features.mode)
-              : toLetterKey(features.key, features.mode)}
-          </TrackKey>
-          <TrackIsSaved onClick={handleHeartClick}>
-            <FiHeart size="20px" style={heartStyle} />
-          </TrackIsSaved>
-        </TrackArea>
-      ) : (
-        <LoaderContainer>
-          <Loader />
-        </LoaderContainer>
-      )}
-    </>
+    <TrackArea onClick={handleTrackClick} isSeed={isSeed}>
+      <TrackNumber>{number}</TrackNumber>
+      <TrackLink
+        href={"https://open.spotify.com/track/" + track.id}
+        target="_blank"
+      >
+        <TrackArt src={track.album.images[2].url} height="48px" />
+        <TrackUri
+          /*onClick={handleArtClick}*/ onClick={(ev) => {
+            ev.stopPropagation();
+          }}
+        >
+          <SpotifyLogo src={spotifyLogoWhitePath} />
+        </TrackUri>
+      </TrackLink>
+      <TrackTitle>
+        <TrackName>{track.name}</TrackName>
+        <TrackArtists>
+          {track.artists.map((artist) => artist.name).join(", ")}
+        </TrackArtists>
+      </TrackTitle>
+      <TrackTime>{msToMinSec(track.duration_ms)}</TrackTime>
+      <TrackBpm>{features.tempo.toFixed()}</TrackBpm>
+      <TrackKey style={keyStyle}>
+        {showCamelot
+          ? toCamelotKey(features.key, features.mode)
+          : toLetterKey(features.key, features.mode)}
+      </TrackKey>
+      {/* <TrackIsSaved onClick={handleHeartClick}>
+        <FiHeart size="20px" style={heartStyle} />
+      </TrackIsSaved> */}
+    </TrackArea>
   );
 };
 
 const TrackArea = styled.div`
   display: grid;
-  grid-template-columns: 32px 48px 257px 48px 48px 64px 20px;
+  grid-template-columns: 32px 48px 257px 48px 48px 64px; //20px;
   gap: 16px;
   padding: 16px;
   background-color: var(--color-dark-contrast);
   align-items: center;
-  cursor: pointer;
+  cursor: ${(props) => (props.isSeed ? "auto" : "pointer")};
 
   &:hover {
-    background-color: var(--color-dark-light);
+    background-color: ${(props) =>
+      props.isSeed ? "var(--color-dark-contrast)" : "var(--color-dark-light)"};
   }
 `;
 
@@ -188,10 +181,6 @@ const TrackTime = styled.p``;
 const TrackBpm = styled.p``;
 const TrackKey = styled.p``;
 
-const LoaderContainer = styled.div`
-  padding: 16px;
-`;
+// const TrackIsSaved = styled.button``;
 
-const TrackIsSaved = styled.button``;
-
-export default Track;
+export default SeedTrack;

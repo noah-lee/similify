@@ -35,7 +35,7 @@ app.get("/api/test", test);
 app.get("/api/log-in", logIn);
 app.get("/api/user-info", getUserInfo);
 app.get("/api/search", search);
-app.get("/api/audio-features/:id", getAudioFeatures);
+app.get("/api/audio-features", getAudioFeatures);
 app.get("/api/recommendations", getRecommendations);
 app.get("/api/check-saved-tracks", checkSavedTracks);
 app.put("/api/save-track", saveTrack);

@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
 
+
 import Track from "./Track";
 import Loader from "./Loader";
 
@@ -13,9 +14,9 @@ import { toKeySubRanges } from "../utils/key";
 const Recommendations = ({
   seed,
   seedFeatures,
+  camelotMatches,
   bpmRange,
   keyRange,
-  camelotMatches,
   showCamelot,
   refresh,
 }) => {
@@ -24,6 +25,7 @@ const Recommendations = ({
   const { setAccessToken, MAX_BPM_RANGE } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
+  const [recommendationFeatures, setRecommendationFeatures] = useState("");
   const [load, setLoad] = useState(10);
 
   //Get recommendations tracks
@@ -33,19 +35,14 @@ const Recommendations = ({
       setRecommendations("");
       // Reset Load to 10
       setLoad(10);
-      const keySubRanges = toKeySubRanges(
-        seedFeatures.key,
-        seedFeatures.mode,
-        keyRange
-      );
-      const defaultParams = new URLSearchParams({
+      const defaultRecommendationsParams = new URLSearchParams({
         limit: 100,
         seed_tracks: seed.id,
         seed_artists: seed.artists.slice(0, 4).map((artist) => artist.id),
         min_tempo:
           bpmRange === MAX_BPM_RANGE
             ? 0
-            : Number(seedFeatures.tempo.toFixed()) - bpmRange - 0.49,
+            : Number(seedFeatures.tempo.toFixed()) - bpmRange - 0.5,
         max_tempo:
           bpmRange === MAX_BPM_RANGE
             ? 300
@@ -63,10 +60,16 @@ const Recommendations = ({
       try {
         // Get combined recommendations
         const combinedRecommendations = [];
+        // Separate API call for each key/mode sub ranges
+        const keySubRanges = toKeySubRanges(
+          seedFeatures.key,
+          seedFeatures.mode,
+          keyRange
+        );
         for (let range of keySubRanges) {
           const recommendationsRes = await axios(
             "/api/recommendations?" +
-              defaultParams +
+              defaultRecommendationsParams +
               "&" +
               new URLSearchParams({
                 min_key: range.minKey,
@@ -77,20 +80,9 @@ const Recommendations = ({
           );
           combinedRecommendations.push(...recommendationsRes.data.tracks);
         }
-        // // Remove all duplicate recommendations
-        // const uniqueIds = [];
-        // const uniqueRecommendations = flattenedRecommendations.filter(
-        //   (track) => {
-        //     const exists = uniqueIds.includes(track.id);
-        //     if (!exists) {
-        //       uniqueIds.push(track.id);
-        //       return true;
-        //     } else {
-        //       return false;
-        //     }
-        //   }
-        // );
-        // Remove same tracks as seed
+        // Max 100 recommendations
+        combinedRecommendations.splice(100);
+        // Remove recommendation is same as seed
         const filteredRecommendations = combinedRecommendations.filter(
           (track) => track.external_ids.isrc !== seed.external_ids.isrc
         );
@@ -98,48 +90,25 @@ const Recommendations = ({
         const sortedRecommendations = filteredRecommendations.sort((a, b) => {
           return b.popularity - a.popularity;
         });
+        setRecommendations(sortedRecommendations);
+        // Extract IDs
         const recommendationIds = sortedRecommendations.map(
           (track) => track.id
         );
-        console.log(recommendationIds);
-        // // Get all recommendation track IDs (batches of 50)
-        // const maxPerRequest = 50;
-        // const temp = [...sortedRecommendations];
-        // const recommendationIds = [];
-        // while (temp.length) {
-        //   recommendationIds.push(
-        //     temp
-        //       .splice(0, maxPerRequest)
-        //       .map((track) => track.id)
-        //       .join(",")
-        //   );
-        // }
-        // // Check if recommended tracks are saved (max 50 IDs per request)
-        // const savedBatches = [];
-        // for (let batch of recommendationIds) {
-        //   const res = await axios(
-        //     "/api/check-saved-tracks?" +
-        //       new URLSearchParams({
-        //         ids: batch,
-        //       })
-        //   );
-        //   savedBatches.push(res.data);
-        // }
-        // // Flatten saved tracks
-        // const savedTracks = savedBatches.flat();
-        // // Add "saved" key/value pair
-        // sortedRecommendations.forEach(
-        //   (track, index) => (track.saved = savedTracks[index])
-        // );
-        // // Set recommendations
-        // setRecommendations(sortedRecommendations);
+        // Get recommendations audio features
+        const featuresRes = await axios(
+          "/api/audio-features?" +
+            new URLSearchParams({
+              ids: recommendationIds.join(","),
+            })
+        );
+        setRecommendationFeatures(featuresRes.data.audio_features);
       } catch (err) {
-        setAccessToken("");
-        navigate("/");
+        console.log(err.response.status, err.response.statusText);
       }
     };
     getRecommendations();
-  }, [seed, seedFeatures, refresh]);
+  }, [seedFeatures, refresh]);
 
   // Load more recommendations
   const handleLoadMoreClick = async () => {
@@ -148,17 +117,18 @@ const Recommendations = ({
 
   return (
     <Wrapper>
-      placeholder
-      {/* {recommendations ? (
+      {recommendations && recommendationFeatures ? (
         <>
           <RecommendationsTitle>Recommendations</RecommendationsTitle>
           {recommendations.slice(0, load).map((recommendation, index) => (
             <Track
               key={recommendation.id}
               track={recommendation}
-              number={index + 1}
+              features={recommendationFeatures[index]}
               camelotMatches={camelotMatches}
+              number={index + 1}
               showCamelot={showCamelot}
+              isSeed={false}
             />
           ))}
           {load <= recommendations.length ? (
@@ -171,13 +141,13 @@ const Recommendations = ({
         <LoaderContainer>
           <Loader />
         </LoaderContainer>
-      )} */}
+      )}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  width: 645px;
+  /* width: 645px; */
 `;
 
 const RecommendationsTitle = styled.h2`

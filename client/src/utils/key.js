@@ -66,6 +66,17 @@ const toCamelotMatches = (key, mode) => {
 };
 
 const toKeySubRanges = (key, mode, range) => {
+  // Sub ranges if key range is ALL
+  if (range >= 6) {
+    return [
+      {
+        minKey: 0,
+        maxKey: 11,
+        minMode: 0,
+        maxMode: 1,
+      },
+    ];
+  }
   // Get key and relative major/minor keys
   const majKey = mode === 1 ? key : (key + 3) % 12;
   const minKey = mode === 0 ? key : (key + 9) % 12;
@@ -82,17 +93,6 @@ const toKeySubRanges = (key, mode, range) => {
         minKey: majKey,
         maxKey: majKey,
         minMode: 1,
-        maxMode: 1,
-      },
-    ];
-  }
-  // Sub ranges if key range is ALL
-  if (range >= 6) {
-    return [
-      {
-        minKey: 0,
-        maxKey: 11,
-        minMode: 0,
         maxMode: 1,
       },
     ];

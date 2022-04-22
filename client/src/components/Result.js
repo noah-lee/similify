@@ -1,29 +1,28 @@
 import { useContext, useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { FiChevronUp } from "react-icons/fi";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
 
-import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
-
+import Logo from "./Logo";
 import Search from "./Search";
-import BpmRange from "./BpmRange";
-import KeyRange from "./KeyRange";
+import Filter from "./Filter";
 import Recommendations from "./Recommendations";
-import SeedTrack from "./SeedTrack";
-
-import { toCamelotMatches } from "../utils/key";
+import Track from "./Track";
 
 import usePersistedState from "../hooks/use-persisted-state.hook";
+
+import { toCamelotMatches } from "../utils/key";
 
 const Result = () => {
   const navigate = useNavigate();
   const { seed } = useContext(SpotifyContext);
 
-  // Seed track audio features, camelot matches
+  // Seed track audio features
   const [seedFeatures, setSeedFeatures] = useState("");
+
   const [camelotMatches, setCamelotMatches] = useState("");
 
   // BPM range, key range, refresh toggle
@@ -41,9 +40,15 @@ const Result = () => {
   useEffect(() => {
     const getSeedFeatures = async () => {
       try {
-        const res = await axios(`/api/audio-features/${seed.id}`);
-        setCamelotMatches(toCamelotMatches(res.data.key, res.data.mode));
-        setSeedFeatures(res.data);
+        const res = await axios(
+          "/api/audio-features?" +
+            new URLSearchParams({
+              ids: seed.id,
+            })
+        );
+        const features = res.data.audio_features[0];
+        setCamelotMatches(toCamelotMatches(features.key, features.mode));
+        setSeedFeatures(features);
       } catch (err) {
         console.log(err.response.status, err.response.statusText);
       }
@@ -51,12 +56,7 @@ const Result = () => {
     getSeedFeatures();
   }, [seed]);
 
-  // Handle refresh button click
-  const handleRefreshClick = () => {
-    setRefresh((prevState) => !prevState);
-  };
-
-  // Handle Key/Camelot Click
+  // Handle Show Key/Camelot Click
   const handleKeyCamelotClick = () => {
     setShowCamelot((prevState) => !prevState);
   };
@@ -81,23 +81,18 @@ const Result = () => {
   };
 
   return (
-    <>
-      <Wrapper>
-        <LogoContainer to="/">
-          <SimilifyLogo width="64" height="64" />
-          <Name>Similify</Name>
-        </LogoContainer>
-        <Search />
+    <Wrapper>
+      <Logo />
+      <Search />
+      {seedFeatures && (
         <ResultContainer>
-          {seedFeatures && (
-            <FilterSection>
-              <BpmRange bpmRange={bpmRange} setBpmRange={setBpmRange} />
-              <KeyRange keyRange={keyRange} setKeyRange={setKeyRange} />
-              <RefreshButton onClick={handleRefreshClick}>
-                Refresh
-              </RefreshButton>
-            </FilterSection>
-          )}
+          <Filter
+            bpmRange={bpmRange}
+            setBpmRange={setBpmRange}
+            keyRange={keyRange}
+            setKeyRange={setKeyRange}
+            setRefresh={setRefresh}
+          />
           <HeaderArea>
             <HeaderNumber>#</HeaderNumber>
             <HeaderTitle>Title</HeaderTitle>
@@ -107,35 +102,31 @@ const Result = () => {
               {showCamelot ? "Camelot" : "Key"}
             </HeaderKey>
           </HeaderArea>
-          {seedFeatures && (
-            <>
-              <SeedTrack
-                seed={seed}
-                seedFeatures={seedFeatures}
-                showCamelot={showCamelot}
-              />
-              <Recommendations
-                seed={seed}
-                seedFeatures={seedFeatures}
-                bpmRange={bpmRange}
-                keyRange={keyRange}
-                refresh={refresh}
-                camelotMatches={camelotMatches}
-                showCamelot={showCamelot}
-              />
-            </>
-          )}
+          <Track
+            track={seed}
+            features={seedFeatures}
+            camelotMatches={camelotMatches}
+            number="🌱"
+            showCamelot={showCamelot}
+            isSeed={true}
+          />
+          <Recommendations
+            seed={seed}
+            seedFeatures={seedFeatures}
+            camelotMatches={camelotMatches}
+            bpmRange={bpmRange}
+            keyRange={keyRange}
+            refresh={refresh}
+            showCamelot={showCamelot}
+          />
         </ResultContainer>
-      </Wrapper>
-      {showScrollUp && (
-        <ScrollUpContainer>
-          <ScrollUp onClick={handleReturnTopClick}>
-            <FiChevronUp size="40px" />
-          </ScrollUp>
-        </ScrollUpContainer>
       )}
-      <Divider />
-    </>
+      {showScrollUp && (
+        <ScrollUpIcon>
+          <FiChevronUp onClick={handleReturnTopClick} size="40px" />
+        </ScrollUpIcon>
+      )}
+    </Wrapper>
   );
 };
 
@@ -148,46 +139,11 @@ const Wrapper = styled.div`
   gap: 64px;
 `;
 
-const LogoContainer = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  font-size: 3.6rem;
-  gap: 8px;
-`;
-
-const Name = styled.h1``;
-
 const ResultContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-`;
-
-const FilterSection = styled.div`
-  /* width: 645px; */
-  width: 609px;
-  display: flex;
-  padding: 16px;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--color-dark-contrast);
-`;
-
-const RefreshButton = styled.button`
-  height: 32px;
-  padding: 0 16px;
-  border-radius: 16px;
-  font-weight: bold;
-  background-color: var(--color-dark-main);
-
-  &:hover {
-    color: var(--color-orange-accent);
-    background-color: var(--color-dark-light);
-  }
+  width: 100%;
 `;
 
 const HeaderArea = styled.div`
@@ -204,26 +160,16 @@ const HeaderBpm = styled.p``;
 const HeaderKey = styled.button`
   text-align: left;
 `;
-
-const ScrollUpContainer = styled.div`
+const ScrollUpIcon = styled.div`
   position: sticky;
-  bottom: 64px;
-  width: 64px;
-  float: right;
-  text-align: center;
-  margin: 0 64px;
-`;
-
-const ScrollUp = styled.button`
-  color: white;
-  height: 64px;
+  right: 64px;
+  bottom: 0px;
+  height: 40px;
+  transform: translate(0, -64px);
+  align-self: flex-end;
   &:hover {
     color: var(--color-orange-accent);
   }
-`;
-
-const Divider = styled.div`
-  height: 128px;
 `;
 
 export default Result;
