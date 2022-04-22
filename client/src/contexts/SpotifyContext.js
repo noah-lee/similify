@@ -11,8 +11,8 @@ export const SpotifyContextProvider = ({ children }) => {
 
   const MAX_BPM_RANGE = 20;
 
-  // axios.defaults.baseURL = "https://similify-server.herokuapp.com";
-  axios.defaults.baseURL = "http://localhost:8000";
+  axios.defaults.baseURL = "https://similify-server.herokuapp.com";
+  // axios.defaults.baseURL = "http://localhost:8000";
 
   // if (accessToken) {
   //   axios.defaults.headers.common["access_token"] = accessToken;

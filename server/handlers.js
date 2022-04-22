@@ -25,8 +25,8 @@ const SCOPES = [
 ]
   .join(" ")
   .toString();
-const REDIRECT_URI = "http://localhost:3000/";
-// const REDIRECT_URI = "https://similify.netlify.app/";
+// const REDIRECT_URI = "http://localhost:3000/";
+const REDIRECT_URI = "https://similify.netlify.app/";
 
 // AXIOS ERROR HANDLER 🚫
 
