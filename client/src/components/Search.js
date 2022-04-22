@@ -42,7 +42,7 @@ const Search = () => {
               new URLSearchParams({
                 q: query,
                 type: "track",
-                limit: 5,
+                limit: 4,
               })
           );
           setSuggestions(res.data.tracks.items);
