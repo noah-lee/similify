@@ -100,8 +100,6 @@ const Recommendations = ({
               ids: recommendationIds.join(","),
             })
         );
-        console.log(sortedRecommendations);
-        console.log(featuresRes.data.audio_features);
         setRecommendations(sortedRecommendations);
         setRecommendationFeatures(featuresRes.data.audio_features);
       } catch (err) {
