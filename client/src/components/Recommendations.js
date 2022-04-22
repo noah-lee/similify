@@ -144,7 +144,7 @@ const Recommendations = ({
 };
 
 const Wrapper = styled.div`
-  /* width: 645px; */
+  width: 609px;
 `;
 
 const RecommendationsTitle = styled.h2`
