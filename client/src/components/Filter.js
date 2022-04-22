@@ -1,15 +1,15 @@
+import { useContext } from "react";
 import styled from "styled-components";
+
+import { SpotifyContext } from "../contexts/SpotifyContext";
 
 import BpmRange from "./BpmRange";
 import KeyRange from "./KeyRange";
 
-const Filter = ({
-  bpmRange,
-  setBpmRange,
-  keyRange,
-  setKeyRange,
-  setRefresh,
-}) => {
+const Filter = ({ setRefresh }) => {
+  const { bpmRange, setBpmRange, keyRange, setKeyRange } =
+    useContext(SpotifyContext);
+
   // Handle refresh button click
   const handleRefreshClick = () => {
     setRefresh((prevState) => !prevState);

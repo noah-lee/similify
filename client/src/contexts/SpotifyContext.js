@@ -8,6 +8,8 @@ export const SpotifyContext = createContext();
 export const SpotifyContextProvider = ({ children }) => {
   const [accessToken, setAccessToken] = usePersistedState("", "access_token");
   const [seed, setSeed] = usePersistedState("", "seed");
+  const [bpmRange, setBpmRange] = usePersistedState(10, "bpm-range");
+  const [keyRange, setKeyRange] = usePersistedState(2, "key-range");
 
   const MAX_BPM_RANGE = 20;
 
@@ -20,7 +22,17 @@ export const SpotifyContextProvider = ({ children }) => {
 
   return (
     <SpotifyContext.Provider
-      value={{ accessToken, setAccessToken, seed, setSeed, MAX_BPM_RANGE }}
+      value={{
+        accessToken,
+        setAccessToken,
+        seed,
+        setSeed,
+        bpmRange,
+        setBpmRange,
+        keyRange,
+        setKeyRange,
+        MAX_BPM_RANGE,
+      }}
     >
       {children}
     </SpotifyContext.Provider>

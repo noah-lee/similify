@@ -21,7 +21,7 @@ const Recommendations = ({
 }) => {
   const navigate = useNavigate();
 
-  const { setAccessToken, MAX_BPM_RANGE } = useContext(SpotifyContext);
+  const { bpmRange, keyRange, MAX_BPM_RANGE } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
   const [recommendationFeatures, setRecommendationFeatures] = useState("");

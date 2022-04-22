@@ -23,11 +23,10 @@ const Result = () => {
   // Seed track audio features
   const [seedFeatures, setSeedFeatures] = useState("");
 
+  // Camelot matches
   const [camelotMatches, setCamelotMatches] = useState("");
 
   // BPM range, key range, refresh toggle
-  const [bpmRange, setBpmRange] = usePersistedState(10, "bpm-range");
-  const [keyRange, setKeyRange] = usePersistedState(2, "key-range");
   const [refresh, setRefresh] = useState(true);
 
   // Show camelot keys
@@ -87,10 +86,6 @@ const Result = () => {
       {seed && seedFeatures && (
         <ResultContainer>
           <Filter
-            bpmRange={bpmRange}
-            setBpmRange={setBpmRange}
-            keyRange={keyRange}
-            setKeyRange={setKeyRange}
             setRefresh={setRefresh}
           />
           <HeaderArea>
@@ -114,8 +109,6 @@ const Result = () => {
             seed={seed}
             seedFeatures={seedFeatures}
             camelotMatches={camelotMatches}
-            bpmRange={bpmRange}
-            keyRange={keyRange}
             refresh={refresh}
             showCamelot={showCamelot}
           />
