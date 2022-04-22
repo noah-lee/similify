@@ -55,6 +55,7 @@ const StyledButton = styled.button`
   align-items: center;
   gap: 8px;
   font-weight: bold;
+  pointer-events: none;
 `;
 
 const SpotifyLogo = styled.img`

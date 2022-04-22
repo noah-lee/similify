@@ -41,12 +41,13 @@ const Search = () => {
             "/api/search?" +
               new URLSearchParams({
                 q: query,
+                type: "track",
+                limit: 5,
               })
           );
           setSuggestions(res.data.tracks.items);
         } catch (err) {
-          setAccessToken("");
-          navigate("/");
+          console.log(err.response.status, err.response.statusText);
         }
       };
       getSearch();
@@ -57,18 +58,13 @@ const Search = () => {
   }, [delayToggle]);
 
   return (
-    <Wrapper
-      noValidate={true}
-      onSubmit={(ev) => ev.preventDefault()}
-      style={{ pointerEvents: accessToken ? "auto" : "none" }}
-    >
+    <Wrapper noValidate={true} onSubmit={(ev) => ev.preventDefault()}>
       <FiSearch color="gray" size="1.5rem" />
       <StyledInput
-        disabled={accessToken ? false : true}
         required={true}
         type="text"
         value={query}
-        placeholder={accessToken ? "Look for a song" : "Please log in"}
+        placeholder="Search"
         onChange={handleQueryChange}
       />
       {query && !suggestions && (

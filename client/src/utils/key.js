@@ -65,59 +65,71 @@ const toCamelotMatches = (key, mode) => {
   return matches;
 };
 
-const toKeyModeMatches = (key, mode, range) => {
+const toKeySubRanges = (key, mode, range) => {
+  // Get key and relative major/minor keys
   const majKey = mode === 1 ? key : (key + 3) % 12;
   const minKey = mode === 0 ? key : (key + 9) % 12;
+  // Sub ranges if key range is 0
   if (range <= 0) {
     return [
       {
-        lower: [minKey, minKey],
-        upper: [minKey, minKey],
-        mode: 0,
+        minKey: minKey,
+        maxKey: minKey,
+        minMode: 0,
+        maxMode: 0,
       },
       {
-        lower: [majKey, majKey],
-        upper: [majKey, majKey],
-        mode: 1,
+        minKey: majKey,
+        maxKey: majKey,
+        minMode: 1,
+        maxMode: 1,
       },
     ];
   }
+  // Sub ranges if key range is ALL
   if (range >= 6) {
     return [
       {
-        lower: [0, 5],
-        upper: [6, 11],
-        mode: 0,
-      },
-      {
-        lower: [0, 5],
-        upper: [6, 11],
-        mode: 1,
+        minKey: 0,
+        maxKey: 11,
+        minMode: 0,
+        maxMode: 1,
       },
     ];
   }
+  // Sub ranges if key range > 0 and < 6
   const result = [];
+  // Minor key ranges
   const minNeg = (minKey + 12 - range) % 12;
   const minPos = (minKey + 12 + range) % 12;
-  result[0] = {
-    lower: minNeg < minPos ? [minNeg, minKey] : [minNeg, 11],
-    upper: minNeg < minPos ? [minKey + 1, minPos] : [0, minPos],
-    mode: 0,
-  };
+  result.push({
+    minKey: minNeg,
+    maxKey: minNeg < minPos ? minKey : 11,
+    minMode: 0,
+    maxMode: 0,
+  });
+  result.push({
+    minKey: minNeg < minPos ? minKey + 1 : 0,
+    maxKey: minPos,
+    minMode: 0,
+    maxMode: 0,
+  });
+  // Major key ranges
   const majNeg = (majKey + 12 - range) % 12;
   const majPos = (majKey + 12 + range) % 12;
-  result[1] = {
-    lower: majNeg < majPos ? [majNeg, majKey] : [majNeg, 11],
-    upper: majNeg < majPos ? [majKey + 1, majPos] : [0, majPos],
-    mode: 1,
-  };
+  result.push({
+    minKey: majNeg,
+    maxKey: majNeg < majPos ? majKey : 11,
+    minMode: 1,
+    maxMode: 1,
+  });
+  result.push({
+    minKey: majNeg < majPos ? majKey + 1 : 0,
+    maxKey: majPos,
+    minMode: 1,
+    maxMode: 1,
+  });
   return result;
 };
 
-export {
-  toLetterKey,
-  toCamelotKey,
-  toColor,
-  toCamelotMatches,
-  toKeyModeMatches,
-};
+export { toLetterKey, toCamelotKey, toColor, toCamelotMatches, toKeySubRanges };

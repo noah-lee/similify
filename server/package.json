@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev:server": "nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "MIT",
@@ -18,7 +18,6 @@
     "helmet": "^5.0.2",
     "mongodb": "^4.5.0",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.15",
-    "querystring": "^0.2.1"
+    "nodemon": "^2.0.15"
   }
 }

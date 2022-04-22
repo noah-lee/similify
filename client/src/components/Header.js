@@ -15,11 +15,6 @@ const Header = () => {
 
   return (
     <Wrapper>
-      {/* <LogoContainer to="/">
-        <SimilifyLogo width="56" height="56" />
-        <Name>Similify</Name>
-      </LogoContainer> */}
-      <Container>
         {accessToken ? (
           <>
             <DisplayName />
@@ -28,7 +23,6 @@ const Header = () => {
         ) : (
           <Connect />
         )}
-      </Container>
     </Wrapper>
   );
 };
@@ -42,12 +36,6 @@ const Wrapper = styled.div`
   justify-content: flex-end;
   align-items: center;
   flex: none;
-`;
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
 `;
 
 const LogoContainer = styled(Link)`

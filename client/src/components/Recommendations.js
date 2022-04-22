@@ -8,7 +8,7 @@ import { SpotifyContext } from "../contexts/SpotifyContext";
 import Track from "./Track";
 import Loader from "./Loader";
 
-import { toKeyModeMatches } from "../utils/key";
+import { toKeySubRanges } from "../utils/key";
 
 const Recommendations = ({
   seed,
@@ -21,8 +21,7 @@ const Recommendations = ({
 }) => {
   const navigate = useNavigate();
 
-  const { setAccessToken, MAX_BPM_RANGE } =
-    useContext(SpotifyContext);
+  const { setAccessToken, MAX_BPM_RANGE } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
   const [load, setLoad] = useState(10);
@@ -34,7 +33,7 @@ const Recommendations = ({
       setRecommendations("");
       // Reset Load to 10
       setLoad(10);
-      const keyModeMatches = toKeyModeMatches(
+      const keySubRanges = toKeySubRanges(
         seedFeatures.key,
         seedFeatures.mode,
         keyRange
@@ -49,101 +48,91 @@ const Recommendations = ({
             : Number(seedFeatures.tempo.toFixed()) - bpmRange - 0.49,
         max_tempo:
           bpmRange === MAX_BPM_RANGE
-            ? 200
+            ? 300
             : Number(seedFeatures.tempo.toFixed()) + bpmRange + 0.49,
-        target_acousticness: seedFeatures.acousticness,
-        target_danceability: seedFeatures.danceability,
-        target_energy: seedFeatures.energy,
-        target_instrumentalness: seedFeatures.instrumentalness,
-        target_liveness: seedFeatures.liveness,
-        target_loudness: seedFeatures.loudness,
-        target_speechiness: seedFeatures.speechiness,
-        target_time_signature: seedFeatures.time_signature,
-        target_valence: seedFeatures.valence,
+        // target_acousticness: seedFeatures.acousticness,
+        // target_danceability: seedFeatures.danceability,
+        // target_energy: seedFeatures.energy,
+        // target_instrumentalness: seedFeatures.instrumentalness,
+        // target_liveness: seedFeatures.liveness,
+        // target_loudness: seedFeatures.loudness,
+        // target_speechiness: seedFeatures.speechiness,
+        // target_time_signature: seedFeatures.time_signature,
+        // target_valence: seedFeatures.valence,
       });
       try {
         // Get combined recommendations
         const combinedRecommendations = [];
-        for (let match of keyModeMatches) {
-          const lowRes = await axios(
+        for (let range of keySubRanges) {
+          const recommendationsRes = await axios(
             "/api/recommendations?" +
               defaultParams +
               "&" +
               new URLSearchParams({
-                min_key: match.lower[0],
-                max_key: match.lower[1],
-                min_mode: match.mode,
-                max_mode: match.mode,
+                min_key: range.minKey,
+                max_key: range.maxKey,
+                min_mode: range.minMode,
+                max_mode: range.maxMode,
               })
           );
-          combinedRecommendations.push(lowRes.data.tracks);
-          const upRes = await axios(
-            "/api/recommendations?" +
-              defaultParams +
-              "&" +
-              new URLSearchParams({
-                min_key: match.upper[0],
-                max_key: match.upper[1],
-                min_mode: match.mode,
-                max_mode: match.mode,
-              })
-          );
-          combinedRecommendations.push(upRes.data.tracks);
+          combinedRecommendations.push(...recommendationsRes.data.tracks);
         }
-        // Flatten recommendations
-        const flattenedRecommendations = combinedRecommendations.flat();
-        // Remove all duplicate recommendations
-        const uniqueIds = [];
-        const uniqueRecommendations = flattenedRecommendations.filter(
-          (track) => {
-            const exists = uniqueIds.includes(track.id);
-            if (!exists) {
-              uniqueIds.push(track.id);
-              return true;
-            } else {
-              return false;
-            }
-          }
-        );
+        // // Remove all duplicate recommendations
+        // const uniqueIds = [];
+        // const uniqueRecommendations = flattenedRecommendations.filter(
+        //   (track) => {
+        //     const exists = uniqueIds.includes(track.id);
+        //     if (!exists) {
+        //       uniqueIds.push(track.id);
+        //       return true;
+        //     } else {
+        //       return false;
+        //     }
+        //   }
+        // );
         // Remove same tracks as seed
-        const filteredRecommendations = uniqueRecommendations.filter(
+        const filteredRecommendations = combinedRecommendations.filter(
           (track) => track.external_ids.isrc !== seed.external_ids.isrc
         );
-        // Sort by popularity & last searched time
+        // Sort by popularity
         const sortedRecommendations = filteredRecommendations.sort((a, b) => {
           return b.popularity - a.popularity;
         });
-        // Get all recommendation track IDs (batches of 50)
-        const maxPerRequest = 50;
-        const temp = [...sortedRecommendations];
-        const recommendationIds = [];
-        while (temp.length) {
-          recommendationIds.push(
-            temp
-              .splice(0, maxPerRequest)
-              .map((track) => track.id)
-              .join(",")
-          );
-        }
-        // Check if recommended tracks are saved (max 50 IDs per request)
-        const savedBatches = [];
-        for (let batch of recommendationIds) {
-          const res = await axios(
-            "/api/check-saved-tracks?" +
-              new URLSearchParams({
-                ids: batch,
-              })
-          );
-          savedBatches.push(res.data);
-        }
-        // Flatten saved tracks
-        const savedTracks = savedBatches.flat();
-        // Add "saved" key/value pair
-        sortedRecommendations.forEach(
-          (track, index) => (track.saved = savedTracks[index])
+        const recommendationIds = sortedRecommendations.map(
+          (track) => track.id
         );
-        // Set recommendations
-        setRecommendations(sortedRecommendations);
+        console.log(recommendationIds);
+        // // Get all recommendation track IDs (batches of 50)
+        // const maxPerRequest = 50;
+        // const temp = [...sortedRecommendations];
+        // const recommendationIds = [];
+        // while (temp.length) {
+        //   recommendationIds.push(
+        //     temp
+        //       .splice(0, maxPerRequest)
+        //       .map((track) => track.id)
+        //       .join(",")
+        //   );
+        // }
+        // // Check if recommended tracks are saved (max 50 IDs per request)
+        // const savedBatches = [];
+        // for (let batch of recommendationIds) {
+        //   const res = await axios(
+        //     "/api/check-saved-tracks?" +
+        //       new URLSearchParams({
+        //         ids: batch,
+        //       })
+        //   );
+        //   savedBatches.push(res.data);
+        // }
+        // // Flatten saved tracks
+        // const savedTracks = savedBatches.flat();
+        // // Add "saved" key/value pair
+        // sortedRecommendations.forEach(
+        //   (track, index) => (track.saved = savedTracks[index])
+        // );
+        // // Set recommendations
+        // setRecommendations(sortedRecommendations);
       } catch (err) {
         setAccessToken("");
         navigate("/");
@@ -159,7 +148,8 @@ const Recommendations = ({
 
   return (
     <Wrapper>
-      {recommendations ? (
+      placeholder
+      {/* {recommendations ? (
         <>
           <RecommendationsTitle>Recommendations</RecommendationsTitle>
           {recommendations.slice(0, load).map((recommendation, index) => (
@@ -181,7 +171,7 @@ const Recommendations = ({
         <LoaderContainer>
           <Loader />
         </LoaderContainer>
-      )}
+      )} */}
     </Wrapper>
   );
 };

@@ -9,58 +9,60 @@ import { msToMinSec } from "../utils/time";
 import { toLetterKey, toCamelotKey, toColor } from "../utils/key";
 
 const SeedTrack = ({ seed, seedFeatures, showCamelot }) => {
-  const [saved, setSaved] = useState("");
+  // const [saved, setSaved] = useState("");
 
-  // Check if seed track is saved
-  useEffect(() => {
-    const checkSaved = async () => {
-      const res = await axios(
-        "/api/check-saved-tracks?" +
-          new URLSearchParams({
-            ids: seed.id,
-          })
-      );
-      setSaved(res.data[0]);
-    };
-    checkSaved();
-  }, [seed]);
+  // // Check if seed track is saved
+  // useEffect(() => {
+  //   const checkSaved = async () => {
+  //     const res = await axios(
+  //       "/api/check-saved-tracks?" +
+  //         new URLSearchParams({
+  //           ids: seed.id,
+  //         })
+  //     );
+  //     setSaved(res.data[0]);
+  //   };
+  //   checkSaved();
+  // }, [seed]);
 
-  // Heart styling
-  const heartStyle = {
-    color: saved ? "var(--color-orange-accent)" : "gray",
-    fill: saved ? "var(--color-orange-accent)" : "none",
-  };
+  // // Heart styling
+  // const heartStyle = {
+  //   color: saved ? "var(--color-orange-accent)" : "gray",
+  //   fill: saved ? "var(--color-orange-accent)" : "none",
+  // };
 
-  // Handle heart click
-  const handleHeartClick = () => {
-    if (saved) {
-      axios.delete(
-        "/api/remove-track?" + new URLSearchParams({ ids: seed.id })
-      );
-    } else {
-      axios.put("/api/save-track?" + new URLSearchParams({ ids: seed.id }));
-    }
-    setSaved((prevState) => !prevState);
-  };
+  // // Handle heart click
+  // const handleHeartClick = () => {
+  //   if (saved) {
+  //     axios.delete(
+  //       "/api/remove-track?" + new URLSearchParams({ ids: seed.id })
+  //     );
+  //   } else {
+  //     axios.put("/api/save-track?" + new URLSearchParams({ ids: seed.id }));
+  //   }
+  //   setSaved((prevState) => !prevState);
+  // };
 
-  // Handle art click
-  const handleArtClick = (ev) => {
-    ev.stopPropagation();
-    axios.put("/api/play", {
-      context_uri: seed.album.uri,
-      offset: {
-        position: seed.track_number - 1,
-      },
-    });
-  };
+  // // Handle art click
+  // const handleArtClick = (ev) => {
+  //   ev.stopPropagation();
+  //   axios.put("/api/play", {
+  //     context_uri: seed.album.uri,
+  //     offset: {
+  //       position: seed.track_number - 1,
+  //     },
+  //   });
+  // };
 
   return (
     <TrackArea>
       <TrackNumber>🌱</TrackNumber>
-      <TrackLink href={"https://open.spotify.com/track/" + seed.id}
-            target="_blank">
+      <TrackLink
+        href={"https://open.spotify.com/track/" + seed.id}
+        target="_blank"
+      >
         <TrackArt src={seed.album.images[2].url} height="48px" />
-        <TrackUri onClick={handleArtClick}>
+        <TrackUri /*onClick={handleArtClick}*/>
           <SpotifyLogo src={spotifyLogoWhitePath} />
         </TrackUri>
       </TrackLink>
@@ -81,16 +83,16 @@ const SeedTrack = ({ seed, seedFeatures, showCamelot }) => {
           ? toCamelotKey(seedFeatures.key, seedFeatures.mode)
           : toLetterKey(seedFeatures.key, seedFeatures.mode)}
       </TrackKey>
-      <TrackIsSaved onClick={handleHeartClick}>
+      {/* <TrackIsSaved onClick={handleHeartClick}>
         <FiHeart size="20px" style={heartStyle} />
-      </TrackIsSaved>
+      </TrackIsSaved> */}
     </TrackArea>
   );
 };
 
 const TrackArea = styled.div`
   display: grid;
-  grid-template-columns: 32px 48px 257px 48px 48px 64px 20px;
+  grid-template-columns: 32px 48px 257px 48px 48px 64px; //20px;
   gap: 16px;
   padding: 16px;
   background-color: var(--color-dark-contrast);
@@ -142,6 +144,6 @@ const TrackTime = styled.p``;
 const TrackBpm = styled.p``;
 const TrackKey = styled.p``;
 
-const TrackIsSaved = styled.button``;
+// const TrackIsSaved = styled.button``;
 
 export default SeedTrack;

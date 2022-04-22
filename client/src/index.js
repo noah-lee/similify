@@ -6,11 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import { SpotifyContextProvider } from "./contexts/SpotifyContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <SpotifyContextProvider>
-      <App />
-    </SpotifyContextProvider>
-  </React.StrictMode>
+  //<React.StrictMode>
+  <SpotifyContextProvider>
+    <App />
+  </SpotifyContextProvider>
+  //</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

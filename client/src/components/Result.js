@@ -20,8 +20,7 @@ import usePersistedState from "../hooks/use-persisted-state.hook";
 
 const Result = () => {
   const navigate = useNavigate();
-
-  const { setAccessToken, seed } = useContext(SpotifyContext);
+  const { seed } = useContext(SpotifyContext);
 
   // Seed track audio features, camelot matches
   const [seedFeatures, setSeedFeatures] = useState("");
@@ -46,8 +45,7 @@ const Result = () => {
         setCamelotMatches(toCamelotMatches(res.data.key, res.data.mode));
         setSeedFeatures(res.data);
       } catch (err) {
-        setAccessToken("");
-        navigate("/");
+        console.log(err.response.status, err.response.statusText);
       }
     };
     getSeedFeatures();
@@ -58,8 +56,8 @@ const Result = () => {
     setRefresh((prevState) => !prevState);
   };
 
-  // Handle Key Click
-  const handleKeyClick = () => {
+  // Handle Key/Camelot Click
+  const handleKeyCamelotClick = () => {
     setShowCamelot((prevState) => !prevState);
   };
 
@@ -105,7 +103,7 @@ const Result = () => {
             <HeaderTitle>Title</HeaderTitle>
             <HeaderTime>Time</HeaderTime>
             <HeaderBpm>BPM</HeaderBpm>
-            <HeaderKey onClick={handleKeyClick}>
+            <HeaderKey onClick={handleKeyCamelotClick}>
               {showCamelot ? "Camelot" : "Key"}
             </HeaderKey>
           </HeaderArea>
@@ -170,7 +168,8 @@ const ResultContainer = styled.div`
 `;
 
 const FilterSection = styled.div`
-  width: 645px;
+  /* width: 645px; */
+  width: 609px;
   display: flex;
   padding: 16px;
   justify-content: space-between;
@@ -193,7 +192,7 @@ const RefreshButton = styled.button`
 
 const HeaderArea = styled.div`
   display: grid;
-  grid-template-columns: 32px 320px 48px 48px 64px 20px;
+  grid-template-columns: 32px 320px 48px 48px 64px; // 20px;
   gap: 16px;
   font-weight: bold;
   padding: 16px;

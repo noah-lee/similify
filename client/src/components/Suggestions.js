@@ -14,9 +14,9 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
 
   // On suggestion click
   const handleTrackSelect = (track) => {
-    axios.post("/api/popular-searches", {
-      track,
-    });
+    // axios.post("/api/popular-searches", {
+    //   track,
+    // });
     setSeed(track);
     setQuery("");
     navigate("/result");
@@ -46,6 +46,11 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [suggestions, selectedIndex]);
 
+  // On suggestion mouse enter
+  const handleMousEnter = (index) => {
+    setSelectedIndex(index);
+  };
+
   return (
     <Wrapper>
       {query && !suggestions.length ? (
@@ -62,6 +67,7 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
               backgroundColor:
                 selectedIndex === index ? "var(--color-orange-accent)" : "",
             }}
+            onMouseEnter={() => handleMousEnter(index)}
           >
             <Art src={suggestion.album.images[2].url} height="48px" />
             <Title>
@@ -99,9 +105,6 @@ const Suggestion = styled.div`
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  &:hover {
-    background-color: var(--color-orange-accent);
-  }
 `;
 
 const Art = styled.img``;
