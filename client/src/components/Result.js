@@ -84,7 +84,7 @@ const Result = () => {
     <Wrapper>
       <Logo />
       <Search />
-      {seedFeatures && (
+      {seed && seedFeatures && (
         <ResultContainer>
           <Filter
             bpmRange={bpmRange}

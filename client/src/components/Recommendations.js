@@ -5,7 +5,6 @@ import axios from "axios";
 
 import { SpotifyContext } from "../contexts/SpotifyContext";
 
-
 import Track from "./Track";
 import Loader from "./Loader";
 
@@ -90,7 +89,6 @@ const Recommendations = ({
         const sortedRecommendations = filteredRecommendations.sort((a, b) => {
           return b.popularity - a.popularity;
         });
-        setRecommendations(sortedRecommendations);
         // Extract IDs
         const recommendationIds = sortedRecommendations.map(
           (track) => track.id
@@ -102,6 +100,9 @@ const Recommendations = ({
               ids: recommendationIds.join(","),
             })
         );
+        console.log(sortedRecommendations);
+        console.log(featuresRes.data.audio_features);
+        setRecommendations(sortedRecommendations);
         setRecommendationFeatures(featuresRes.data.audio_features);
       } catch (err) {
         console.log(err.response.status, err.response.statusText);
