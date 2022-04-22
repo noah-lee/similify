@@ -16,7 +16,7 @@ const Footer = () => {
         </StyledA>
       </LinkContainer>
       <SpotifyText>
-        Powered by{" "}
+        Create by Noah Lee, powered by{" "}
         <SpotifyA href="http://spotify.com/" target="_blank">
           Spotify
         </SpotifyA>
