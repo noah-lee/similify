@@ -3,7 +3,7 @@
 // PACKAGES 📦
 const axios = require("axios");
 const { MongoClient } = require("mongodb");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config();
 
 // SECRET 🤫
 const { MONGO_URI, CLIENT_SECRET } = process.env;
@@ -26,7 +26,8 @@ const SCOPES = [
   .join(" ")
   .toString();
 // const REDIRECT_URI = "http://localhost:3000/";
-const REDIRECT_URI = "https://similify.netlify.app/";
+// const REDIRECT_URI = "https://similify.netlify.app/";
+const REDIRECT_URI = process.env.CLIENT_URL;
 
 // AXIOS ERROR HANDLER 🚫
 
