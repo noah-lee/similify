@@ -16,6 +16,7 @@ const options = {
 
 // SPOTIFY CLIENT CONFIG ⚙️
 const CLIENT_ID = "8c2bf61fb7774277acea438120202d71";
+const REDIRECT_URI = process.env.CLIENT_URL;
 const SCOPES = [
   "user-read-private",
   "user-read-email",
@@ -25,9 +26,6 @@ const SCOPES = [
 ]
   .join(" ")
   .toString();
-// const REDIRECT_URI = "http://localhost:3000/";
-// const REDIRECT_URI = "https://similify.netlify.app/";
-const REDIRECT_URI = process.env.CLIENT_URL;
 
 // AXIOS ERROR HANDLER 🚫
 
