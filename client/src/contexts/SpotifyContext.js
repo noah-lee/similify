@@ -14,6 +14,7 @@ export const SpotifyContextProvider = ({ children }) => {
   const MAX_BPM_RANGE = 20;
 
   axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
+  console.log(process.env.REACT_APP_SERVER_URL);
 
   // if (accessToken) {
   //   axios.defaults.headers.common["access_token"] = accessToken;
