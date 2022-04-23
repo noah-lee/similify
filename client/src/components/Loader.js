@@ -1,10 +1,10 @@
 import styled, { keyframes } from "styled-components";
 import { ReactComponent as SimilifyLoader } from "../assets/similify_loader.svg";
 
-const Loader = () => {
+const Loader = ({ size, padding }) => {
   return (
-    <Wrapper>
-      <SimilifyLoader width="32" height="32" />
+    <Wrapper padding={padding} >
+      <SimilifyLoader width={size} height={size} />
     </Wrapper>
   );
 };
@@ -16,10 +16,10 @@ const spin = keyframes`
 
 const Wrapper = styled.div`
   animation: ${spin} 3s linear infinite;
-  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: ${props => props.padding} 0;
 `;
 
 export default Loader;

@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
 
 import Search from "./Search";
-import Test from "./Test";
 
 const Homepage = () => {
   return (

@@ -9,6 +9,7 @@ import { SpotifyContext } from "../contexts/SpotifyContext";
 
 import useInterval from "../hooks/use-interval.hook";
 
+import Loader from "./Loader";
 import Suggestions from "./Suggestions";
 
 const Search = () => {
@@ -59,7 +60,7 @@ const Search = () => {
 
   return (
     <Wrapper noValidate={true} onSubmit={(ev) => ev.preventDefault()}>
-      <FiSearch color="gray" size="1.5rem" />
+      <FiSearch color="gray" size="24px" />
       <StyledInput
         required={true}
         type="text"
@@ -67,11 +68,7 @@ const Search = () => {
         placeholder="Search"
         onChange={handleQueryChange}
       />
-      {query && !suggestions && (
-        <Loader>
-          <SimilifyLoader width="24" height="24" />
-        </Loader>
-      )}
+      {query && !suggestions ? <Loader size="24" /> : <Spacer />}
       {suggestions && (
         <Suggestions
           suggestions={suggestions}
@@ -84,8 +81,11 @@ const Search = () => {
 };
 
 const Wrapper = styled.form`
-  width: 560px;
+  max-width: 520px;
+  min-width: 260px;
+  width: 100%;
   height: 48px;
+  margin: 0 24px;
   display: flex;
   align-items: center;
   position: relative;
@@ -103,19 +103,17 @@ const Wrapper = styled.form`
 const StyledInput = styled.input`
   border: none;
   outline: none;
+  height: 24px;
+  width: 100px;
   color: var(--color-dark-contrast);
   font-size: 1.25rem;
-  padding-left: 16px;
-  flex: 1;
+  padding: 0 0 0 16px;
+  flex-grow: 1;
 `;
 
-const spin = keyframes`
-  0% { transform: rotate(0deg)}
-  100% { transform: rotate(360deg)}
-`;
-
-const Loader = styled.div`
-  animation: ${spin} 3s linear infinite;
+const Spacer = styled.div`
+  width: 24px;
+  height: 24px;
 `;
 
 export default Search;

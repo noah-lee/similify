@@ -47,7 +47,7 @@ const handleAxiosError = (err) => {
   }
 };
 
-// SPOTIFY CLIENT AUTHENTICATION
+// SPOTIFY CLIENT AUTHENTICATION 🔑
 
 let CLIENT_HEADERS;
 
@@ -80,7 +80,7 @@ const getClientAccessToken = async () => {
 
 getClientAccessToken();
 
-// CUSTOM SPOTIFY REQUEST (with access token retries)
+// CUSTOM SPOTIFY REQUEST (with access token retry) 📨⏰
 
 const spotifyRequest = async (options, res) => {
   while (true) {
@@ -178,143 +178,46 @@ const getRecommendations = async (req, res) => {
 
 // Get saved tracks
 const checkSavedTracks = async (req, res) => {
-  const { access_token } = req.headers;
-  const query = req.query;
-  try {
-    const spotifyRes = await axios(
-      "	https://api.spotify.com/v1/me/tracks/contains?" +
-        new URLSearchParams(query),
-      {
-        headers: {
-          Authorization: "Bearer " + access_token,
-        },
-      }
-    );
-    res.status(spotifyRes.status).json(spotifyRes.data);
-  } catch (err) {
-    res.status(err.response.status).json(err.response.data.error);
-  }
+  const options = {
+    url:
+      "https://api.spotify.com/v1/me/tracks/contains?" +
+      new URLSearchParams(req.query),
+    headers: CLIENT_HEADERS,
+  };
+  await spotifyRequest(options, res);
 };
 
 // Add track to user saved tracks
 const saveTrack = async (req, res) => {
-  const { access_token } = req.headers;
-  const query = req.query;
-  try {
-    const spotifyRes = await axios(
-      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(query),
-      {
-        method: "PUT",
-        headers: {
-          Authorization: "Bearer " + access_token,
-        },
-      }
-    );
-    res.status(spotifyRes.status).json(spotifyRes.data);
-  } catch (err) {
-    console.log(err.response.data.error);
-    res.status(err.response.status).json(err.response.data.error);
-  }
+  const options = {
+    url:
+      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
+    method: "PUT",
+    headers: CLIENT_HEADERS,
+  };
+  await spotifyRequest(options, res);
 };
 
 // Remove track from user saved tracks
 const removeTrack = async (req, res) => {
-  const { access_token } = req.headers;
-  const query = req.query;
-  try {
-    const spotifyRes = await axios.delete(
-      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(query),
-      {
-        headers: {
-          Authorization: "Bearer " + access_token,
-        },
-      }
-    );
-    res.status(spotifyRes.status).json(spotifyRes.data);
-  } catch (err) {
-    res.status(err.response.status).json(err.response.data.error);
-  }
+  const options = {
+    url:
+      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
+    method: "DELETE",
+    headers: CLIENT_HEADERS,
+  };
+  await spotifyRequest(options, res);
 };
 
 // Start playback
 const startPlayback = async (req, res) => {
-  const { access_token } = req.headers;
-  const query = req.body;
-  try {
-    const spotifyRes = await axios.put(
-      "https://api.spotify.com/v1/me/player/play",
-      query,
-      {
-        headers: {
-          Authorization: "Bearer " + access_token,
-        },
-      }
-    );
-    res.status(spotifyRes.status).json(spotifyRes.data);
-  } catch (err) {
-    console.log(err.response.data.error);
-    res.status(err.response.status).json(err.response.data.error);
-  }
-};
-
-// MONGODB ENDPOINTS 📞
-
-// Add song to collection
-const addPopularSearches = async (req, res) => {
-  // Request body
-  const { track } = req.body;
-  const query = { _id: track.external_ids.isrc };
-  // Connect to MongoDB database
-  const client = new MongoClient(MONGO_URI, options);
-  await client.connect();
-  const db = client.db();
-  // Add track to database
-  try {
-    // Check if track already exists in database
-    const existingTrack = await db.collection("tracks").findOne(query);
-    // If new, add track to database
-    if (!existingTrack) {
-      track._id = track.external_ids.isrc;
-      track.count = 1;
-      track.updated = Date.now();
-      const addTrack = await db.collection("tracks").insertOne(track);
-      // If existing, increment count key
-    } else {
-      const updateValues = {
-        $inc: { count: 1 },
-        $set: { updated: Date.now() },
-      };
-      const updateTrack = await db
-        .collection("tracks")
-        .updateOne(query, updateValues);
-    }
-    res.status(201).json({ status: 201, data: req.body });
-  } catch (err) {
-    res.status(500).json({ status: 500, data: req.body, message: err.message });
-  }
-  client.close();
-};
-
-// Get top 8 from collection
-const getPopularSearches = async (req, res) => {
-  // Connect to MongoDB database
-  const client = new MongoClient(MONGO_URI, options);
-  await client.connect();
-  const db = client.db();
-  // Get popular searches from database
-  // Sort by popularity & last searched and
-  // Limit to top 8
-  try {
-    const sortedCollection = await db
-      .collection("tracks")
-      .find()
-      .sort({ count: -1, updated: -1 })
-      .limit(8)
-      .toArray();
-    res.status(200).json({ status: 200, tracks: sortedCollection });
-  } catch (err) {
-    res.status(500).json({ status: 500, data: req.body, message: err.message });
-  }
+  const options = {
+    url: "https://api.spotify.com/v1/me/tracks?",
+    query: req.query,
+    method: "PUT",
+    headers: CLIENT_HEADERS,
+  };
+  await spotifyRequest(options, res);
 };
 
 // EXPORT HANDLERS ⬆️
@@ -330,6 +233,4 @@ module.exports = {
   saveTrack,
   removeTrack,
   startPlayback,
-  addPopularSearches,
-  getPopularSearches,
 };

@@ -38,6 +38,7 @@ const TopContainer = styled.div`
 const MainContainer = styled.div`
   position: relative;
   flex: 1;
+  margin: 0 32px;
 `;
 
 export default App;

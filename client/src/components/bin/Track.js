@@ -78,7 +78,7 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
 
   return (
     <>
-      {features ? (
+      {features && (
         <TrackArea onClick={handleTrackClick}>
           <TrackNumber>{number}</TrackNumber>
           <TrackLink
@@ -120,10 +120,6 @@ const Track = ({ track, number, camelotMatches, showCamelot }) => {
             <FiHeart size="20px" style={heartStyle} />
           </TrackIsSaved>
         </TrackArea>
-      ) : (
-        <LoaderContainer>
-          <Loader />
-        </LoaderContainer>
       )}
     </>
   );

@@ -79,7 +79,7 @@ const Recommendations = ({
         }
         // Max 100 recommendations
         combinedRecommendations.splice(100);
-        // Remove recommendation is same as seed
+        // Remove recommendation if same as seed
         const filteredRecommendations = combinedRecommendations.filter(
           (track) => track.external_ids.isrc !== seed.external_ids.isrc
         );
@@ -135,9 +135,7 @@ const Recommendations = ({
           )}
         </>
       ) : (
-        <LoaderContainer>
-          <Loader />
-        </LoaderContainer>
+        <Loader size="64" padding="64px" />
       )}
     </Wrapper>
   );
@@ -175,10 +173,6 @@ const LoadEnd = styled.p`
   display: flex;
   justify-content: center;
   background-color: var(--color-dark-contrast);
-`;
-
-const LoaderContainer = styled.div`
-  padding: 16px;
 `;
 
 export default Recommendations;
