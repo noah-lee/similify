@@ -62,7 +62,7 @@ const SeedTrack = ({
   //   });
   // };
 
-  const { setSeed, width, breakpoint } = useContext(SpotifyContext);
+  const { setSeed, width, breakpointX } = useContext(SpotifyContext);
 
   // Handle track click
   const handleTrackClick = () => {
@@ -83,7 +83,7 @@ const SeedTrack = ({
 
   return (
     <>
-      {width > breakpoint ? (
+      {width > breakpointX ? (
         <DesktopTrack
           track={track}
           features={features}

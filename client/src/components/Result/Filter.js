@@ -16,7 +16,7 @@ const Filter = ({
   setShowCamelot,
   setRefresh,
 }) => {
-  const { width, breakpoint } = useContext(SpotifyContext);
+  const { width, breakpointX } = useContext(SpotifyContext);
 
   // Handle Show Key/Camelot Click
   const handleCamelotClick = () => {
@@ -24,7 +24,7 @@ const Filter = ({
   };
 
   return (
-    <Wrapper width={width} breakpoint={breakpoint}>
+    <Wrapper width={width} breakpointX={breakpointX}>
       <BpmRange
         width="120px"
         bpmRange={bpmRange}
@@ -45,13 +45,13 @@ const Filter = ({
 };
 
 const Wrapper = styled.div`
-  width: ${({ width, breakpoint }) => (width > breakpoint ? "100%" : "")};
+  width: ${({ width, breakpointX }) => (width > breakpointX ? "100%" : "")};
   padding: 16px;
   border-radius: 16px;
 
   display: flex;
-  flex-direction: ${({ width, breakpoint }) =>
-    width > breakpoint ? "row" : "column"};
+  flex-direction: ${({ width, breakpointX }) =>
+    width > breakpointX ? "row" : "column"};
   justify-content: space-between;
   align-items: center;
   gap: 16px;

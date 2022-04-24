@@ -9,7 +9,13 @@ import { SpotifyContext } from "../../contexts/SpotifyContext";
 // Misc.
 import { msToMinSec } from "../../utils/time";
 
-const Suggestions = ({ suggestions, setSuggestions, query, setQuery }) => {
+const Suggestions = ({
+  suggestions,
+  setSuggestions,
+  query,
+  setQuery,
+  overlay,
+}) => {
   const navigate = useNavigate();
   const { setSeed } = useContext(SpotifyContext);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -52,7 +58,7 @@ const Suggestions = ({ suggestions, setSuggestions, query, setQuery }) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper overlay={overlay}>
       {query && !suggestions.length ? (
         <NoResult>
           <p>Sorry, we couldn't find any results</p>
@@ -85,9 +91,8 @@ const Suggestions = ({ suggestions, setSuggestions, query, setQuery }) => {
 };
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: ${({ overlay }) => (overlay ? "" : "absolute")};
   top: 80px;
-  left: 0;
   z-index: 10;
 
   width: 100%;

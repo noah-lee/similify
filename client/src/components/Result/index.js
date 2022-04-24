@@ -20,7 +20,7 @@ import { toCamelotMatches } from "../../utils/key";
 
 const Result = () => {
   // const navigate = useNavigate();
-  const { seed, width, breakpoint } = useContext(SpotifyContext);
+  const { seed, width, breakpointX } = useContext(SpotifyContext);
 
   const [seedFeatures, setSeedFeatures] = useState("");
   const [refresh, setRefresh] = useState(true);
@@ -52,7 +52,7 @@ const Result = () => {
       <Logo />
       <Search />
       {seed && seedFeatures && (
-        <ResultContainer width={width} breakpoint={breakpoint}>
+        <ResultContainer width={width} breakpointX={breakpointX}>
           <Filter
             bpmRange={bpmRange}
             setBpmRange={setBpmRange}
@@ -62,7 +62,7 @@ const Result = () => {
             setShowCamelot={setShowCamelot}
             setRefresh={setRefresh}
           />
-          {width > breakpoint ? (
+          {width > breakpointX ? (
             <ResultHeader />
           ) : (
             <MobileHeader>Result</MobileHeader>
@@ -105,8 +105,8 @@ const Wrapper = styled.div`
 
 const ResultContainer = styled.div`
   width: 100%;
-  max-width: ${({ width, breakpoint }) =>
-    width > breakpoint ? "1280px" : `${breakpoint}px`};
+  max-width: ${({ width, breakpointX }) =>
+    width > breakpointX ? "1280px" : `${breakpointX}px`};
   min-width: "260px";
 
   display: flex;

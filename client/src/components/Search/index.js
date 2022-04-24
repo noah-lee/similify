@@ -1,5 +1,5 @@
 // Libraries
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -16,12 +16,13 @@ import { FiSearch } from "react-icons/fi";
 
 const Search = () => {
   // const navigate = useNavigate();
-  const { accessToken, setAccessToken, width, breakpoint } =
+  const { accessToken, setAccessToken, height, breakpointY, setOverlay } =
     useContext(SpotifyContext);
 
   const [query, setQuery] = useState("");
   const [prevQuery, setPrevQuery] = useState("");
   const [suggestions, setSuggestions] = useState("");
+  const searchRef = useRef(null);
 
   // Handle search input change
   const handleQueryChange = async (ev) => {
@@ -41,7 +42,7 @@ const Search = () => {
               new URLSearchParams({
                 q: query,
                 type: "track",
-                limit: 4,
+                limit: 5,
               })
           );
           setSuggestions(res.data.tracks.items);
@@ -55,62 +56,121 @@ const Search = () => {
     }
   }, 1000);
 
+  // Handle close
   const handleClose = () => {
     setQuery("");
     setPrevQuery("");
     setSuggestions("");
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (ev) => {
+      if (searchRef.current && !searchRef.current.contains(ev.target)) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
+  // Set search bar and suggestions as overlay if
+  // query and window height below breakpointY
+  useEffect(() => {
+    if (query && height < breakpointY) {
+      setOverlay(true);
+    } else {
+      setOverlay(false);
+    }
+  }, [query, height]);
+
   return (
-    <Wrapper
-      noValidate={true}
-      onSubmit={(ev) => ev.preventDefault()}
-      query={query}
-      width={width}
-      breakpoint={breakpoint}
-    >
-      <FiSearch color="gray" size="24px" />
-      <StyledInput
-        required={true}
-        type="text"
-        value={query}
-        placeholder="Search"
-        onChange={handleQueryChange}
-      />
-      {query ? (
-        <>
-          {suggestions ? (
-            <Close size="24px" handleClose={handleClose} />
+    <Overlay query={query}>
+      <Wrapper ref={searchRef}>
+        <Form noValidate={true} onSubmit={(ev) => ev.preventDefault()}>
+          <FiSearch color="gray" size="24px" />
+          <StyledInput
+            required={true}
+            type="text"
+            value={query}
+            placeholder="Search"
+            onChange={handleQueryChange}
+          />
+          {query ? (
+            <>
+              {suggestions ? (
+                <Close size="24px" handleClose={handleClose} />
+              ) : (
+                <Loader size="24" />
+              )}
+            </>
           ) : (
-            <Loader size="24" />
+            <Spacer />
           )}
-        </>
-      ) : (
-        <Spacer />
-      )}
-      {suggestions && (
-        <Suggestions
-          suggestions={suggestions}
-          setSuggestions={setSuggestions}
-          query={query}
-          setQuery={setQuery}
-        />
-      )}
-    </Wrapper>
+        </Form>
+        {suggestions && (
+          <Suggestions
+            suggestions={suggestions}
+            setSuggestions={setSuggestions}
+            query={query}
+            setQuery={setQuery}
+          />
+        )}
+      </Wrapper>
+    </Overlay>
   );
 };
 
-const Wrapper = styled.form`
-  position: relative;
+const Overlay = styled.div`
   z-index: 5;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+
+  &::-webkit-scrollbar {
+    /* WebKit */
+    width: 0;
+    height: 0;
+  }
 
   width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  @media screen and (max-height: 768px) {
+    ${({ query }) => {
+      return query
+        ? {
+            position: "fixed",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            overflowY: "scroll",
+          }
+        : "";
+    }}
+  }
+`;
+
+const Wrapper = styled.div`
+  position: relative;
   max-width: 520px;
-  min-width: 260px;
+  min-width: 280px;
+  width: 100%;
+  height: fit-content;
+
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+`;
+
+const Form = styled.form`
+  width: 100%;
   height: 48px;
   border-radius: 48px;
   padding: 4px 16px;
-  margin: 0 24px;
 
   display: flex;
   align-items: center;
@@ -121,12 +181,6 @@ const Wrapper = styled.form`
     box-shadow: rgba(255, 175, 65, 0.4) 0px 5px,
       rgba(255, 175, 65, 0.3) 0px 10px, rgba(255, 175, 65, 0.2) 0px 15px,
       rgba(255, 175, 65, 0.1) 0px 20px, rgba(255, 175, 65, 0.05) 0px 25px;
-  }
-
-  @media screen and (max-height: 768px) {
-    ${({ query }) => {
-      return query ? { position: "fixed", top: 0 } : "";
-    }}
   }
 `;
 

@@ -8,22 +8,32 @@ export const SpotifyContext = createContext();
 export const SpotifyContextProvider = ({ children }) => {
   const [accessToken, setAccessToken] = usePersistedState("", "access_token");
   const [seed, setSeed] = usePersistedState("", "seed");
-  const [width, setWidth] = useState(window.innerWidth);
 
-  const breakpoint = 768;
+  const [width, setWidth] = useState(window.innerWidth);
+  const [height, setHeight] = useState(window.innerHeight);
+  const [overlay, setOverlay] = useState(false);
+
+  const breakpointX = 768;
+  const breakpointY = 768;
 
   axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
 
-  // Track window width
+  // Track window width & height
   useEffect(() => {
-    const handleWidthChange = (ev) => {
+    const handleWindowChange = (ev) => {
       setWidth(ev.target.innerWidth);
+      setHeight(ev.target.innerHeight);
     };
 
-    window.addEventListener("resize", handleWidthChange);
+    window.addEventListener("resize", handleWindowChange);
 
-    return () => window.removeEventListener("resize", handleWidthChange);
+    return () => window.removeEventListener("resize", handleWindowChange);
   }, []);
+
+  // Don't allow body scroll when an overlay component is displayed
+  useEffect(() => {
+    document.body.style.overflow = overlay ? "hidden" : "auto";
+  }, [overlay]);
 
   // if (accessToken) {
   //   axios.defaults.headers.common["access_token"] = accessToken;
@@ -37,7 +47,11 @@ export const SpotifyContextProvider = ({ children }) => {
         seed,
         setSeed,
         width,
-        breakpoint,
+        height,
+        breakpointX,
+        breakpointY,
+        overlay,
+        setOverlay,
       }}
     >
       {children}
