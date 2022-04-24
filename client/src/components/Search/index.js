@@ -102,6 +102,7 @@ const Search = () => {
 
 const Wrapper = styled.form`
   position: relative;
+  z-index: 5;
 
   width: 100%;
   max-width: 520px;
