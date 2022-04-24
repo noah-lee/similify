@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 
-import spotifyLogoPath from "../assets/Spotify_Icon_RGB_Green.png";
+import spotifyLogoPath from "../../assets/Spotify_Icon_RGB_Green.png";
 
 const Disconnect = () => {
   const navigate = useNavigate();

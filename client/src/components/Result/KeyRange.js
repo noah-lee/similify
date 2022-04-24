@@ -1,23 +1,29 @@
 import styled from "styled-components";
 
-const KeyRange = ({ keyRange, setKeyRange }) => {
-
+const KeyRange = ({ width, keyRange, setKeyRange, setRefresh }) => {
   // Handle key change
   const handleKeyChange = (ev) => {
     const value = Number(ev.target.value);
     setKeyRange(value);
   };
 
+  // Handle refresh on mouse up
+  const handleRefresh = () => {
+    setRefresh((prevState) => !prevState);
+  };
+
   return (
     <Wrapper>
       <Text>Key</Text>
-      <StyledContainer>
+      <StyledContainer width={width}>
         <StyledInput
+          width={width}
           type="range"
           step={1}
           max={6}
           value={keyRange}
           onChange={handleKeyChange}
+          onMouseUp={handleRefresh}
         />
         <StyledTrack />
         <StyledRange keyRange={keyRange} max={6} />
@@ -42,7 +48,7 @@ const Text = styled.p`
 
 const StyledContainer = styled.div`
   position: relative;
-  width: 120px;
+  width: ${({ width }) => width};
   height: 24px;
   margin: 0;
 `;
@@ -50,7 +56,7 @@ const StyledContainer = styled.div`
 const StyledInput = styled.input`
   -webkit-appearance: none;
   position: absolute;
-  width: 120px;
+  width: ${({ width }) => width};
   top: 12px;
   height: 0;
   margin: 0;

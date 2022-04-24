@@ -4,33 +4,40 @@ import { FiInfo, FiGithub } from "react-icons/fi";
 
 const Footer = () => {
   return (
-    <Wrapper>
-      <LinkContainer>
-        <StyledLink to="/about">
-          <FiInfo />
-          <p>About</p>
-        </StyledLink>
-        <StyledA href="https://github.com/noah-lee/similify" target="_blank">
-          <FiGithub />
-          <p>GitHub</p>
-        </StyledA>
-      </LinkContainer>
-      <SpotifyText>
-        Create by Noah Lee, powered by{" "}
-        <SpotifyA href="http://spotify.com/" target="_blank">
-          Spotify
-        </SpotifyA>
-      </SpotifyText>
+    <Wrapper className="footer">
+      <FooterContainer>
+        <FooterLinks>
+          <StyledLink to="/about">
+            <FiInfo />
+            <p>About</p>
+          </StyledLink>
+          <StyledA href="https://github.com/noah-lee/similify" target="_blank">
+            <FiGithub />
+            <p>GitHub</p>
+          </StyledA>
+        </FooterLinks>
+        <FooterText>
+          Created by Noah Lee, powered by{" "}
+          <SpotifyA href="http://spotify.com/" target="_blank">
+            Spotify
+          </SpotifyA>
+        </FooterText>
+      </FooterContainer>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.footer`
   background-color: var(--color-dark-contrast);
+`;
+
+const FooterContainer = styled.div`
+  width: 100%;
+  max-width: 1280px;
   height: 96px;
+  margin: 0 auto;
   padding: 16px 32px;
-  font-weight: bold;
-  flex: none;
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,17 +45,19 @@ const Wrapper = styled.div`
   gap: 16px;
 `;
 
-const LinkContainer = styled.div`
-  flex: none;
+const FooterLinks = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
+
+  font-weight: bold;
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
+
   display: flex;
   align-items: center;
   gap: 4px;
@@ -61,19 +70,19 @@ const StyledLink = styled(Link)`
 const StyledA = styled.a`
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
+
   display: flex;
   align-items: center;
   gap: 4px;
-  cursor: pointer;
 
   &:hover {
     color: var(--color-orange-accent);
   }
 `;
 
-const SpotifyText = styled.p`
+const FooterText = styled.p`
   color: gray;
-  font-weight: normal;
   font-size: 12px;
 `;
 

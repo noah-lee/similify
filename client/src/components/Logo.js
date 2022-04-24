@@ -1,6 +1,8 @@
+// Libraries
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+// Misc.
 import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
 
 const Logo = () => {
@@ -15,13 +17,15 @@ const Logo = () => {
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
+
   display: flex;
   align-items: center;
-  font-weight: bold;
-  font-size: 3.6rem;
   gap: 8px;
 `;
 
-const Name = styled.h1``;
+const Name = styled.h1`
+  font-weight: bold;
+  font-size: 3.6rem;
+`;
 
 export default Logo;

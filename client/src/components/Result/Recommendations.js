@@ -1,25 +1,27 @@
+// Libraries
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
-
+// Components
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 import Track from "./Track";
-import Loader from "./Loader";
+import Loader from "../Loader";
 
-import { toKeySubRanges } from "../utils/key";
+// Misc.
+import { toKeySubRanges } from "../../utils/key";
 
 const Recommendations = ({
   seed,
   seedFeatures,
+  bpmRange,
+  keyRange,
   camelotMatches,
   showCamelot,
   refresh,
 }) => {
-  const navigate = useNavigate();
-
-  const { bpmRange, keyRange, MAX_BPM_RANGE } = useContext(SpotifyContext);
+  // const navigate = useNavigate();
 
   const [recommendations, setRecommendations] = useState("");
   const [recommendationFeatures, setRecommendationFeatures] = useState("");
@@ -37,11 +39,11 @@ const Recommendations = ({
         seed_tracks: seed.id,
         seed_artists: seed.artists.slice(0, 4).map((artist) => artist.id),
         min_tempo:
-          bpmRange === MAX_BPM_RANGE
+          bpmRange === 20
             ? 0
             : Number(seedFeatures.tempo.toFixed()) - bpmRange - 0.5,
         max_tempo:
-          bpmRange === MAX_BPM_RANGE
+          bpmRange === 20
             ? 300
             : Number(seedFeatures.tempo.toFixed()) + bpmRange + 0.49,
         // target_acousticness: seedFeatures.acousticness,
@@ -116,20 +118,19 @@ const Recommendations = ({
     <Wrapper>
       {recommendations && recommendationFeatures ? (
         <>
-          <RecommendationsTitle>Recommendations</RecommendationsTitle>
+          <HeaderTitle>Recommendations</HeaderTitle>
           {recommendations.slice(0, load).map((recommendation, index) => (
             <Track
               key={recommendation.id}
               track={recommendation}
               features={recommendationFeatures[index]}
               camelotMatches={camelotMatches}
-              number={index + 1}
               showCamelot={showCamelot}
               isSeed={false}
             />
           ))}
           {load <= recommendations.length ? (
-            <LoadMore onClick={handleLoadMoreClick}>Look for more 👀</LoadMore>
+            <LoadMore onClick={handleLoadMoreClick}>Look for more 🔎</LoadMore>
           ) : (
             <LoadEnd>🏁 You've reached the end 🏁</LoadEnd>
           )}
@@ -142,21 +143,23 @@ const Recommendations = ({
 };
 
 const Wrapper = styled.div`
-  width: 609px;
+  width: 100%;
 `;
 
-const RecommendationsTitle = styled.h2`
+const HeaderTitle = styled.h2`
   font-weight: bold;
   padding: 16px;
 `;
 
 const LoadMore = styled.button`
-  font-weight: bold;
   width: 100%;
   height: 48px;
   padding: 16px;
+
   display: flex;
   justify-content: center;
+
+  font-weight: bold;
   background-color: var(--color-dark-contrast);
 
   &:hover {
@@ -166,12 +169,14 @@ const LoadMore = styled.button`
 `;
 
 const LoadEnd = styled.p`
-  font-weight: bold;
   width: 100%;
   height: 48px;
   padding: 16px;
+
   display: flex;
   justify-content: center;
+
+  font-weight: bold;
   background-color: var(--color-dark-contrast);
 `;
 

@@ -1,19 +1,20 @@
+// Libraries
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { FiHeart } from "react-icons/fi";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
+// Components
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 
-import spotifyLogoWhitePath from "../assets/Spotify_Icon_RGB_White.png";
-
-import { msToMinSec } from "../utils/time";
-import { toLetterKey, toCamelotKey, toColor } from "../utils/key";
+// Misc.
+import spotifyLogoWhitePath from "../../assets/Spotify_Icon_RGB_White.png";
+import { msToMinSec } from "../../utils/time";
+import { toLetterKey, toCamelotKey, toColor } from "../../utils/key";
 
 const SeedTrack = ({
   track,
   features,
-  number,
   camelotMatches,
   showCamelot,
   isSeed,
@@ -67,9 +68,6 @@ const SeedTrack = ({
 
   // Handle track click
   const handleTrackClick = () => {
-    // axios.post("/api/popular-searches", {
-    //   track,
-    // });
     if (!isSeed) setSeed(track);
   };
 
@@ -87,7 +85,6 @@ const SeedTrack = ({
 
   return (
     <TrackArea onClick={handleTrackClick} isSeed={isSeed}>
-      <TrackNumber>{number}</TrackNumber>
       <TrackLink
         href={"https://open.spotify.com/track/" + track.id}
         target="_blank"
@@ -108,27 +105,33 @@ const SeedTrack = ({
         </TrackArtists>
       </TrackTitle>
       <TrackTime>{msToMinSec(track.duration_ms)}</TrackTime>
+
       <TrackBpm>{features.tempo.toFixed()}</TrackBpm>
       <TrackKey style={keyStyle}>
         {showCamelot
           ? toCamelotKey(features.key, features.mode)
           : toLetterKey(features.key, features.mode)}
       </TrackKey>
-      {/* <TrackIsSaved onClick={handleHeartClick}>
-        <FiHeart size="20px" style={heartStyle} />
-      </TrackIsSaved> */}
+
+      <TrackIsSaved /*onClick={handleHeartClick}*/>
+        <FiHeart size="20px" /*style={heartStyle}*/ />
+      </TrackIsSaved>
     </TrackArea>
   );
 };
 
 const TrackArea = styled.div`
-  display: grid;
-  grid-template-columns: 32px 48px 257px 48px 48px 64px; //20px;
-  gap: 16px;
-  padding: 16px;
-  background-color: var(--color-dark-contrast);
-  align-items: center;
   cursor: ${(props) => (props.isSeed ? "auto" : "pointer")};
+
+  width: 100%;
+  padding: 16px;
+  
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  background-color: var(--color-dark-contrast);
 
   &:hover {
     background-color: ${(props) =>
@@ -136,10 +139,9 @@ const TrackArea = styled.div`
   }
 `;
 
-const TrackNumber = styled.p``;
-
 const TrackLink = styled.a`
   position: relative;
+  width: 48px;
   height: 48px;
 `;
 
@@ -147,11 +149,14 @@ const TrackUri = styled.button`
   position: absolute;
   left: 0;
   top: 0;
-  width: 48px;
-  height: 48px;
+
+  width: 100%;
+  height: 100%;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   color: #f3f3f3;
   opacity: 0;
   cursor: pointer;
@@ -162,25 +167,44 @@ const TrackUri = styled.button`
   }
 `;
 
+const TrackArt = styled.img``;
+
 const SpotifyLogo = styled.img`
   width: 24px;
 `;
 
-const TrackArt = styled.img``;
 const TrackTitle = styled.div`
+  flex: 1;
+  min-width: 160px;
+
   display: flex;
   flex-direction: column;
   gap: 8px;
+  justify-content: center;
 `;
+
 const TrackName = styled.p``;
+
 const TrackArtists = styled.p`
   font-weight: 400;
   color: gray;
 `;
-const TrackTime = styled.p``;
-const TrackBpm = styled.p``;
-const TrackKey = styled.p``;
 
-// const TrackIsSaved = styled.button``;
+const TrackTime = styled.p`
+  width: 48px;
+`;
+
+const TrackBpm = styled.p`
+  width: 48px;
+`;
+
+const TrackKey = styled.p`
+  width: 64px;
+`;
+
+const TrackIsSaved = styled.button`
+  width: 48px;
+  height: 20px;
+`;
 
 export default SeedTrack;

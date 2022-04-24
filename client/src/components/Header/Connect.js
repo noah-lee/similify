@@ -1,12 +1,15 @@
+// Libraries
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
-import { getHashParams } from "../utils/hash";
+// Components
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
-import spotifyLogoPath from "../assets/Spotify_Icon_RGB_Green.png";
+// Misc.
+import spotifyLogoPath from "../../assets/Spotify_Icon_RGB_Green.png";
+import { getHashParams } from "../../utils/hash";
 
 const Connect = () => {
   const navigate = useNavigate();
@@ -32,10 +35,6 @@ const Connect = () => {
       setAccessToken(hashParams.access_token);
       navigate("/");
     }
-
-    // NOTE: Run effect once on component mount, please
-    // recheck dependencies if effect is updated.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -47,15 +46,18 @@ const Connect = () => {
 };
 
 const StyledButton = styled.button`
-  background-color: white;
-  padding: 8px 16px;
-  border-radius: 24px;
-  color: var(--color-dark-main);
+  pointer-events: none;
+  
   display: flex;
   align-items: center;
   gap: 8px;
+
+  padding: 12px 16px;
+  border-radius: 24px;
+
+  background-color: white;
+  color: var(--color-dark-main);
   font-weight: bold;
-  pointer-events: none;
 `;
 
 const SpotifyLogo = styled.img`

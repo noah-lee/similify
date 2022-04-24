@@ -1,33 +1,35 @@
-import { useContext } from "react";
 import styled from "styled-components";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
-
-const BpmRange = ({ bpmRange, setBpmRange }) => {
-  const { MAX_BPM_RANGE } = useContext(SpotifyContext);
-
+const BpmRange = ({ width, bpmRange, setBpmRange, setRefresh }) => {
   // Handle BPM change
   const handleBpmChange = (ev) => {
     const value = Number(ev.target.value);
     setBpmRange(value);
   };
 
+  // Handle refresh on mouse up
+  const handleRefresh = () => {
+    setRefresh((prevState) => !prevState);
+  };
+
   return (
     <Wrapper>
       <Text>BPM</Text>
-      <StyledContainer>
+      <StyledContainer width={width}>
         <StyledInput
+          width={width}
           type="range"
           step={1}
-          max={MAX_BPM_RANGE}
+          max={20}
           value={bpmRange}
           onChange={handleBpmChange}
+          onMouseUp={handleRefresh}
         />
         <StyledTrack />
-        <StyledRange bpmRange={bpmRange} max={MAX_BPM_RANGE} />
+        <StyledRange bpmRange={bpmRange} max={20} />
       </StyledContainer>
       <Text style={{ width: "32px" }}>
-        {bpmRange < MAX_BPM_RANGE ? "±" + bpmRange : "All"}
+        {bpmRange < 20 ? "±" + bpmRange : "All"}
       </Text>
     </Wrapper>
   );
@@ -46,7 +48,7 @@ const Text = styled.p`
 
 const StyledContainer = styled.div`
   position: relative;
-  width: 120px;
+  width: ${({ width }) => width};
   height: 24px;
   margin: 0;
 `;
@@ -54,7 +56,7 @@ const StyledContainer = styled.div`
 const StyledInput = styled.input`
   -webkit-appearance: none;
   position: absolute;
-  width: 120px;
+  width: ${({ width }) => width};
   top: 12px;
   height: 0;
   margin: 0;

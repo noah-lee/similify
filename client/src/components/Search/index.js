@@ -1,26 +1,25 @@
-import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled, { keyframes } from "styled-components";
+// Libraries
+import { useState /*, useContext*/ } from "react";
+// import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import axios from "axios";
-import { FiSearch } from "react-icons/fi";
-import { ReactComponent as SimilifyLoader } from "../assets/similify_loader.svg";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
-
-import useInterval from "../hooks/use-interval.hook";
-
-import Loader from "./Loader";
+// Components
+// import { SpotifyContext } from "../../contexts/SpotifyContext"
+import Loader from "../Loader";
 import Suggestions from "./Suggestions";
 
-const Search = () => {
-  const navigate = useNavigate();
+// Misc.
+import useInterval from "../../hooks/use-interval.hook";
+import { FiSearch } from "react-icons/fi";
 
-  const { accessToken, setAccessToken } = useContext(SpotifyContext);
+const Search = () => {
+  // const navigate = useNavigate();
+  // const { accessToken, setAccessToken } = useContext(SpotifyContext);
 
   const [query, setQuery] = useState("");
   const [prevQuery, setPrevQuery] = useState("");
   const [suggestions, setSuggestions] = useState("");
-  const [delayToggle, setDelayToggle] = useState(true);
 
   // Handle search input change
   const handleQueryChange = async (ev) => {
@@ -29,14 +28,11 @@ const Search = () => {
     setQuery(value);
   };
 
-  // Limit to 1 search api call per second
-  useInterval(() => setDelayToggle((prevState) => !prevState), 1000);
-
-  // Get Spotify search results
-  useEffect(() => {
+  // Get Spotify search results (Limit to 1 api call per second)
+  useInterval(() => {
     if (query && prevQuery !== query) {
       setPrevQuery(query);
-      const getSearch = async () => {
+      (async () => {
         try {
           const res = await axios(
             "/api/search?" +
@@ -50,16 +46,19 @@ const Search = () => {
         } catch (err) {
           console.log(err.response.status, err.response.statusText);
         }
-      };
-      getSearch();
+      })();
     } else if (!query && prevQuery !== query) {
       setPrevQuery("");
       setSuggestions("");
     }
-  }, [delayToggle]);
+  }, 1000);
 
   return (
-    <Wrapper noValidate={true} onSubmit={(ev) => ev.preventDefault()}>
+    <Wrapper
+      noValidate={true}
+      onSubmit={(ev) => ev.preventDefault()}
+      query={query}
+    >
       <FiSearch color="gray" size="24px" />
       <StyledInput
         required={true}
@@ -81,16 +80,19 @@ const Search = () => {
 };
 
 const Wrapper = styled.form`
+  position: relative;
+
+  width: 100%;
   max-width: 520px;
   min-width: 260px;
-  width: 100%;
   height: 48px;
+  border-radius: 48px;
+  padding: 4px 16px;
   margin: 0 24px;
+
   display: flex;
   align-items: center;
-  position: relative;
-  padding: 4px 16px;
-  border-radius: 48px;
+
   background-color: white;
 
   &:hover {
@@ -98,17 +100,25 @@ const Wrapper = styled.form`
       rgba(255, 175, 65, 0.3) 0px 10px, rgba(255, 175, 65, 0.2) 0px 15px,
       rgba(255, 175, 65, 0.1) 0px 20px, rgba(255, 175, 65, 0.05) 0px 25px;
   }
+
+  @media screen and (max-height: 768px) {
+    ${({ query }) => {
+      return query ? { position: "fixed", top: 0} : "";
+    }}
+  }
 `;
 
 const StyledInput = styled.input`
+  flex-grow: 1;
   border: none;
   outline: none;
+
+  min-width: 160px;
   height: 24px;
-  width: 100px;
-  color: var(--color-dark-contrast);
-  font-size: 1.25rem;
   padding: 0 0 0 16px;
-  flex-grow: 1;
+
+  font-size: 1.25rem;
+  color: var(--color-dark-contrast);
 `;
 
 const Spacer = styled.div`

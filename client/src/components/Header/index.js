@@ -1,11 +1,9 @@
+// Libraries
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
-
-import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
-
+// Components
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 import Connect from "./Connect";
 import Disconnect from "./Disconnect";
 import DisplayName from "./DisplayName";
@@ -14,40 +12,35 @@ const Header = () => {
   const { accessToken } = useContext(SpotifyContext);
 
   return (
-    <Wrapper>
-        {/* {accessToken ? (
+    <Wrapper className="header">
+      <HeaderContainer>
+        {accessToken ? (
           <>
             <DisplayName />
             <Disconnect />
           </>
         ) : (
           <Connect />
-        )} */}
+        )}
+      </HeaderContainer>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.header``;
+
+const HeaderContainer = styled.div`
+  width: 100%;
+  max-width: 1280px;
   height: 96px;
+  margin: 0 auto;
   padding: 16px 32px;
-  line-height: 32px;
-  font-weight: bold;
+
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  align-items: center;
-  flex: none;
-`;
 
-const LogoContainer = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  align-items: center;
   font-weight: bold;
-  font-size: 2rem;
-  gap: 8px;
 `;
-
-const Name = styled.h1``;
 
 export default Header;

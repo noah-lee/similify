@@ -64,10 +64,16 @@ export default createGlobalStyle`
   }
 
   body {
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Nunito', sans-serif;
     background-color: var(--color-dark-main);
     color: white;
-    min-width: 320px;
+  }
+
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   button {

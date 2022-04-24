@@ -1,11 +1,13 @@
+// Libraries
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 
-import { SpotifyContext } from "../contexts/SpotifyContext";
+// Components
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 
-import { msToMinSec } from "../utils/time";
+// Misc.
+import { msToMinSec } from "../../utils/time";
 
 const Suggestions = ({ suggestions, query, setQuery }) => {
   const navigate = useNavigate();
@@ -14,9 +16,6 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
 
   // On suggestion click
   const handleTrackSelect = (track) => {
-    // axios.post("/api/popular-searches", {
-    //   track,
-    // });
     setSeed(track);
     setQuery("");
     navigate("/result");
@@ -85,26 +84,31 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
 };
 
 const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
   position: absolute;
   top: 80px;
   left: 0;
-  background-color: var(--color-dark-contrast);
-  border-radius: 16px;
   z-index: 10;
+
+  width: 100%;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-dark-contrast);
 `;
 
 const Suggestion = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  border-radius: 16px;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  
+  border-radius: 16px;
+  padding: 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
 `;
 
 const Art = styled.img``;
@@ -132,6 +136,7 @@ const Time = styled.p`
 const NoResult = styled.div`
   padding: 16px;
   border-radius: 16px;
+  
   display: flex;
   flex-direction: column;
   gap: 8px;

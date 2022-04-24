@@ -1,6 +1,8 @@
+// Libraries
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 
+// Components
 import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import Homepage from "./Homepage";
@@ -13,32 +15,22 @@ function App() {
   return (
     <BrowserRouter>
       <GlobalStyles />
-      <TopContainer>
         <Header />
-        <MainContainer>
+        <Main className='content'>
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/result" element={<Result />} />
             <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </MainContainer>
+        </Main>
         <Footer />
-      </TopContainer>
     </BrowserRouter>
   );
 }
 
-const TopContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`;
-
-const MainContainer = styled.div`
-  position: relative;
+const Main = styled.main`
   flex: 1;
-  margin: 0 32px;
 `;
 
 export default App;
