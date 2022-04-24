@@ -24,6 +24,7 @@ const Suggestions = ({
   const handleTrackSelect = (track) => {
     setSeed(track);
     setQuery("");
+    setSuggestions("");
     navigate("/result");
   };
 
