@@ -46,6 +46,7 @@ const Filter = ({
 
 const Wrapper = styled.div`
   width: ${({ width, breakpointX }) => (width > breakpointX ? "100%" : "")};
+  max-width: 768px;
   padding: 16px;
   border-radius: 16px;
 
