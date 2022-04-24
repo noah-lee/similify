@@ -24,6 +24,7 @@ const BpmRange = ({ width, bpmRange, setBpmRange, setRefresh }) => {
           value={bpmRange}
           onChange={handleBpmChange}
           onMouseUp={handleRefresh}
+          onPointerUp={handleRefresh}
         />
         <StyledTrack />
         <StyledRange bpmRange={bpmRange} max={20} />

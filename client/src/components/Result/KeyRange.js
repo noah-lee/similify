@@ -24,6 +24,7 @@ const KeyRange = ({ width, keyRange, setKeyRange, setRefresh }) => {
           value={keyRange}
           onChange={handleKeyChange}
           onMouseUp={handleRefresh}
+          onPointerUp={handleRefresh}
         />
         <StyledTrack />
         <StyledRange keyRange={keyRange} max={6} />
