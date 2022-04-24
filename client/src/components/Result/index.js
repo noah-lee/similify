@@ -65,7 +65,7 @@ const Result = () => {
           {width > breakpoint ? (
             <ResultHeader />
           ) : (
-            <MobileHeader>Title</MobileHeader>
+            <MobileHeader>Result</MobileHeader>
           )}
           <Track
             track={seed}
