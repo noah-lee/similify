@@ -129,7 +129,7 @@ const Recommendations = ({
               isSeed={false}
             />
           ))}
-          {load <= recommendations.length ? (
+          {load < recommendations.length ? (
             <LoadMore onClick={handleLoadMoreClick}>Look for more 🔎</LoadMore>
           ) : (
             <LoadEnd>🏁 You've reached the end 🏁</LoadEnd>
