@@ -6,7 +6,7 @@ import axios from "axios";
 
 // Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
-import Track from "./Track";
+import Track from "../Track";
 import Loader from "../Loader";
 
 // Misc.
@@ -144,6 +144,9 @@ const Recommendations = ({
 
 const Wrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const HeaderTitle = styled.h2`
@@ -155,6 +158,7 @@ const LoadMore = styled.button`
   width: 100%;
   height: 48px;
   padding: 16px;
+  border-radius: 8px;
 
   display: flex;
   justify-content: center;
@@ -172,6 +176,7 @@ const LoadEnd = styled.p`
   width: 100%;
   height: 48px;
   padding: 16px;
+  border-radius: 8px;
 
   display: flex;
   justify-content: center;

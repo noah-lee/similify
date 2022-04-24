@@ -1,88 +1,21 @@
-// Libraries
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
+
 import { FiHeart } from "react-icons/fi";
 
-// Components
-import { SpotifyContext } from "../../contexts/SpotifyContext";
-
-// Misc.
 import spotifyLogoWhitePath from "../../assets/Spotify_Icon_RGB_White.png";
 import { msToMinSec } from "../../utils/time";
-import { toLetterKey, toCamelotKey, toColor } from "../../utils/key";
 
-const SeedTrack = ({
+import { toLetterKey, toCamelotKey} from "../../utils/key";
+
+
+const DesktopTrack = ({
   track,
   features,
-  camelotMatches,
   showCamelot,
   isSeed,
+  handleTrackClick,
+  keyStyle,
 }) => {
-  // const [saved, setSaved] = useState("");
-
-  // // Check if seed track is saved
-  // useEffect(() => {
-  //   const checkSaved = async () => {
-  //     const res = await axios(
-  //       "/api/check-saved-tracks?" +
-  //         new URLSearchParams({
-  //           ids: seed.id,
-  //         })
-  //     );
-  //     setSaved(res.data[0]);
-  //   };
-  //   checkSaved();
-  // }, [seed]);
-
-  // // Heart styling
-  // const heartStyle = {
-  //   color: saved ? "var(--color-orange-accent)" : "gray",
-  //   fill: saved ? "var(--color-orange-accent)" : "none",
-  // };
-
-  // // Handle heart click
-  // const handleHeartClick = () => {
-  //   if (saved) {
-  //     axios.delete(
-  //       "/api/remove-track?" + new URLSearchParams({ ids: seed.id })
-  //     );
-  //   } else {
-  //     axios.put("/api/save-track?" + new URLSearchParams({ ids: seed.id }));
-  //   }
-  //   setSaved((prevState) => !prevState);
-  // };
-
-  // // Handle art click
-  // const handleArtClick = (ev) => {
-  //   ev.stopPropagation();
-  //   axios.put("/api/play", {
-  //     context_uri: seed.album.uri,
-  //     offset: {
-  //       position: seed.track_number - 1,
-  //     },
-  //   });
-  // };
-
-  const { setSeed } = useContext(SpotifyContext);
-
-  // Handle track click
-  const handleTrackClick = () => {
-    if (!isSeed) setSeed(track);
-  };
-
-  // Show color only if it is a camelot match
-  const keyStyle = {
-    color: `${
-      showCamelot &&
-      !camelotMatches
-        .map((match) => JSON.stringify(match))
-        .includes(JSON.stringify({ key: features.key, mode: features.mode }))
-        ? "gray"
-        : toColor(features.key, features.mode)
-    }`,
-  };
-
   return (
     <TrackArea onClick={handleTrackClick} isSeed={isSeed}>
       <TrackLink
@@ -125,7 +58,8 @@ const TrackArea = styled.div`
 
   width: 100%;
   padding: 16px;
-  
+  border-radius: 16px;
+
   display: flex;
   align-items: center;
 
@@ -207,4 +141,4 @@ const TrackIsSaved = styled.button`
   height: 20px;
 `;
 
-export default SeedTrack;
+export default DesktopTrack;

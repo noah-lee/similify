@@ -9,7 +9,7 @@ import { SpotifyContext } from "../../contexts/SpotifyContext";
 // Misc.
 import { msToMinSec } from "../../utils/time";
 
-const Suggestions = ({ suggestions, query, setQuery }) => {
+const Suggestions = ({ suggestions, setSuggestions, query, setQuery }) => {
   const navigate = useNavigate();
   const { setSeed } = useContext(SpotifyContext);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -36,6 +36,7 @@ const Suggestions = ({ suggestions, query, setQuery }) => {
         }
         if (ev.key === "Escape") {
           setQuery("");
+          setSuggestions("");
         }
       }
     };
@@ -102,7 +103,7 @@ const Suggestion = styled.div`
   text-decoration: none;
   color: inherit;
   cursor: pointer;
-  
+
   border-radius: 16px;
   padding: 16px;
 
@@ -136,7 +137,7 @@ const Time = styled.p`
 const NoResult = styled.div`
   padding: 16px;
   border-radius: 16px;
-  
+
   display: flex;
   flex-direction: column;
   gap: 8px;

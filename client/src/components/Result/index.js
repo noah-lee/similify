@@ -11,16 +11,16 @@ import Search from "../Search";
 import Filter from "./Filter";
 import ResultHeader from "./ResultHeader";
 import Recommendations from "./Recommendations";
-import Track from "./Track";
+import Track from "../Track";
 import ScrollUp from "./ScrollUp";
 
 // Misc.
-import usePersistedState from '../../hooks/use-persisted-state.hook';
+import usePersistedState from "../../hooks/use-persisted-state.hook";
 import { toCamelotMatches } from "../../utils/key";
 
 const Result = () => {
   // const navigate = useNavigate();
-  const { seed } = useContext(SpotifyContext);
+  const { seed, width, breakpoint } = useContext(SpotifyContext);
 
   const [seedFeatures, setSeedFeatures] = useState("");
   const [refresh, setRefresh] = useState(true);
@@ -28,7 +28,6 @@ const Result = () => {
   const [showCamelot, setShowCamelot] = useState(false);
   const [bpmRange, setBpmRange] = usePersistedState(10, "bpm-range");
   const [keyRange, setKeyRange] = usePersistedState(2, "key-range");
-
   // Get seed track audio features
   useEffect(() => {
     (async () => {
@@ -53,7 +52,7 @@ const Result = () => {
       <Logo />
       <Search />
       {seed && seedFeatures && (
-        <ResultContainer>
+        <ResultContainer width={width} breakpoint={breakpoint}>
           <Filter
             bpmRange={bpmRange}
             setBpmRange={setBpmRange}
@@ -63,7 +62,7 @@ const Result = () => {
             setShowCamelot={setShowCamelot}
             setRefresh={setRefresh}
           />
-          <ResultHeader />
+          {width > breakpoint ? <ResultHeader /> : <></>}
           <Track
             track={seed}
             features={seedFeatures}
@@ -88,6 +87,11 @@ const Result = () => {
 };
 
 const Wrapper = styled.div`
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 32px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -97,11 +101,14 @@ const Wrapper = styled.div`
 
 const ResultContainer = styled.div`
   width: 100%;
-  max-width: 640px;
+  max-width: ${({ width, breakpoint }) =>
+    width > breakpoint ? "1280px" : `${breakpoint}px`};
+  min-width: "260px";
 
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
 `;
 
 export default Result;

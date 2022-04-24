@@ -1,7 +1,9 @@
 // Libraries
+import { useContext } from "react";
 import styled from "styled-components";
 
 // Components
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 import BpmRange from "./BpmRange";
 import KeyRange from "./KeyRange";
 
@@ -14,15 +16,27 @@ const Filter = ({
   setShowCamelot,
   setRefresh,
 }) => {
+  const { width, breakpoint } = useContext(SpotifyContext);
+
   // Handle Show Key/Camelot Click
   const handleCamelotClick = () => {
     setShowCamelot((prevState) => !prevState);
   };
 
   return (
-    <Wrapper>
-      <BpmRange width="120px" bpmRange={bpmRange} setBpmRange={setBpmRange} setRefresh={setRefresh}/>
-      <KeyRange width="120px" keyRange={keyRange} setKeyRange={setKeyRange} setRefresh={setRefresh}/>
+    <Wrapper width={width} breakpoint={breakpoint}>
+      <BpmRange
+        width="120px"
+        bpmRange={bpmRange}
+        setBpmRange={setBpmRange}
+        setRefresh={setRefresh}
+      />
+      <KeyRange
+        width="120px"
+        keyRange={keyRange}
+        setKeyRange={setKeyRange}
+        setRefresh={setRefresh}
+      />
       <CamelotButton onClick={handleCamelotClick}>
         {showCamelot ? "Camelot" : "Key"}
       </CamelotButton>
@@ -31,10 +45,13 @@ const Filter = ({
 };
 
 const Wrapper = styled.div`
-  width: 100%;
+  width: ${({ width, breakpoint }) => (width > breakpoint ? "100%" : "")};
   padding: 16px;
+  border-radius: 16px;
 
   display: flex;
+  flex-direction: ${({ width, breakpoint }) =>
+    width > breakpoint ? "row" : "column"};
   justify-content: space-between;
   align-items: center;
   gap: 16px;

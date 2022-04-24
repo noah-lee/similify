@@ -1,13 +1,14 @@
 // Libraries
-import { useState /*, useContext*/ } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
 // Components
-// import { SpotifyContext } from "../../contexts/SpotifyContext"
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 import Loader from "../Loader";
 import Suggestions from "./Suggestions";
+import Close from "./Close";
 
 // Misc.
 import useInterval from "../../hooks/use-interval.hook";
@@ -15,7 +16,8 @@ import { FiSearch } from "react-icons/fi";
 
 const Search = () => {
   // const navigate = useNavigate();
-  // const { accessToken, setAccessToken } = useContext(SpotifyContext);
+  const { accessToken, setAccessToken, width, breakpoint } =
+    useContext(SpotifyContext);
 
   const [query, setQuery] = useState("");
   const [prevQuery, setPrevQuery] = useState("");
@@ -53,11 +55,19 @@ const Search = () => {
     }
   }, 1000);
 
+  const handleClose = () => {
+    setQuery("");
+    setPrevQuery("");
+    setSuggestions("");
+  };
+
   return (
     <Wrapper
       noValidate={true}
       onSubmit={(ev) => ev.preventDefault()}
       query={query}
+      width={width}
+      breakpoint={breakpoint}
     >
       <FiSearch color="gray" size="24px" />
       <StyledInput
@@ -67,10 +77,21 @@ const Search = () => {
         placeholder="Search"
         onChange={handleQueryChange}
       />
-      {query && !suggestions ? <Loader size="24" /> : <Spacer />}
+      {query ? (
+        <>
+          {suggestions ? (
+            <Close size="24px" handleClose={handleClose} />
+          ) : (
+            <Loader size="24" />
+          )}
+        </>
+      ) : (
+        <Spacer />
+      )}
       {suggestions && (
         <Suggestions
           suggestions={suggestions}
+          setSuggestions={setSuggestions}
           query={query}
           setQuery={setQuery}
         />
@@ -103,7 +124,7 @@ const Wrapper = styled.form`
 
   @media screen and (max-height: 768px) {
     ${({ query }) => {
-      return query ? { position: "fixed", top: 0} : "";
+      return query ? { position: "fixed", top: 0 } : "";
     }}
   }
 `;
