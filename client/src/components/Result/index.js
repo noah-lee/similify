@@ -62,7 +62,11 @@ const Result = () => {
             setShowCamelot={setShowCamelot}
             setRefresh={setRefresh}
           />
-          {width > breakpoint ? <ResultHeader /> : <></>}
+          {width > breakpoint ? (
+            <ResultHeader />
+          ) : (
+            <MobileHeader>Title</MobileHeader>
+          )}
           <Track
             track={seed}
             features={seedFeatures}
@@ -109,6 +113,13 @@ const ResultContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
+`;
+
+const MobileHeader = styled.div`
+  padding: 16px;
+  width: 100%;
+
+  font-weight: bold;
 `;
 
 export default Result;
