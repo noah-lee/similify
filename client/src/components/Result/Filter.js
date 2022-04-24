@@ -38,7 +38,7 @@ const Filter = ({
         setRefresh={setRefresh}
       />
       <CamelotButton onClick={handleCamelotClick}>
-        {showCamelot ? "Camelot" : "Key"}
+        {showCamelot ? "Show Key" : "Show Camelot"}
       </CamelotButton>
     </Wrapper>
   );
@@ -60,7 +60,7 @@ const Wrapper = styled.div`
 `;
 
 const CamelotButton = styled.button`
-  width: 96px;
+  width: 140px;
   height: 32px;
   border-radius: 16px;
   padding: 0 16px;
