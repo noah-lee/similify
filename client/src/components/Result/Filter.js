@@ -27,14 +27,14 @@ const Filter = ({
   return (
     <Wrapper width={width} breakpointX={breakpointX}>
       <BpmRange
-        width="160px"
+        width="132px"
         seedFeatures={seedFeatures}
         bpmRange={bpmRange}
         setBpmRange={setBpmRange}
         setRefresh={setRefresh}
       />
       <KeyRange
-        width="160px"
+        width="132px"
         seedFeatures={seedFeatures}
         keyRange={keyRange}
         setKeyRange={setKeyRange}

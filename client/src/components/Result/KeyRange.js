@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { toLetterKey } from "../../utils/key";
 
 const KeyRange = ({
@@ -25,6 +25,7 @@ const KeyRange = ({
     <Wrapper>
       <SliderContainer>
         <KeyText>Key</KeyText>
+        <SliderText>{keyRange < 6 ? `±${keyRange}` : "All"}</SliderText>
         <CustomSlider width={width}>
           <StyledInput
             width={width}
@@ -46,11 +47,13 @@ const KeyRange = ({
             ? toLetterKey(seedFeatures.key - keyRange, seedFeatures.mode)
             : "All"}
         </Text>
-        <FiChevronLeft />
-        <Text style={{ color: "var(--color-orange-accent)", textAlign: "center" }}>
+        <FiArrowLeft />
+        <Text
+          style={{ color: "var(--color-orange-accent)", textAlign: "center" }}
+        >
           {toLetterKey(seedFeatures.key, seedFeatures.mode)}
         </Text>
-        <FiChevronRight />
+        <FiArrowRight />
         <Text style={{ textAlign: "right" }}>
           {keyRange < 6
             ? toLetterKey(seedFeatures.key + keyRange, seedFeatures.mode)
@@ -70,6 +73,8 @@ const Wrapper = styled.div`
 `;
 
 const SliderContainer = styled.div`
+  position: relative;
+
   display: flex;
   align-items: center;
   gap: 8px;
@@ -78,7 +83,7 @@ const SliderContainer = styled.div`
 const KeyText = styled.p`
   font-weight: bold;
   line-height: 32px;
-  width: 48px;
+  width: 40px;
 `;
 
 const CustomSlider = styled.div`
@@ -127,6 +132,13 @@ const StyledRange = styled.div`
   left: 0;
   top: 0;
   z-index: 1;
+`;
+
+const SliderText = styled.p`
+  width: 32px;
+  color: grey;
+  font-weight: bold;
+  line-height: 32px;
 `;
 
 const TextContainer = styled.div`

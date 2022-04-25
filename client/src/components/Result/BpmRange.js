@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 const BpmRange = ({
   seedFeatures,
@@ -24,6 +24,7 @@ const BpmRange = ({
     <Wrapper>
       <SliderContainer>
         <BpmText>BPM</BpmText>
+        <SliderText>{bpmRange < 20 ? `±${bpmRange}` : "All"}</SliderText>
         <CustomSlider width={width}>
           <StyledInput
             width={width}
@@ -39,20 +40,19 @@ const BpmRange = ({
           <StyledRange bpmRange={bpmRange} max={20} />
         </CustomSlider>
       </SliderContainer>
-
       <TextContainer>
         <Text style={{ textAlign: "left" }}>
           {bpmRange < 20
             ? `${+seedFeatures.tempo.toFixed() - bpmRange}`
             : "All"}
         </Text>
-        <FiChevronLeft />
+        <FiArrowLeft />
         <Text
           style={{ color: "var(--color-orange-accent)", textAlign: "center" }}
         >
           {+seedFeatures.tempo.toFixed()}
         </Text>
-        <FiChevronRight />
+        <FiArrowRight />
         <Text style={{ textAlign: "right" }}>
           {bpmRange < 20
             ? `${+seedFeatures.tempo.toFixed() + bpmRange}`
@@ -72,6 +72,8 @@ const Wrapper = styled.div`
 `;
 
 const SliderContainer = styled.div`
+  position: relative;
+
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -81,7 +83,7 @@ const SliderContainer = styled.div`
 const BpmText = styled.p`
   font-weight: bold;
   line-height: 32px;
-  width: 48px;
+  width: 40px;
 `;
 
 const CustomSlider = styled.div`
@@ -130,6 +132,13 @@ const StyledRange = styled.div`
   left: 0;
   top: 0;
   z-index: 1;
+`;
+
+const SliderText = styled.p`
+  width: 32px;
+  color: grey;
+  font-weight: bold;
+  line-height: 32px;
 `;
 
 const TextContainer = styled.div`
