@@ -1,6 +1,14 @@
 import styled from "styled-components";
 
-const BpmRange = ({ width, bpmRange, setBpmRange, setRefresh }) => {
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+
+const BpmRange = ({
+  seedFeatures,
+  width,
+  bpmRange,
+  setBpmRange,
+  setRefresh,
+}) => {
   // Handle BPM change
   const handleBpmChange = (ev) => {
     const value = Number(ev.target.value);
@@ -14,40 +22,69 @@ const BpmRange = ({ width, bpmRange, setBpmRange, setRefresh }) => {
 
   return (
     <Wrapper>
-      <Text>BPM</Text>
-      <StyledContainer width={width}>
-        <StyledInput
-          width={width}
-          type="range"
-          step={1}
-          max={20}
-          value={bpmRange}
-          onChange={handleBpmChange}
-          onMouseUp={handleRefresh}
-          onTouchEnd={handleRefresh}
-        />
-        <StyledTrack />
-        <StyledRange bpmRange={bpmRange} max={20} />
-      </StyledContainer>
-      <Text style={{ width: "32px" }}>
-        {bpmRange < 20 ? "±" + bpmRange : "All"}
-      </Text>
+      <SliderContainer>
+        <BpmText>BPM</BpmText>
+        <CustomSlider width={width}>
+          <StyledInput
+            width={width}
+            type="range"
+            step={1}
+            max={20}
+            value={bpmRange}
+            onChange={handleBpmChange}
+            onMouseUp={handleRefresh}
+            onTouchEnd={handleRefresh}
+          />
+          <StyledTrack />
+          <StyledRange bpmRange={bpmRange} max={20} />
+        </CustomSlider>
+      </SliderContainer>
+
+      <TextContainer>
+        <Text style={{ textAlign: "left" }}>
+          {bpmRange < 20
+            ? `${+seedFeatures.tempo.toFixed() - bpmRange}`
+            : "All"}
+        </Text>
+        <FiChevronLeft />
+        <Text
+          style={{ color: "var(--color-orange-accent)", textAlign: "center" }}
+        >
+          {+seedFeatures.tempo.toFixed()}
+        </Text>
+        <FiChevronRight />
+        <Text style={{ textAlign: "right" }}>
+          {bpmRange < 20
+            ? `${+seedFeatures.tempo.toFixed() + bpmRange}`
+            : "All"}
+        </Text>
+      </TextContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  width: 220px;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
   align-items: center;
+  gap: 8px;
 `;
 
-const Text = styled.p`
+const SliderContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+`;
+
+const BpmText = styled.p`
   font-weight: bold;
   line-height: 32px;
+  width: 48px;
 `;
 
-const StyledContainer = styled.div`
+const CustomSlider = styled.div`
   position: relative;
   width: ${({ width }) => width};
   height: 24px;
@@ -76,6 +113,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledTrack = styled.div`
+  background-color: var(--color-dark-light);
   position: absolute;
   height: 24px;
   width: 100%;
@@ -92,6 +130,19 @@ const StyledRange = styled.div`
   left: 0;
   top: 0;
   z-index: 1;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const Text = styled.p`
+  font-weight: bold;
+  line-height: 32px;
+  width: 48px;
 `;
 
 export default BpmRange;

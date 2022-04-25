@@ -28,6 +28,7 @@ const Result = () => {
   const [showCamelot, setShowCamelot] = useState(false);
   const [bpmRange, setBpmRange] = usePersistedState(10, "bpm-range");
   const [keyRange, setKeyRange] = usePersistedState(2, "key-range");
+
   // Get seed track audio features
   useEffect(() => {
     (async () => {
@@ -54,6 +55,7 @@ const Result = () => {
       {seed && seedFeatures && (
         <ResultContainer width={width} breakpointX={breakpointX}>
           <Filter
+            seedFeatures={seedFeatures}
             bpmRange={bpmRange}
             setBpmRange={setBpmRange}
             keyRange={keyRange}

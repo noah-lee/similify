@@ -8,7 +8,7 @@ import axios from "axios";
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
 // Misc.
-import spotifyLogoPath from "../../assets/Spotify_Icon_RGB_Green.png";
+import spotifyIconGreen from "../../assets/Spotify_Icon_RGB_Green.png";
 import { getHashParams } from "../../utils/hash";
 
 const Connect = () => {
@@ -39,7 +39,7 @@ const Connect = () => {
 
   return (
     <StyledButton onClick={handleLogIn}>
-      <SpotifyLogo src={spotifyLogoPath} />
+      <SpotifyIcon src={spotifyIconGreen} />
       <p>Connect with Spotify</p>
     </StyledButton>
   );
@@ -60,7 +60,7 @@ const StyledButton = styled.button`
   font-weight: bold;
 `;
 
-const SpotifyLogo = styled.img`
+const SpotifyIcon = styled.img`
   width: 24px;
 `;
 

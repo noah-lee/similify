@@ -8,6 +8,7 @@ import BpmRange from "./BpmRange";
 import KeyRange from "./KeyRange";
 
 const Filter = ({
+  seedFeatures,
   bpmRange,
   setBpmRange,
   keyRange,
@@ -26,13 +27,15 @@ const Filter = ({
   return (
     <Wrapper width={width} breakpointX={breakpointX}>
       <BpmRange
-        width="120px"
+        width="160px"
+        seedFeatures={seedFeatures}
         bpmRange={bpmRange}
         setBpmRange={setBpmRange}
         setRefresh={setRefresh}
       />
       <KeyRange
-        width="120px"
+        width="160px"
+        seedFeatures={seedFeatures}
         keyRange={keyRange}
         setKeyRange={setKeyRange}
         setRefresh={setRefresh}
@@ -62,9 +65,8 @@ const Wrapper = styled.div`
 
 const CamelotButton = styled.button`
   width: 140px;
-  height: 32px;
-  border-radius: 16px;
-  padding: 0 16px;
+  border-radius: 32px;
+  padding: 16px;
 
   font-weight: bold;
   background-color: var(--color-dark-main);

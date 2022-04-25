@@ -29,7 +29,8 @@ const colorDict = {
 };
 
 const toLetterKey = (key, mode) => {
-  return `${keyDict[key]}${mode === 0 ? "min" : "maj"}`;
+  const resultKey = (key + 12) % 12;
+  return `${keyDict[resultKey]}${mode === 0 ? "min" : "maj"}`;
 };
 
 const toCamelotKey = (key, mode) => {

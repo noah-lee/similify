@@ -1,6 +1,15 @@
 import styled from "styled-components";
 
-const KeyRange = ({ width, keyRange, setKeyRange, setRefresh }) => {
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { toLetterKey } from "../../utils/key";
+
+const KeyRange = ({
+  seedFeatures,
+  width,
+  keyRange,
+  setKeyRange,
+  setRefresh,
+}) => {
   // Handle key change
   const handleKeyChange = (ev) => {
     const value = Number(ev.target.value);
@@ -14,40 +23,65 @@ const KeyRange = ({ width, keyRange, setKeyRange, setRefresh }) => {
 
   return (
     <Wrapper>
-      <Text>Key</Text>
-      <StyledContainer width={width}>
-        <StyledInput
-          width={width}
-          type="range"
-          step={1}
-          max={6}
-          value={keyRange}
-          onChange={handleKeyChange}
-          onMouseUp={handleRefresh}
-          onTouchEnd={handleRefresh}
-        />
-        <StyledTrack />
-        <StyledRange keyRange={keyRange} max={6} />
-      </StyledContainer>
-      <Text style={{ width: "32px" }}>
-        {keyRange < 6 ? "±" + keyRange : "All"}
-      </Text>
+      <SliderContainer>
+        <KeyText>Key</KeyText>
+        <CustomSlider width={width}>
+          <StyledInput
+            width={width}
+            type="range"
+            step={1}
+            max={6}
+            value={keyRange}
+            onChange={handleKeyChange}
+            onMouseUp={handleRefresh}
+            onTouchEnd={handleRefresh}
+          />
+          <StyledTrack />
+          <StyledRange keyRange={keyRange} max={6} />
+        </CustomSlider>
+      </SliderContainer>
+      <TextContainer>
+        <Text style={{ textAlign: "left" }}>
+          {keyRange < 6
+            ? toLetterKey(seedFeatures.key - keyRange, seedFeatures.mode)
+            : "All"}
+        </Text>
+        <FiChevronLeft />
+        <Text style={{ color: "var(--color-orange-accent)", textAlign: "center" }}>
+          {toLetterKey(seedFeatures.key, seedFeatures.mode)}
+        </Text>
+        <FiChevronRight />
+        <Text style={{ textAlign: "right" }}>
+          {keyRange < 6
+            ? toLetterKey(seedFeatures.key + keyRange, seedFeatures.mode)
+            : "All"}
+        </Text>
+      </TextContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
+  width: 220px;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
   align-items: center;
+  gap: 8px;
 `;
 
-const Text = styled.p`
+const SliderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const KeyText = styled.p`
   font-weight: bold;
   line-height: 32px;
+  width: 48px;
 `;
 
-const StyledContainer = styled.div`
+const CustomSlider = styled.div`
   position: relative;
   width: ${({ width }) => width};
   height: 24px;
@@ -76,6 +110,7 @@ const StyledInput = styled.input`
 `;
 
 const StyledTrack = styled.div`
+  background-color: var(--color-dark-light);
   position: absolute;
   height: 24px;
   width: 100%;
@@ -92,6 +127,19 @@ const StyledRange = styled.div`
   left: 0;
   top: 0;
   z-index: 1;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const Text = styled.p`
+  font-weight: bold;
+  line-height: 32px;
+  width: 48px;
 `;
 
 export default KeyRange;

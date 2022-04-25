@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import { FiHeart } from "react-icons/fi";
 
-import spotifyLogoWhitePath from "../../assets/Spotify_Icon_RGB_White.png";
+import spotifyIconWhite from "../../assets/Spotify_Icon_RGB_White.png";
 import { msToMinSec } from "../../utils/time";
 
 import { toLetterKey, toCamelotKey} from "../../utils/key";
@@ -28,7 +28,7 @@ const DesktopTrack = ({
             ev.stopPropagation();
           }}
         >
-          <SpotifyLogo src={spotifyLogoWhitePath} />
+          <SpotifyLogo src={spotifyIconWhite} />
         </TrackUri>
       </TrackLink>
       <TrackTitle>
