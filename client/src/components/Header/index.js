@@ -16,7 +16,7 @@ const Header = () => {
       <HeaderContainer>
         {userAuthHeaders ? (
           <>
-            {/* <DisplayName /> */}
+            <DisplayName />
             <Disconnect />
           </>
         ) : (

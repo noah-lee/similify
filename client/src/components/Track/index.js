@@ -1,5 +1,6 @@
 // Libraries
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 // Components
@@ -19,32 +20,42 @@ const Track = ({
   showCamelot,
   isSeed,
 }) => {
-  const { setSeed, userAuthHeaders } = useContext(SpotifyContext);
+  const navigate = useNavigate();
+
+  const { setSeed, userAuthHeaders, setUserAuthHeaders } =
+    useContext(SpotifyContext);
   const { width, breakpointX } = useContext(ResponsiveContext);
   const [localIsSaved, setLocalIsSaved] = useState(isSaved);
 
   // Update local isSaved
   useEffect(() => {
     setLocalIsSaved(isSaved);
-  }, [isSaved]);
+  }, [isSaved, userAuthHeaders]);
 
   // Handle heart click
   const handleHeartClick = (ev) => {
     ev.stopPropagation();
     if (userAuthHeaders) {
-      if (localIsSaved) {
-        axios.delete(
-          "/api/remove-track?" + new URLSearchParams({ ids: track.id }),
-          userAuthHeaders
-        );
-      } else {
-        axios.put(
-          "/api/save-track?" + new URLSearchParams({ ids: track.id }),
-          {},
-          userAuthHeaders
-        );
+      try {
+        if (localIsSaved) {
+          axios.delete(
+            "/api/remove-track?" + new URLSearchParams({ ids: track.id }),
+            userAuthHeaders
+          );
+        } else {
+          axios.put(
+            "/api/save-track?" + new URLSearchParams({ ids: track.id }),
+            {},
+            userAuthHeaders
+          );
+        }
+        setLocalIsSaved((prevState) => !prevState);
+      } catch (err) {
+        console.log('Save/Remove track');
+        console.log(err.response.status, err.response.statusText);
+        setUserAuthHeaders("");
+        navigate("/");
       }
-      setLocalIsSaved((prevState) => !prevState);
     }
   };
 

@@ -39,17 +39,15 @@ const DesktopTrack = ({
         </TrackArtists>
       </TrackTitle>
       <TrackTime>{msToMinSec(track.duration_ms)}</TrackTime>
-
       <TrackBpm>{features.tempo.toFixed()}</TrackBpm>
       <TrackKey style={keyStyle}>
         {showCamelot
           ? toCamelotKey(features.key, features.mode)
           : toLetterKey(features.key, features.mode)}
       </TrackKey>
-
       <TrackIsSaved
         onClick={handleHeartClick}
-        disabled={userAuthHeaders ? false : true}
+        style={{ pointerEvents: userAuthHeaders ? "inherit" : "none" }}
       >
         <FiHeart size="20px" style={heartStyle} />
       </TrackIsSaved>

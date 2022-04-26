@@ -1,6 +1,6 @@
 // Libraries
 import { useContext, useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -20,9 +20,11 @@ import usePersistedState from "../../hooks/use-persisted-state.hook";
 import { toCamelotMatches } from "../../utils/key";
 
 const Result = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const { width, breakpointX } = useContext(ResponsiveContext);
-  const { seed, userAuthHeaders } = useContext(SpotifyContext);
+  const { seed, userAuthHeaders, setUserAuthHeaders } =
+    useContext(SpotifyContext);
 
   const [seedFeatures, setSeedFeatures] = useState("");
   const [seedIsSaved, setSeedIsSaved] = useState("");
@@ -32,10 +34,9 @@ const Result = () => {
   const [bpmRange, setBpmRange] = usePersistedState(10, "bpm-range");
   const [keyRange, setKeyRange] = usePersistedState(2, "key-range");
 
-  // Get seed track audio features
+  // Get seed track audio features and check if saved
   useEffect(() => {
     (async () => {
-      console.log('seed update');
       try {
         // If user connected
         if (userAuthHeaders) {
@@ -61,7 +62,10 @@ const Result = () => {
         setCamelotMatches(toCamelotMatches(features.key, features.mode));
         setSeedFeatures(features);
       } catch (err) {
+        console.log('Get seed features and check saved');
         console.log(err.response.status, err.response.statusText);
+        setUserAuthHeaders("");
+        navigate("/");
       }
     })();
   }, [seed, userAuthHeaders]);

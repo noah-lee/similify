@@ -22,8 +22,8 @@ const Recommendations = ({
   showCamelot,
   refresh,
 }) => {
-  // const navigate = useNavigate();
-  const { userAuthHeaders } = useContext(SpotifyContext);
+  const navigate = useNavigate();
+  const { userAuthHeaders, setUserAuthHeaders } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
   const [recIds, setRecIds] = useState("");
@@ -129,7 +129,10 @@ const Recommendations = ({
         setRecommendationFeatures(featuresRes.data.audio_features);
         // If user is connected
       } catch (err) {
+        console.log("Get recommendations");
         console.log(err.response.status, err.response.statusText);
+        setUserAuthHeaders("");
+        navigate("/");
       }
     };
     getRecommendations();

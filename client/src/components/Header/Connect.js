@@ -22,7 +22,7 @@ const Connect = () => {
     (async () => {
       setSavedPath(window.location.pathname);
       try {
-        const res = await axios("/api/log-in");
+        const res = await axios("/api/connect");
         window.location = res.data.url;
       } catch (err) {
         console.log(err.response.status, err.response.statusText);

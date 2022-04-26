@@ -150,7 +150,7 @@ const getRecommendations = async (req, res) => {
 // USER REQUESTS
 
 // Get Spotify authorization url
-const logIn = async (req, res) => {
+const userConnect = async (req, res) => {
   const spotifyAuthUrl =
     "https://accounts.spotify.com/authorize?" +
     new URLSearchParams({
@@ -261,7 +261,7 @@ module.exports = {
   search,
   getAudioFeatures,
   getRecommendations,
-  logIn,
+  userConnect,
   getUserInfo,
   checkSavedTracks,
   saveTrack,

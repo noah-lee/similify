@@ -18,7 +18,7 @@ const {
   search,
   getAudioFeatures,
   getRecommendations,
-  logIn,
+  userConnect,
   getUserInfo,
   checkSavedTracks,
   saveTrack,
@@ -33,7 +33,7 @@ app.get("/api/test", test);
 app.get("/api/search", search);
 app.get("/api/audio-features", getAudioFeatures);
 app.get("/api/recommendations", getRecommendations);
-app.get("/api/log-in", logIn);
+app.get("/api/connect", userConnect);
 app.get("/api/user-info", getUserInfo);
 app.get("/api/check-saved-tracks", checkSavedTracks);
 app.put("/api/save-track", saveTrack);

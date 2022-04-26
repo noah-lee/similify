@@ -41,12 +41,11 @@ const DesktopTrack = ({
         </TrackTitle>
         <TrackIsSaved
           onClick={handleHeartClick}
-          disabled={userAuthHeaders ? false : true}
+          style={{ pointerEvents: userAuthHeaders ? "inherit" : "none" }}
         >
           <FiHeart size="20px" style={heartStyle} />
         </TrackIsSaved>
       </TrackTopContainer>
-
       <TrackBottomContainer>
         <TrackBpm>
           {features.tempo.toFixed()}
