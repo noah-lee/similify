@@ -24,7 +24,7 @@ export const ResponsiveContextProvider = ({ children }) => {
 
   // Don't allow body scroll when an overlay component is displayed
   useEffect(() => {
-    document.body.style.overflow = overlay ? "hidden" : "auto";
+    document.body.style.overflow = overlay ? "hidden" : "";
   }, [overlay]);
 
   return (

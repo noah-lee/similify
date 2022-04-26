@@ -1,5 +1,5 @@
 // Libraries
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -10,14 +10,17 @@ import { SpotifyContext } from "../../contexts/SpotifyContext";
 // Misc.
 import spotifyIconGreen from "../../assets/Spotify_Icon_RGB_Green.png";
 import { getHashParams } from "../../utils/hash";
+import usePersistedState from "../../hooks/use-persisted-state.hook";
 
 const Connect = () => {
   const navigate = useNavigate();
   const { setUserAuthHeaders } = useContext(SpotifyContext);
+  const [savedPath, setSavedPath] = usePersistedState("", "saved-path");
 
   // Redirect to Spotify authorization url
-  const handleLogIn = () => {
+  const handleConnect = () => {
     (async () => {
+      setSavedPath(window.location.pathname);
       try {
         const res = await axios("/api/log-in");
         window.location = res.data.url;
@@ -35,12 +38,12 @@ const Connect = () => {
         headers: { Authorization: "Bearer " + hashParams.access_token },
       };
       setUserAuthHeaders(headers);
-      navigate("/");
+      navigate(savedPath);
     }
   }, []);
 
   return (
-    <StyledButton onClick={handleLogIn}>
+    <StyledButton onClick={handleConnect}>
       <SpotifyIcon src={spotifyIconGreen} />
       <p>Connect</p>
     </StyledButton>

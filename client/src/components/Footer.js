@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FiInfo, FiGithub } from "react-icons/fi";
 
+import spotifyIconGreen from "../assets/Spotify_Icon_RGB_Green.png";
+
 const Footer = () => {
   return (
     <Wrapper className="footer">
@@ -16,12 +18,13 @@ const Footer = () => {
             <p>GitHub</p>
           </StyledA>
         </FooterLinks>
-        <FooterText>
-          Created by Noah Lee, powered by{" "}
+        <FooterTextContainer>
+          <FooterText>Created by Noah Lee, powered by</FooterText>
           <SpotifyA href="http://spotify.com/" target="_blank">
+            <img src={spotifyIconGreen} height="12px" />
             Spotify
           </SpotifyA>
-        </FooterText>
+        </FooterTextContainer>
       </FooterContainer>
     </Wrapper>
   );
@@ -37,7 +40,7 @@ const FooterContainer = styled.div`
   height: 96px;
   margin: 0 auto;
   padding: 16px;
-  
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,14 +84,25 @@ const StyledA = styled.a`
   }
 `;
 
+const FooterTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
 const FooterText = styled.p`
   color: gray;
   font-size: 12px;
 `;
 
 const SpotifyA = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
   text-decoration: none;
-  color: var(--color-orange-accent);
+  font-size: 12px;
+  color: #1ed760;
 `;
 
 export default Footer;

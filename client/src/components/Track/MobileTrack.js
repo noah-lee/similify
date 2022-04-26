@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
-import spotifyLogoWhitePath from "../../assets/Spotify_Icon_RGB_White.png";
+import spotifyIconWhitePath from "../../assets/Spotify_Icon_RGB_White.png";
 import { FiHeart } from "react-icons/fi";
 import { msToMinSec } from "../../utils/time";
 import { toLetterKey, toCamelotKey } from "../../utils/key";
@@ -14,8 +14,10 @@ const DesktopTrack = ({
   showCamelot,
   isSeed,
   handleTrackClick,
+  handleArtClick,
   keyStyle,
   heartStyle,
+  handleHeartClick,
 }) => {
   const { userAuthHeaders } = useContext(SpotifyContext);
 
@@ -27,13 +29,9 @@ const DesktopTrack = ({
           target="_blank"
         >
           <TrackArt src={track.album.images[2].url} height="48px" />
-          <TrackUri
-            /*onClick={handleArtClick}*/ onClick={(ev) => {
-              ev.stopPropagation();
-            }}
-          >
-            <SpotifyLogo src={spotifyLogoWhitePath} />
-          </TrackUri>
+          <TrackSpotifyOverlay onClick={handleArtClick}>
+            <SpotifyLogo src={spotifyIconWhitePath} />
+          </TrackSpotifyOverlay>
         </TrackLink>
         <TrackTitle>
           <TrackName>{track.name}</TrackName>
@@ -42,9 +40,8 @@ const DesktopTrack = ({
           </TrackArtists>
         </TrackTitle>
         <TrackIsSaved
-          /*onClick={handleHeartClick}*/ disabled={
-            userAuthHeaders ? false : true
-          }
+          onClick={handleHeartClick}
+          disabled={userAuthHeaders ? false : true}
         >
           <FiHeart size="20px" style={heartStyle} />
         </TrackIsSaved>
@@ -108,7 +105,7 @@ const TrackLink = styled.a`
   height: 48px;
 `;
 
-const TrackUri = styled.button`
+const TrackSpotifyOverlay = styled.button`
   position: absolute;
   left: 0;
   top: 0;

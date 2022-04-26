@@ -68,7 +68,6 @@ export default createGlobalStyle`
     font-family: 'Nunito', sans-serif;
     background-color: var(--color-dark-main);
     color: white;
-    overflow: hidden;
   }
 
   #root {

@@ -13,7 +13,7 @@ const Homepage = () => {
     <Wrapper>
       <Logo />
       <Instructions>
-        <SpotifyLogo src={spotifyLogoWhite} />
+        {/* <SpotifyLogo src={spotifyLogoWhite} /> */}
         <Text>Search & Discover</Text>
         <Text>
           with <Accent>BPM</Accent> & <Accent>key</Accent>

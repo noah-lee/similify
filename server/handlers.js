@@ -149,8 +149,6 @@ const getRecommendations = async (req, res) => {
 
 // USER REQUESTS
 
-let USER_HEADERS;
-
 // Get Spotify authorization url
 const logIn = async (req, res) => {
   const spotifyAuthUrl =
@@ -202,20 +200,18 @@ const checkSavedTracks = async (req, res) => {
 // Add track to user saved tracks
 const saveTrack = async (req, res) => {
   const userHeaders = {
-    Authorization: req.body.headers.Authorization,
+    Authorization: req.headers.authorization,
   };
-  console.log(userHeaders);
   try {
-    console.log("save");
     const spotifyRes = await axios.put(
       "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
+      {},
       {
         headers: userHeaders,
       }
     );
     res.status(spotifyRes.status).json(spotifyRes.data);
   } catch (err) {
-
     res.status(err.response.status).json(err.response.data.error);
   }
 };
@@ -225,8 +221,6 @@ const removeTrack = async (req, res) => {
   const userHeaders = {
     Authorization: req.headers.authorization,
   };
-  console.log(userHeaders);
-
   try {
     console.log("delete");
     const spotifyRes = await axios.delete(
@@ -243,13 +237,21 @@ const removeTrack = async (req, res) => {
 
 // Start playback
 const startPlayback = async (req, res) => {
-  const options = {
-    url: "https://api.spotify.com/v1/me/tracks?",
-    query: req.query,
-    method: "PUT",
-    headers: CLIENT_AUTH_HEADERS,
+  const userHeaders = {
+    Authorization: req.headers.authorization,
   };
-  await spotifyClientRequest(options, res);
+  try {
+    const spotifyRes = await axios.put(
+      "https://api.spotify.com/v1/me/player/play",
+      req.body,
+      {
+        headers: userHeaders,
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+    res.status(err.response.status).json(err.response.data.error);
+  }
 };
 
 // EXPORT HANDLERS ⬆️

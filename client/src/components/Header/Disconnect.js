@@ -13,7 +13,6 @@ const Disconnect = () => {
   // Reset Spotify access token
   const handleLogOut = () => {
     setUserAuthHeaders("");
-    navigate("/");
   };
 
   return (

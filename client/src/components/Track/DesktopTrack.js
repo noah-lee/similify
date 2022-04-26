@@ -14,6 +14,7 @@ const DesktopTrack = ({
   showCamelot,
   isSeed,
   handleTrackClick,
+  handleArtClick,
   keyStyle,
   heartStyle,
   handleHeartClick,
@@ -27,13 +28,9 @@ const DesktopTrack = ({
         target="_blank"
       >
         <TrackArt src={track.album.images[2].url} height="48px" />
-        <TrackUri
-          /*onClick={handleArtClick}*/ onClick={(ev) => {
-            ev.stopPropagation();
-          }}
-        >
+        <TrackSpotifyOverlay onClick={handleArtClick}>
           <SpotifyLogo src={spotifyIconWhite} />
-        </TrackUri>
+        </TrackSpotifyOverlay>
       </TrackLink>
       <TrackTitle>
         <TrackName>{track.name}</TrackName>
@@ -86,7 +83,7 @@ const TrackLink = styled.a`
   height: 48px;
 `;
 
-const TrackUri = styled.button`
+const TrackSpotifyOverlay = styled.button`
   position: absolute;
   left: 0;
   top: 0;

@@ -26,6 +26,7 @@ const Recommendations = ({
   const { userAuthHeaders } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
+  const [recIds, setRecIds] = useState("");
   const [recommendationFeatures, setRecommendationFeatures] = useState("");
   const [isSavedList, setIsSavedList] = useState("");
   const [load, setLoad] = useState(10);
@@ -96,6 +97,7 @@ const Recommendations = ({
         const recommendationIds = sortedRecommendations.map(
           (track) => track.id
         );
+        setRecIds(recommendationIds);
         // If used connected
         if (userAuthHeaders) {
           // Split IDs to groups of 50
@@ -113,6 +115,8 @@ const Recommendations = ({
             isSavedSplit.push(...savedRes.data);
           }
           setIsSavedList(isSavedSplit);
+        } else {
+          setIsSavedList("");
         }
         // Get recommendations audio features
         const featuresRes = await axios(
@@ -129,7 +133,7 @@ const Recommendations = ({
       }
     };
     getRecommendations();
-  }, [seedFeatures, userAuthHeaders, refresh]);
+  }, [seedFeatures, refresh]);
 
   // Load more recommendations
   const handleLoadMoreClick = async () => {

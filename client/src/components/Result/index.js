@@ -34,8 +34,8 @@ const Result = () => {
 
   // Get seed track audio features
   useEffect(() => {
-    console.log("seed refresh");
     (async () => {
+      console.log('seed update');
       try {
         // If user connected
         if (userAuthHeaders) {
@@ -47,8 +47,9 @@ const Result = () => {
               }),
             userAuthHeaders
           );
-          console.log(res.data[0]);
           setSeedIsSaved(res.data[0]);
+        } else {
+          setSeedIsSaved(false);
         }
         const res = await axios(
           "/api/audio-features?" +
@@ -95,7 +96,7 @@ const Result = () => {
             showCamelot={showCamelot}
             isSeed={true}
           />
-          {/* <Recommendations
+          <Recommendations
             seed={seed}
             seedFeatures={seedFeatures}
             bpmRange={bpmRange}
@@ -103,7 +104,7 @@ const Result = () => {
             refresh={refresh}
             camelotMatches={camelotMatches}
             showCamelot={showCamelot}
-          /> */}
+          />
         </ResultContainer>
       )}
       <ScrollUp />

@@ -1,5 +1,5 @@
 // Libraries
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 // Components
@@ -23,10 +23,10 @@ const Track = ({
   const { width, breakpointX } = useContext(ResponsiveContext);
   const [localIsSaved, setLocalIsSaved] = useState(isSaved);
 
-  if (isSeed) {
-    console.log("inside track");
-    console.log(isSaved);
-  }
+  // Update local isSaved
+  useEffect(() => {
+    setLocalIsSaved(isSaved);
+  }, [isSaved]);
 
   // Handle heart click
   const handleHeartClick = (ev) => {
@@ -40,6 +40,7 @@ const Track = ({
       } else {
         axios.put(
           "/api/save-track?" + new URLSearchParams({ ids: track.id }),
+          {},
           userAuthHeaders
         );
       }
@@ -47,16 +48,22 @@ const Track = ({
     }
   };
 
-  // // Handle art click
-  // const handleArtClick = (ev) => {
-  //   ev.stopPropagation();
-  //   axios.put("/api/play", {
-  //     context_uri: seed.album.uri,
-  //     offset: {
-  //       position: seed.track_number - 1,
-  //     },
-  //   });
-  // };
+  // Handle art click
+  const handleArtClick = (ev) => {
+    ev.stopPropagation();
+    if (userAuthHeaders) {
+      axios.put(
+        "/api/play",
+        {
+          context_uri: track.album.uri,
+          offset: {
+            position: track.track_number - 1,
+          },
+        },
+        userAuthHeaders
+      );
+    }
+  };
 
   // Handle track click
   const handleTrackClick = () => {
@@ -90,6 +97,7 @@ const Track = ({
           showCamelot={showCamelot}
           isSeed={isSeed}
           handleTrackClick={handleTrackClick}
+          handleArtClick={handleArtClick}
           keyStyle={keyStyle}
           heartStyle={heartStyle}
           handleHeartClick={handleHeartClick}
@@ -101,6 +109,7 @@ const Track = ({
           showCamelot={showCamelot}
           isSeed={isSeed}
           handleTrackClick={handleTrackClick}
+          handleArtClick={handleArtClick}
           keyStyle={keyStyle}
           heartStyle={heartStyle}
           handleHeartClick={handleHeartClick}
