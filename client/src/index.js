@@ -3,13 +3,17 @@ import ReactDOM from "react-dom/client";
 import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 
+import { ResponsiveContextProvider } from "./contexts/ResponsiveContext";
 import { SpotifyContextProvider } from "./contexts/SpotifyContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   //<React.StrictMode>
-  <SpotifyContextProvider>
-    <App />
-  </SpotifyContextProvider>
+  <ResponsiveContextProvider>
+    <SpotifyContextProvider>
+      <App />
+    </SpotifyContextProvider>
+  </ResponsiveContextProvider>
+
   //</React.StrictMode>
 );
 

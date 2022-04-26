@@ -13,26 +13,28 @@ import { getHashParams } from "../../utils/hash";
 
 const Connect = () => {
   const navigate = useNavigate();
-  const { setAccessToken } = useContext(SpotifyContext);
+  const { setUserAuthHeaders } = useContext(SpotifyContext);
 
   // Redirect to Spotify authorization url
   const handleLogIn = () => {
-    const logIn = async () => {
+    (async () => {
       try {
         const res = await axios("/api/log-in");
         window.location = res.data.url;
       } catch (err) {
-        navigate("/");
+        console.log(err.response.status, err.response.statusText);
       }
-    };
-    logIn();
+    })();
   };
 
-  // Get Spotify access token
+  // Get Spotify user auth headers
   useEffect(() => {
     if (window.location.hash) {
       const hashParams = getHashParams(window.location.hash);
-      setAccessToken(hashParams.access_token);
+      const headers = {
+        headers: { Authorization: "Bearer " + hashParams.access_token },
+      };
+      setUserAuthHeaders(headers);
       navigate("/");
     }
   }, []);
@@ -40,19 +42,17 @@ const Connect = () => {
   return (
     <StyledButton onClick={handleLogIn}>
       <SpotifyIcon src={spotifyIconGreen} />
-      <p>Connect with Spotify</p>
+      <p>Connect</p>
     </StyledButton>
   );
 };
 
 const StyledButton = styled.button`
-  pointer-events: none;
-  
   display: flex;
   align-items: center;
   gap: 8px;
 
-  padding: 12px 16px;
+  padding: 8px 16px;
   border-radius: 24px;
 
   background-color: white;

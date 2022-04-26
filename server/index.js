@@ -15,11 +15,11 @@ app.use(express.json());
 // IMPORT HANDLERS ⬇️
 const {
   test,
-  logIn,
-  getUserInfo,
   search,
   getAudioFeatures,
   getRecommendations,
+  logIn,
+  getUserInfo,
   checkSavedTracks,
   saveTrack,
   removeTrack,
@@ -30,11 +30,11 @@ const {
 app.get("/api/test", test);
 
 // SPOTIFY ENDPOINTS 📞
-app.get("/api/log-in", logIn);
-app.get("/api/user-info", getUserInfo);
 app.get("/api/search", search);
 app.get("/api/audio-features", getAudioFeatures);
 app.get("/api/recommendations", getRecommendations);
+app.get("/api/log-in", logIn);
+app.get("/api/user-info", getUserInfo);
 app.get("/api/check-saved-tracks", checkSavedTracks);
 app.put("/api/save-track", saveTrack);
 app.delete("/api/remove-track", removeTrack);

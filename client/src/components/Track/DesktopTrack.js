@@ -1,12 +1,12 @@
+import { useContext } from "react";
 import styled from "styled-components";
 
-import { FiHeart } from "react-icons/fi";
+import { SpotifyContext } from "../../contexts/SpotifyContext";
 
 import spotifyIconWhite from "../../assets/Spotify_Icon_RGB_White.png";
+import { FiHeart } from "react-icons/fi";
 import { msToMinSec } from "../../utils/time";
-
-import { toLetterKey, toCamelotKey} from "../../utils/key";
-
+import { toLetterKey, toCamelotKey } from "../../utils/key";
 
 const DesktopTrack = ({
   track,
@@ -15,7 +15,11 @@ const DesktopTrack = ({
   isSeed,
   handleTrackClick,
   keyStyle,
+  heartStyle,
+  handleHeartClick,
 }) => {
+  const { userAuthHeaders } = useContext(SpotifyContext);
+
   return (
     <TrackArea onClick={handleTrackClick} isSeed={isSeed}>
       <TrackLink
@@ -46,8 +50,11 @@ const DesktopTrack = ({
           : toLetterKey(features.key, features.mode)}
       </TrackKey>
 
-      <TrackIsSaved /*onClick={handleHeartClick}*/>
-        <FiHeart size="20px" /*style={heartStyle}*/ />
+      <TrackIsSaved
+        onClick={handleHeartClick}
+        disabled={userAuthHeaders ? false : true}
+      >
+        <FiHeart size="20px" style={heartStyle} />
       </TrackIsSaved>
     </TrackArea>
   );

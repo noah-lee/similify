@@ -38,8 +38,9 @@ const ScrollUp = () => {
 
 const ScrollUpIcon = styled.div`
   position: sticky;
-  right: 64px;
+  /* right: 64px; */
   bottom: 0px;
+  margin-right: 32px;
 
   height: 40px;
   border-radius: 50%;

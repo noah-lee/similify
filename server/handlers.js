@@ -49,9 +49,9 @@ const handleAxiosError = (err) => {
 
 // SPOTIFY CLIENT AUTHENTICATION 🔑
 
-let CLIENT_HEADERS;
+let CLIENT_AUTH_HEADERS;
 
-const getClientAccessToken = async () => {
+const setClientAutHeaders = async () => {
   const body = new URLSearchParams({
     grant_type: "client_credentials",
   });
@@ -70,7 +70,7 @@ const getClientAccessToken = async () => {
       body,
       headers
     );
-    CLIENT_HEADERS = {
+    CLIENT_AUTH_HEADERS = {
       Authorization: "Bearer " + res.data.access_token,
     };
   } catch (err) {
@@ -78,11 +78,11 @@ const getClientAccessToken = async () => {
   }
 };
 
-getClientAccessToken();
+setClientAutHeaders();
 
 // CUSTOM SPOTIFY REQUEST (with access token retry) 📨⏰
 
-const spotifyRequest = async (options, res) => {
+const spotifyClientRequest = async (options, res) => {
   while (true) {
     try {
       const spotify = await axios(options);
@@ -91,8 +91,8 @@ const spotifyRequest = async (options, res) => {
     } catch (err) {
       // If access token is expired, get updated token and retry
       if (err.response.status === 401) {
-        await getClientAccessToken();
-        options.headers = CLIENT_HEADERS;
+        await setClientAutHeaders();
+        options.headers = CLIENT_AUTH_HEADERS;
         // Else respond with error
       } else {
         res.status(err.response.status).json(err.response.data.error);
@@ -107,12 +107,49 @@ const spotifyRequest = async (options, res) => {
 const test = async (req, res) => {
   const options = {
     url: "https://api.spotify.com/v1/browse/new-releases",
-    headers: CLIENT_HEADERS,
+    headers: CLIENT_AUTH_HEADERS,
   };
-  await spotifyRequest(options, res);
+  await spotifyClientRequest(options, res);
 };
 
 // SPOTIFY ENDPOINTS 📞
+
+// CLIENT REQUESTS
+
+// Search track
+const search = async (req, res) => {
+  const options = {
+    url: "https://api.spotify.com/v1/search?" + new URLSearchParams(req.query),
+    headers: CLIENT_AUTH_HEADERS,
+  };
+  await spotifyClientRequest(options, res);
+};
+
+// Get tracks audio features (bpm, key, mode, etc.)
+const getAudioFeatures = async (req, res) => {
+  const options = {
+    url:
+      "https://api.spotify.com/v1/audio-features?" +
+      new URLSearchParams(req.query),
+    headers: CLIENT_AUTH_HEADERS,
+  };
+  await spotifyClientRequest(options, res);
+};
+
+// Get recommendations
+const getRecommendations = async (req, res) => {
+  const options = {
+    url:
+      "https://api.spotify.com/v1/recommendations?" +
+      new URLSearchParams(req.query),
+    headers: CLIENT_AUTH_HEADERS,
+  };
+  await spotifyClientRequest(options, res);
+};
+
+// USER REQUESTS
+
+let USER_HEADERS;
 
 // Get Spotify authorization url
 const logIn = async (req, res) => {
@@ -130,14 +167,12 @@ const logIn = async (req, res) => {
 
 // Get user info
 const getUserInfo = async (req, res) => {
-  const { access_token } = req.headers;
-  console.log("get user info");
-  console.log(req.headers.access_token);
+  const userHeaders = {
+    Authorization: req.headers.authorization,
+  };
   try {
     const spotifyRes = await axios("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: "Bearer " + access_token,
-      },
+      headers: userHeaders,
     });
     res.status(spotifyRes.status).json(spotifyRes.data);
   } catch (err) {
@@ -145,68 +180,65 @@ const getUserInfo = async (req, res) => {
   }
 };
 
-// Search track
-const search = async (req, res) => {
-  const options = {
-    url: "https://api.spotify.com/v1/search?" + new URLSearchParams(req.query),
-    headers: CLIENT_HEADERS,
-  };
-  await spotifyRequest(options, res);
-};
-
-// Get tracks audio features (bpm, key, mode, etc.)
-const getAudioFeatures = async (req, res) => {
-  const options = {
-    url:
-      "https://api.spotify.com/v1/audio-features?" +
-      new URLSearchParams(req.query),
-    headers: CLIENT_HEADERS,
-  };
-  await spotifyRequest(options, res);
-};
-
-// Get recommendations
-const getRecommendations = async (req, res) => {
-  const options = {
-    url:
-      "https://api.spotify.com/v1/recommendations?" +
-      new URLSearchParams(req.query),
-    headers: CLIENT_HEADERS,
-  };
-  await spotifyRequest(options, res);
-};
-
 // Get saved tracks
 const checkSavedTracks = async (req, res) => {
-  const options = {
-    url:
-      "https://api.spotify.com/v1/me/tracks/contains?" +
-      new URLSearchParams(req.query),
-    headers: CLIENT_HEADERS,
+  const userHeaders = {
+    Authorization: req.headers.authorization,
   };
-  await spotifyRequest(options, res);
+  try {
+    const spotifyRes = await axios(
+      "https://api.spotify.com/v1/me/tracks/contains?" +
+        new URLSearchParams(req.query),
+      {
+        headers: userHeaders,
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+    res.status(err.response.status).json(err.response.data.error);
+  }
 };
 
 // Add track to user saved tracks
 const saveTrack = async (req, res) => {
-  const options = {
-    url:
-      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
-    method: "PUT",
-    headers: CLIENT_HEADERS,
+  const userHeaders = {
+    Authorization: req.body.headers.Authorization,
   };
-  await spotifyRequest(options, res);
+  console.log(userHeaders);
+  try {
+    console.log("save");
+    const spotifyRes = await axios.put(
+      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
+      {
+        headers: userHeaders,
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+
+    res.status(err.response.status).json(err.response.data.error);
+  }
 };
 
 // Remove track from user saved tracks
 const removeTrack = async (req, res) => {
-  const options = {
-    url:
-      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
-    method: "DELETE",
-    headers: CLIENT_HEADERS,
+  const userHeaders = {
+    Authorization: req.headers.authorization,
   };
-  await spotifyRequest(options, res);
+  console.log(userHeaders);
+
+  try {
+    console.log("delete");
+    const spotifyRes = await axios.delete(
+      "https://api.spotify.com/v1/me/tracks?" + new URLSearchParams(req.query),
+      {
+        headers: userHeaders,
+      }
+    );
+    res.status(spotifyRes.status).json(spotifyRes.data);
+  } catch (err) {
+    res.status(err.response.status).json(err.response.data.error);
+  }
 };
 
 // Start playback
@@ -215,20 +247,20 @@ const startPlayback = async (req, res) => {
     url: "https://api.spotify.com/v1/me/tracks?",
     query: req.query,
     method: "PUT",
-    headers: CLIENT_HEADERS,
+    headers: CLIENT_AUTH_HEADERS,
   };
-  await spotifyRequest(options, res);
+  await spotifyClientRequest(options, res);
 };
 
 // EXPORT HANDLERS ⬆️
 
 module.exports = {
   test,
-  logIn,
-  getUserInfo,
   search,
   getAudioFeatures,
   getRecommendations,
+  logIn,
+  getUserInfo,
   checkSavedTracks,
   saveTrack,
   removeTrack,

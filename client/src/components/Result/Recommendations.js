@@ -11,6 +11,7 @@ import Loader from "../Loader";
 
 // Misc.
 import { toKeySubRanges } from "../../utils/key";
+import { splitArray } from "../../utils/misc";
 
 const Recommendations = ({
   seed,
@@ -22,9 +23,11 @@ const Recommendations = ({
   refresh,
 }) => {
   // const navigate = useNavigate();
+  const { userAuthHeaders } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
   const [recommendationFeatures, setRecommendationFeatures] = useState("");
+  const [isSavedList, setIsSavedList] = useState("");
   const [load, setLoad] = useState(10);
 
   //Get recommendations tracks
@@ -93,6 +96,24 @@ const Recommendations = ({
         const recommendationIds = sortedRecommendations.map(
           (track) => track.id
         );
+        // If used connected
+        if (userAuthHeaders) {
+          // Split IDs to groups of 50
+          const splitIds = splitArray(recommendationIds, 50);
+          // Check if recommendation is in user's saved list
+          const isSavedSplit = [];
+          for (let batch of splitIds) {
+            const savedRes = await axios(
+              "/api/check-saved-tracks?" +
+                new URLSearchParams({
+                  ids: batch.join(","),
+                }),
+              userAuthHeaders
+            );
+            isSavedSplit.push(...savedRes.data);
+          }
+          setIsSavedList(isSavedSplit);
+        }
         // Get recommendations audio features
         const featuresRes = await axios(
           "/api/audio-features?" +
@@ -102,12 +123,13 @@ const Recommendations = ({
         );
         setRecommendations(sortedRecommendations);
         setRecommendationFeatures(featuresRes.data.audio_features);
+        // If user is connected
       } catch (err) {
         console.log(err.response.status, err.response.statusText);
       }
     };
     getRecommendations();
-  }, [seedFeatures, refresh]);
+  }, [seedFeatures, userAuthHeaders, refresh]);
 
   // Load more recommendations
   const handleLoadMoreClick = async () => {
@@ -124,6 +146,7 @@ const Recommendations = ({
               key={recommendation.id}
               track={recommendation}
               features={recommendationFeatures[index]}
+              isSaved={isSavedList[index]}
               camelotMatches={camelotMatches}
               showCamelot={showCamelot}
               isSeed={false}

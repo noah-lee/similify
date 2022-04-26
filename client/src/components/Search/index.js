@@ -1,11 +1,10 @@
 // Libraries
 import { useState, useContext, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 
 // Components
-import { SpotifyContext } from "../../contexts/SpotifyContext";
+import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import Loader from "../Loader";
 import Suggestions from "./Suggestions";
 import Close from "./Close";
@@ -15,9 +14,7 @@ import useInterval from "../../hooks/use-interval.hook";
 import { FiSearch } from "react-icons/fi";
 
 const Search = () => {
-  // const navigate = useNavigate();
-  const { accessToken, setAccessToken, height, breakpointY, setOverlay } =
-    useContext(SpotifyContext);
+  const { height, breakpointY, setOverlay } = useContext(ResponsiveContext);
 
   const [query, setQuery] = useState("");
   const [prevQuery, setPrevQuery] = useState("");

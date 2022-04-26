@@ -1,55 +1,51 @@
 // Libraries
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 
 // Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
+import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import DesktopTrack from "./DesktopTrack";
-import MobileTrack from './MobileTrack';
+import MobileTrack from "./MobileTrack";
 
 // Misc.
 import { toColor } from "../../utils/key";
 
-const SeedTrack = ({
+const Track = ({
   track,
   features,
+  isSaved,
   camelotMatches,
   showCamelot,
   isSeed,
 }) => {
-  // const [saved, setSaved] = useState("");
+  const { setSeed, userAuthHeaders } = useContext(SpotifyContext);
+  const { width, breakpointX } = useContext(ResponsiveContext);
+  const [localIsSaved, setLocalIsSaved] = useState(isSaved);
 
-  // // Check if seed track is saved
-  // useEffect(() => {
-  //   const checkSaved = async () => {
-  //     const res = await axios(
-  //       "/api/check-saved-tracks?" +
-  //         new URLSearchParams({
-  //           ids: seed.id,
-  //         })
-  //     );
-  //     setSaved(res.data[0]);
-  //   };
-  //   checkSaved();
-  // }, [seed]);
+  if (isSeed) {
+    console.log("inside track");
+    console.log(isSaved);
+  }
 
-  // // Heart styling
-  // const heartStyle = {
-  //   color: saved ? "var(--color-orange-accent)" : "gray",
-  //   fill: saved ? "var(--color-orange-accent)" : "none",
-  // };
-
-  // // Handle heart click
-  // const handleHeartClick = () => {
-  //   if (saved) {
-  //     axios.delete(
-  //       "/api/remove-track?" + new URLSearchParams({ ids: seed.id })
-  //     );
-  //   } else {
-  //     axios.put("/api/save-track?" + new URLSearchParams({ ids: seed.id }));
-  //   }
-  //   setSaved((prevState) => !prevState);
-  // };
+  // Handle heart click
+  const handleHeartClick = (ev) => {
+    ev.stopPropagation();
+    if (userAuthHeaders) {
+      if (localIsSaved) {
+        axios.delete(
+          "/api/remove-track?" + new URLSearchParams({ ids: track.id }),
+          userAuthHeaders
+        );
+      } else {
+        axios.put(
+          "/api/save-track?" + new URLSearchParams({ ids: track.id }),
+          userAuthHeaders
+        );
+      }
+      setLocalIsSaved((prevState) => !prevState);
+    }
+  };
 
   // // Handle art click
   // const handleArtClick = (ev) => {
@@ -61,8 +57,6 @@ const SeedTrack = ({
   //     },
   //   });
   // };
-
-  const { setSeed, width, breakpointX } = useContext(SpotifyContext);
 
   // Handle track click
   const handleTrackClick = () => {
@@ -81,6 +75,12 @@ const SeedTrack = ({
     }`,
   };
 
+  // Heart styling
+  const heartStyle = {
+    color: localIsSaved ? "var(--color-orange-accent)" : "gray",
+    fill: localIsSaved ? "var(--color-orange-accent)" : "none",
+  };
+
   return (
     <>
       {width > breakpointX ? (
@@ -91,6 +91,8 @@ const SeedTrack = ({
           isSeed={isSeed}
           handleTrackClick={handleTrackClick}
           keyStyle={keyStyle}
+          heartStyle={heartStyle}
+          handleHeartClick={handleHeartClick}
         />
       ) : (
         <MobileTrack
@@ -100,10 +102,12 @@ const SeedTrack = ({
           isSeed={isSeed}
           handleTrackClick={handleTrackClick}
           keyStyle={keyStyle}
+          heartStyle={heartStyle}
+          handleHeartClick={handleHeartClick}
         />
       )}
     </>
   );
 };
 
-export default SeedTrack;
+export default Track;

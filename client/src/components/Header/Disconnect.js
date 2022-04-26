@@ -8,11 +8,11 @@ import spotifyLogoPath from "../../assets/Spotify_Icon_RGB_Green.png";
 
 const Disconnect = () => {
   const navigate = useNavigate();
-  const { setAccessToken } = useContext(SpotifyContext);
+  const { setUserAuthHeaders } = useContext(SpotifyContext);
 
   // Reset Spotify access token
   const handleLogOut = () => {
-    setAccessToken("");
+    setUserAuthHeaders("");
     navigate("/");
   };
 

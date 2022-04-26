@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 // Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
+import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import Logo from "../Logo";
 import Search from "../Search";
 import Filter from "./Filter";
@@ -20,9 +21,11 @@ import { toCamelotMatches } from "../../utils/key";
 
 const Result = () => {
   // const navigate = useNavigate();
-  const { seed, width, breakpointX } = useContext(SpotifyContext);
+  const { width, breakpointX } = useContext(ResponsiveContext);
+  const { seed, userAuthHeaders } = useContext(SpotifyContext);
 
   const [seedFeatures, setSeedFeatures] = useState("");
+  const [seedIsSaved, setSeedIsSaved] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [camelotMatches, setCamelotMatches] = useState("");
   const [showCamelot, setShowCamelot] = useState(false);
@@ -31,8 +34,22 @@ const Result = () => {
 
   // Get seed track audio features
   useEffect(() => {
+    console.log("seed refresh");
     (async () => {
       try {
+        // If user connected
+        if (userAuthHeaders) {
+          // Check if seed track is saved
+          const res = await axios(
+            "/api/check-saved-tracks?" +
+              new URLSearchParams({
+                ids: seed.id,
+              }),
+            userAuthHeaders
+          );
+          console.log(res.data[0]);
+          setSeedIsSaved(res.data[0]);
+        }
         const res = await axios(
           "/api/audio-features?" +
             new URLSearchParams({
@@ -46,7 +63,7 @@ const Result = () => {
         console.log(err.response.status, err.response.statusText);
       }
     })();
-  }, [seed]);
+  }, [seed, userAuthHeaders]);
 
   return (
     <Wrapper>
@@ -56,6 +73,7 @@ const Result = () => {
         <ResultContainer width={width} breakpointX={breakpointX}>
           <Filter
             seedFeatures={seedFeatures}
+            isSaved={seedIsSaved}
             bpmRange={bpmRange}
             setBpmRange={setBpmRange}
             keyRange={keyRange}
@@ -72,11 +90,12 @@ const Result = () => {
           <Track
             track={seed}
             features={seedFeatures}
+            isSaved={seedIsSaved}
             camelotMatches={camelotMatches}
             showCamelot={showCamelot}
             isSeed={true}
           />
-          <Recommendations
+          {/* <Recommendations
             seed={seed}
             seedFeatures={seedFeatures}
             bpmRange={bpmRange}
@@ -84,7 +103,7 @@ const Result = () => {
             refresh={refresh}
             camelotMatches={camelotMatches}
             showCamelot={showCamelot}
-          />
+          /> */}
         </ResultContainer>
       )}
       <ScrollUp />
@@ -94,7 +113,8 @@ const Result = () => {
 
 const Wrapper = styled.div`
   width: 100%;
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  max-width: 800px;
   margin: 0 auto;
   padding: 16px;
 

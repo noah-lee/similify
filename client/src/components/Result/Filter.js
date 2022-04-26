@@ -3,7 +3,7 @@ import { useContext } from "react";
 import styled from "styled-components";
 
 // Components
-import { SpotifyContext } from "../../contexts/SpotifyContext";
+import { ResponsiveContext } from '../../contexts/ResponsiveContext';
 import BpmRange from "./BpmRange";
 import KeyRange from "./KeyRange";
 
@@ -17,7 +17,7 @@ const Filter = ({
   setShowCamelot,
   setRefresh,
 }) => {
-  const { width, breakpointX } = useContext(SpotifyContext);
+  const { width, breakpointX } = useContext(ResponsiveContext);
 
   // Handle Show Key/Camelot Click
   const handleCamelotClick = () => {

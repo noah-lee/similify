@@ -5,22 +5,23 @@ import axios from "axios";
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
 const DisplayName = () => {
-  const { accessToken, setAccessToken } = useContext(SpotifyContext);
+  const { userAuthHeaders } = useContext(SpotifyContext);
 
   const [displayName, setDisplayName] = useState("");
 
   // Get Spotify display name
   useEffect(() => {
-    const getUserInfo = async () => {
-      try {
-        const res = await axios("/api/user-info");
-        setDisplayName(res.data.display_name);
-      } catch (err) {
-        setAccessToken("");
-      }
-    };
-    getUserInfo();
-  }, [accessToken]);
+    if (userAuthHeaders) {
+      (async () => {
+        try {
+          const res = await axios("/api/user-info", userAuthHeaders);
+          setDisplayName(res.data.display_name);
+        } catch (err) {
+          console.log(err.response.status, err.response.statusText);
+        }
+      })();
+    }
+  }, [userAuthHeaders]);
 
   return (
     <>
