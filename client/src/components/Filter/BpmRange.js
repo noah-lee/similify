@@ -21,7 +21,7 @@ const BpmRange = ({
   };
 
   return (
-    <Wrapper>
+    <Wrapper aria-label="Slider to change musical BPM search range">
       <SliderContainer>
         <BpmText>BPM</BpmText>
         <SliderText>{bpmRange < 20 ? `±${bpmRange}` : "All"}</SliderText>
@@ -111,6 +111,12 @@ const StyledInput = styled.input`
     border-radius: 4px;
     background-color: var(--color-orange-accent);
     cursor: pointer;
+  }
+
+  &:focus {
+    &::-webkit-slider-thumb {
+      outline: auto var(--color-orange-accent);
+    }
   }
 `;
 

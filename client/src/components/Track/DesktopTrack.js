@@ -22,17 +22,36 @@ const DesktopTrack = ({
   const { userAuthHeaders } = useContext(SpotifyContext);
 
   return (
-    <TrackArea onClick={handleTrackClick} isSeed={isSeed}>
+    <TrackArea
+      isSeed={isSeed}
+      aria-label={`Click to search using this track: ${
+        track.name
+      } by ${track.artists
+        .map((artist) => artist.name)
+        .join(", ")}, Time: ${msToMinSec(
+        track.duration_ms
+      )}, BPM: ${features.tempo.toFixed()}, Key: ${
+        showCamelot
+          ? toCamelotKey(features.key, features.mode)
+          : toLetterKey(features.key, features.mode)
+      }`}
+    >
       <TrackLink
-        href={"https://open.spotify.com/track/" + track.id}
+        onClick={handleArtClick}
         target="_blank"
+        aria-labe="Open song on Spotify website and play if connected"
       >
-        <TrackArt src={track.album.images[2].url} height="48px" />
-        <TrackSpotifyOverlay onClick={handleArtClick}>
+        <TrackArt
+          src={track.album.images[2].url}
+          height="48px"
+          alt="Track album art"
+        />
+        <TrackSpotifyOverlay>
           <SpotifyLogo src={spotifyIconWhite} />
         </TrackSpotifyOverlay>
       </TrackLink>
-      <TrackTitle>
+
+      <TrackTitle onClick={handleTrackClick} tabIndex={isSeed ? "-1" : "auto"}>
         <TrackName>{track.name}</TrackName>
         <TrackArtists>
           {track.artists.map((artist) => artist.name).join(", ")}
@@ -48,6 +67,8 @@ const DesktopTrack = ({
       <TrackIsSaved
         onClick={handleHeartClick}
         style={{ pointerEvents: userAuthHeaders ? "inherit" : "none" }}
+        aria-label="Add or remove song from Spotify saved list, if connected"
+        tabIndex={userAuthHeaders ? "auto" : "-1"}
       >
         <FiHeart size="20px" style={heartStyle} />
       </TrackIsSaved>
@@ -55,9 +76,7 @@ const DesktopTrack = ({
   );
 };
 
-const TrackArea = styled.div`
-  cursor: ${(props) => (props.isSeed ? "auto" : "pointer")};
-
+const TrackArea = styled.li`
   width: 100%;
   padding: 16px;
   border-radius: 16px;
@@ -69,19 +88,23 @@ const TrackArea = styled.div`
 
   background-color: var(--color-dark-contrast);
 
-  &:hover {
+  /* &:hover {
     background-color: ${(props) =>
-      props.isSeed ? "var(--color-dark-contrast)" : "var(--color-dark-light)"};
-  }
+    props.isSeed ? "var(--color-dark-contrast)" : "var(--color-dark-light)"};
+  } */
 `;
 
-const TrackLink = styled.a`
+const TrackLink = styled.button`
   position: relative;
   width: 48px;
   height: 48px;
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
+  }
 `;
 
-const TrackSpotifyOverlay = styled.button`
+const TrackSpotifyOverlay = styled.div`
   position: absolute;
   left: 0;
   top: 0;
@@ -109,7 +132,7 @@ const SpotifyLogo = styled.img`
   width: 24px;
 `;
 
-const TrackTitle = styled.div`
+const TrackTitle = styled.button`
   flex: 1;
   min-width: 160px;
 
@@ -117,6 +140,15 @@ const TrackTitle = styled.div`
   flex-direction: column;
   gap: 8px;
   justify-content: center;
+
+  &:hover,
+  &:focus {
+    color: var(--color-orange-accent);
+  }
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
+  }
 `;
 
 const TrackName = styled.p``;
@@ -141,6 +173,10 @@ const TrackKey = styled.p`
 const TrackIsSaved = styled.button`
   width: 48px;
   height: 20px;
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
+  }
 `;
 
 export default DesktopTrack;

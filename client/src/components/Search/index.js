@@ -83,7 +83,7 @@ const Search = () => {
   }, [query, height]);
 
   return (
-    <Overlay query={query}>
+    <Overlay query={query} aria-label="Search bar to look for songs using Spotify API">
       <Wrapper ref={searchRef}>
         <Form noValidate={true} onSubmit={(ev) => ev.preventDefault()}>
           <FiSearch color="gray" size="24px" />

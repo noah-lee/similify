@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FiInfo, FiGithub } from "react-icons/fi";
 
 import spotifyIconGreen from "../assets/Spotify_Icon_RGB_Green.png";
-import spotifyLogoGreen from "../assets/Spotify_Logo_RGB_Green.png"
+import spotifyLogoGreen from "../assets/Spotify_Logo_RGB_Green.png";
 
 const Footer = () => {
   return (
@@ -24,7 +24,7 @@ const Footer = () => {
           <SpotifyA href="http://spotify.com/" target="_blank">
             {/* <img src={spotifyIconGreen} height="12px" />
             Spotify */}
-            <img src={spotifyLogoGreen} width="70px"/>
+            <img src={spotifyLogoGreen} width="70px" />
           </SpotifyA>
         </FooterTextContainer>
       </FooterContainer>
@@ -67,8 +67,13 @@ const StyledLink = styled(Link)`
   align-items: center;
   gap: 4px;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: var(--color-orange-accent);
+  }
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
   }
 `;
 
@@ -81,8 +86,13 @@ const StyledA = styled.a`
   align-items: center;
   gap: 4px;
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: var(--color-orange-accent);
+  }
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
   }
 `;
 
@@ -105,6 +115,10 @@ const SpotifyA = styled.a`
   text-decoration: none;
   font-size: 12px;
   color: #1ed760;
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
+  }
 `;
 
 export default Footer;

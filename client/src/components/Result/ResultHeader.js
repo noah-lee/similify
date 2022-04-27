@@ -1,15 +1,28 @@
 // Libraries
+import { useContext } from "react";
 import styled from "styled-components";
 
+// Components
+import { ResponsiveContext } from "../../contexts/ResponsiveContext";
+
 const ResultHeader = () => {
+  const { width, breakpointX } = useContext(ResponsiveContext);
+
   return (
-    <HeaderArea>
-      <HeaderTitle>Title</HeaderTitle>
-      <HeaderTime>Time</HeaderTime>
-      <HeaderBpm>BPM</HeaderBpm>
-      <HeaderKey>Key</HeaderKey>
-      <HeaderSpacer />
-    </HeaderArea>
+    <>
+      {width > breakpointX ? (
+        <HeaderArea>
+          <HeaderTitle>Title</HeaderTitle>
+          <HeaderTime>Time</HeaderTime>
+          <HeaderBpm>BPM</HeaderBpm>
+          <HeaderKey>Key</HeaderKey>
+        </HeaderArea>
+      ) : (
+        <HeaderArea>
+          <MobileHeader>Title</MobileHeader>
+        </HeaderArea>
+      )}
+    </>
   );
 };
 
@@ -23,25 +36,23 @@ const HeaderArea = styled.div`
   font-weight: bold;
 `;
 
-const HeaderTitle = styled.p`
+const MobileHeader = styled.h2``;
+
+const HeaderTitle = styled.h2`
   flex: 1;
   min-width: 224px;
 `;
 
-const HeaderTime = styled.p`
+const HeaderTime = styled.h2`
   width: 48px;
 `;
 
-const HeaderBpm = styled.p`
+const HeaderBpm = styled.h2`
   width: 48px;
 `;
 
-const HeaderKey = styled.p`
-  width: 64px;
-`;
-
-const HeaderSpacer = styled.div`
-  width: 48px;
+const HeaderKey = styled.h2`
+  width: 128px;
 `;
 
 export default ResultHeader;

@@ -59,7 +59,7 @@ const Suggestions = ({
   };
 
   return (
-    <Wrapper overlay={overlay}>
+    <Wrapper overlay={overlay} aria-label="Top 5 search result suggestions">
       {query && !suggestions.length ? (
         <NoResult>
           <p>Sorry, we couldn't find any results</p>
@@ -75,6 +75,7 @@ const Suggestions = ({
                 selectedIndex === index ? "var(--color-orange-accent)" : "",
             }}
             onMouseEnter={() => handleMousEnter(index)}
+            aria-label={`${suggestion.name} by ${suggestion.artists.map((artist) => artist.name).join(", ")}`}
           >
             <Art src={suggestion.album.images[2].url} height="48px" />
             <Title>
@@ -91,7 +92,7 @@ const Suggestions = ({
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.ul`
   position: ${({ overlay }) => (overlay ? "" : "absolute")};
   top: 80px;
   z-index: 10;
@@ -105,7 +106,7 @@ const Wrapper = styled.div`
   background-color: var(--color-dark-contrast);
 `;
 
-const Suggestion = styled.div`
+const Suggestion = styled.li`
   text-decoration: none;
   color: inherit;
   cursor: pointer;

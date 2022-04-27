@@ -12,7 +12,7 @@ const Homepage = () => {
   return (
     <Wrapper>
       <Logo />
-      <Instructions>
+      <Instructions aria-label="Short instructions">
         <SpotifyLogo src={spotifyLogoWhite} />
         <Text>Search & Discover</Text>
         <Text>

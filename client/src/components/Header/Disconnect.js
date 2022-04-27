@@ -16,7 +16,7 @@ const Disconnect = () => {
   };
 
   return (
-    <StyledButton onClick={handleLogOut}>
+    <StyledButton onClick={handleLogOut} aria-label="Disconnect from website">
       <SpotifyLogo src={spotifyLogoPath} />
       <p>Disconnect</p>
     </StyledButton>
@@ -31,6 +31,15 @@ const StyledButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
+
+  &:hover,
+  &:focus {
+    color: #1ed760;
+  }
+
+  &:focus {
+    outline: auto;
+  }
 `;
 
 const SpotifyLogo = styled.img`

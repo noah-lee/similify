@@ -145,7 +145,6 @@ const Recommendations = ({
     <Wrapper>
       {recommendations && recommendationFeatures ? (
         <>
-          <HeaderTitle>Recommendations</HeaderTitle>
           {recommendations.slice(0, load).map((recommendation, index) => (
             <Track
               key={recommendation.id}
@@ -158,7 +157,12 @@ const Recommendations = ({
             />
           ))}
           {load < recommendations.length ? (
-            <LoadMore onClick={handleLoadMoreClick}>Look for more 🔎</LoadMore>
+            <LoadMore
+              onClick={handleLoadMoreClick}
+              aria-label="Load 10 more recommendations"
+            >
+              Look for more 🔎
+            </LoadMore>
           ) : (
             <LoadEnd>🏁 You've reached the end 🏁</LoadEnd>
           )}
@@ -170,16 +174,11 @@ const Recommendations = ({
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.ul`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
-`;
-
-const HeaderTitle = styled.h2`
-  font-weight: bold;
-  padding: 16px;
 `;
 
 const LoadMore = styled.button`
@@ -194,13 +193,13 @@ const LoadMore = styled.button`
   font-weight: bold;
   background-color: var(--color-dark-contrast);
 
-  &:hover {
+  &:hover, &:focus {
     background-color: var(--color-dark-light);
     color: var(--color-orange-accent);
   }
 `;
 
-const LoadEnd = styled.p`
+const LoadEnd = styled.div`
   width: 100%;
   height: 48px;
   padding: 16px;

@@ -62,7 +62,7 @@ const Result = () => {
         setCamelotMatches(toCamelotMatches(features.key, features.mode));
         setSeedFeatures(features);
       } catch (err) {
-        console.log('Get seed features and check saved');
+        console.log("Get seed features and check saved");
         console.log(err.response.status, err.response.statusText);
         setUserAuthHeaders("");
         navigate("/");
@@ -75,7 +75,11 @@ const Result = () => {
       <Logo />
       <Search />
       {seed && seedFeatures && (
-        <ResultContainer width={width} breakpointX={breakpointX}>
+        <ResultContainer
+          width={width}
+          breakpointX={breakpointX}
+          aria-label="Search result section"
+        >
           <Filter
             seedFeatures={seedFeatures}
             isSaved={seedIsSaved}
@@ -87,11 +91,7 @@ const Result = () => {
             setShowCamelot={setShowCamelot}
             setRefresh={setRefresh}
           />
-          {width > breakpointX ? (
-            <ResultHeader />
-          ) : (
-            <MobileHeader>Result</MobileHeader>
-          )}
+          <ResultHeader />
           <Track
             track={seed}
             features={seedFeatures}
@@ -100,6 +100,7 @@ const Result = () => {
             showCamelot={showCamelot}
             isSeed={true}
           />
+          <HeaderTitle>Recommendations</HeaderTitle>
           <Recommendations
             seed={seed}
             seedFeatures={seedFeatures}
@@ -130,7 +131,7 @@ const Wrapper = styled.div`
   gap: 64px;
 `;
 
-const ResultContainer = styled.div`
+const ResultContainer = styled.section`
   width: 100%;
   max-width: ${({ width, breakpointX }) =>
     width > breakpointX ? "1280px" : `${breakpointX}px`};
@@ -142,11 +143,10 @@ const ResultContainer = styled.div`
   gap: 8px;
 `;
 
-const MobileHeader = styled.div`
-  padding: 16px;
+const HeaderTitle = styled.h2`
   width: 100%;
-
   font-weight: bold;
+  padding: 16px;
 `;
 
 export default Result;

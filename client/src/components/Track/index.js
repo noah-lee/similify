@@ -62,6 +62,7 @@ const Track = ({
   // Handle art click
   const handleArtClick = (ev) => {
     ev.stopPropagation();
+    window.open("https://open.spotify.com/track/" + track.id)
     if (userAuthHeaders) {
       axios.put(
         "/api/play",

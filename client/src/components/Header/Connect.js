@@ -43,7 +43,10 @@ const Connect = () => {
   }, []);
 
   return (
-    <StyledButton onClick={handleConnect}>
+    <StyledButton
+      onClick={handleConnect}
+      aria-label="Redirects to Spotify authorization page to connect to website"
+    >
       <SpotifyIcon src={spotifyIconGreen} />
       <p>Connect</p>
     </StyledButton>
@@ -61,6 +64,14 @@ const StyledButton = styled.button`
   background-color: white;
   color: var(--color-dark-main);
   font-weight: bold;
+
+  &:hover, &:focus {
+    color: #1ed760;
+  }
+
+  &:focus {
+    outline: auto;
+  }
 `;
 
 const SpotifyIcon = styled.img`

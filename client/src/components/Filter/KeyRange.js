@@ -22,7 +22,7 @@ const KeyRange = ({
   };
 
   return (
-    <Wrapper>
+    <Wrapper aria-label="Slider to change musical key search range">
       <SliderContainer>
         <KeyText>Key</KeyText>
         <SliderText>{keyRange < 6 ? `±${keyRange}` : "All"}</SliderText>
@@ -111,6 +111,12 @@ const StyledInput = styled.input`
     border-radius: 4px;
     background-color: var(--color-orange-accent);
     cursor: pointer;
+  }
+
+  &:focus {
+    &::-webkit-slider-thumb {
+      outline: auto var(--color-orange-accent);
+    }
   }
 `;
 

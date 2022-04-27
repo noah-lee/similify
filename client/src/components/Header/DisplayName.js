@@ -26,7 +26,7 @@ const DisplayName = () => {
   return (
     <>
       {displayName && (
-        <StyledDisplayName>Hello {displayName}</StyledDisplayName>
+        <StyledDisplayName aria-label='Your Spotify display name'>Hello {displayName}</StyledDisplayName>
       )}
     </>
   );

@@ -28,15 +28,18 @@ const ScrollUp = () => {
   return (
     <>
       {showScrollUp && (
-        <ScrollUpIcon>
-          <FiChevronUp onClick={handleScrollUpClick} size="40px" />
+        <ScrollUpIcon
+          onClick={handleScrollUpClick}
+          aria-label="Scroll back to the top of the page"
+        >
+          <FiChevronUp size="40px" />
         </ScrollUpIcon>
       )}
     </>
   );
 };
 
-const ScrollUpIcon = styled.div`
+const ScrollUpIcon = styled.button`
   position: sticky;
   /* right: 64px; */
   bottom: 0px;
@@ -49,7 +52,8 @@ const ScrollUpIcon = styled.div`
 
   background-color: var(--color-dark-main);
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: var(--color-orange-accent);
     background-color: var(--color-dark-light);
   }

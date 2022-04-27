@@ -5,7 +5,7 @@ import styled from "styled-components";
 // Components
 import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import BpmRange from "./BpmRange";
-import KeyRange from "./KeyRange"
+import KeyRange from "./KeyRange";
 
 const Filter = ({
   seedFeatures,
@@ -25,7 +25,11 @@ const Filter = ({
   };
 
   return (
-    <Wrapper width={width} breakpointX={breakpointX}>
+    <Wrapper
+      width={width}
+      breakpointX={breakpointX}
+      aria-label="Song recommendations filters"
+    >
       <BpmRange
         width="132px"
         seedFeatures={seedFeatures}
@@ -40,7 +44,10 @@ const Filter = ({
         setKeyRange={setKeyRange}
         setRefresh={setRefresh}
       />
-      <CamelotButton onClick={handleCamelotClick}>
+      <CamelotButton
+        onClick={handleCamelotClick}
+        aria-label="Toggle between showing musical key or camelot key"
+      >
         {showCamelot ? "Show Key" : "Show Camelot"}
       </CamelotButton>
     </Wrapper>
@@ -71,7 +78,8 @@ const CamelotButton = styled.button`
   font-weight: bold;
   background-color: var(--color-dark-main);
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: var(--color-orange-accent);
     background-color: var(--color-dark-light);
   }

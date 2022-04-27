@@ -22,13 +22,27 @@ const DesktopTrack = ({
   const { userAuthHeaders } = useContext(SpotifyContext);
 
   return (
-    <TrackArea onClick={handleTrackClick} isSeed={isSeed}>
+    <TrackArea
+      isSeed={isSeed}
+      aria-label={`Click to search using this track: ${
+        track.name
+      } by ${track.artists
+        .map((artist) => artist.name)
+        .join(", ")}, Time: ${msToMinSec(
+        track.duration_ms
+      )}, BPM: ${features.tempo.toFixed()}, Key: ${
+        showCamelot
+          ? toCamelotKey(features.key, features.mode)
+          : toLetterKey(features.key, features.mode)
+      }`}
+    >
       <TrackTopContainer>
         <TrackLink
-          href={"https://open.spotify.com/track/" + track.id}
+          onClick={handleTrackClick}
           target="_blank"
+          aria-labe="Open song on Spotify website and play if connected"
         >
-          <TrackArt src={track.album.images[2].url} height="48px" />
+          <TrackArt src={track.album.images[2].url} height="48px" alt='Track album art'/>
           <TrackSpotifyOverlay onClick={handleArtClick}>
             <SpotifyLogo src={spotifyIconWhitePath} />
           </TrackSpotifyOverlay>
@@ -42,6 +56,7 @@ const DesktopTrack = ({
         <TrackIsSaved
           onClick={handleHeartClick}
           style={{ pointerEvents: userAuthHeaders ? "inherit" : "none" }}
+          aria-label="Add or remove song from Spotify saved list, if connected"
         >
           <FiHeart size="20px" style={heartStyle} />
         </TrackIsSaved>
@@ -66,9 +81,7 @@ const DesktopTrack = ({
   );
 };
 
-const TrackArea = styled.div`
-  cursor: ${(props) => (props.isSeed ? "auto" : "pointer")};
-
+const TrackArea = styled.li`
   width: 100%;
   padding: 16px;
   border-radius: 16px;
@@ -80,10 +93,10 @@ const TrackArea = styled.div`
 
   background-color: var(--color-dark-contrast);
 
-  &:hover {
+  /* &:hover {
     background-color: ${(props) =>
       props.isSeed ? "var(--color-dark-contrast)" : "var(--color-dark-light)"};
-  }
+  } */
 `;
 
 const TrackTopContainer = styled.div`
