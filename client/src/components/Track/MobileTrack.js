@@ -1,10 +1,13 @@
+// Libraries
 import { useContext } from "react";
 import styled from "styled-components";
+import { FiHeart } from "react-icons/fi";
 
+// Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
+// Misc.
 import spotifyIconWhitePath from "../../assets/Spotify_Icon_RGB_White.png";
-import { FiHeart } from "react-icons/fi";
 import { msToMinSec } from "../../utils/time";
 import { toLetterKey, toCamelotKey } from "../../utils/key";
 
@@ -18,36 +21,40 @@ const DesktopTrack = ({
   keyStyle,
   heartStyle,
   handleHeartClick,
+  localIsSaved,
 }) => {
   const { userAuthHeaders } = useContext(SpotifyContext);
 
   return (
-    <TrackArea
-      isSeed={isSeed}
-      aria-label={`Click to search using this track: ${
-        track.name
-      } by ${track.artists
-        .map((artist) => artist.name)
-        .join(", ")}, Time: ${msToMinSec(
-        track.duration_ms
-      )}, BPM: ${features.tempo.toFixed()}, Key: ${
-        showCamelot
-          ? toCamelotKey(features.key, features.mode)
-          : toLetterKey(features.key, features.mode)
-      }`}
-    >
+    <TrackArea isSeed={isSeed}>
       <TrackTopContainer>
         <TrackLink
-          onClick={handleTrackClick}
-          target="_blank"
-          aria-labe="Open song on Spotify website and play if connected"
+          onClick={handleArtClick}
+          aria-label={`Open ${track.name} by ${track.artists
+            .map((artist) => artist.name)
+            .join(", ")} on Spotify website and play if connected`}
         >
-          <TrackArt src={track.album.images[2].url} height="48px" alt='Track album art'/>
-          <TrackSpotifyOverlay onClick={handleArtClick}>
+          <TrackArt
+            src={track.album.images[2].url}
+            height="48px"
+            alt="Track album art"
+          />
+          <TrackSpotifyOverlay>
             <SpotifyLogo src={spotifyIconWhitePath} />
           </TrackSpotifyOverlay>
         </TrackLink>
-        <TrackTitle>
+        <TrackTitle
+          onClick={handleTrackClick}
+          tabIndex={isSeed ? "-1" : "auto"}
+          style={{ pointerEvents: isSeed ? "none" : "inherit" }}
+          aria-label={
+            isSeed
+              ? "Searched track"
+              : `Search using ${track.name} by ${track.artists
+                  .map((artist) => artist.name)
+                  .join(", ")}`
+          }
+        >
           <TrackName>{track.name}</TrackName>
           <TrackArtists>
             {track.artists.map((artist) => artist.name).join(", ")}
@@ -56,7 +63,11 @@ const DesktopTrack = ({
         <TrackIsSaved
           onClick={handleHeartClick}
           style={{ pointerEvents: userAuthHeaders ? "inherit" : "none" }}
-          aria-label="Add or remove song from Spotify saved list, if connected"
+          tabIndex={userAuthHeaders ? "auto" : "-1"}
+          aria-label={`${
+            localIsSaved ? "Remove song from" : "Add song to"
+          } your Spotify saved list`}
+          aria-hidden={userAuthHeaders ? false : true}
         >
           <FiHeart size="20px" style={heartStyle} />
         </TrackIsSaved>
@@ -95,7 +106,7 @@ const TrackArea = styled.li`
 
   /* &:hover {
     background-color: ${(props) =>
-      props.isSeed ? "var(--color-dark-contrast)" : "var(--color-dark-light)"};
+    props.isSeed ? "var(--color-dark-contrast)" : "var(--color-dark-light)"};
   } */
 `;
 
@@ -104,6 +115,7 @@ const TrackTopContainer = styled.div`
   align-items: center;
   gap: 16px;
 `;
+
 const TrackBottomContainer = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -111,13 +123,17 @@ const TrackBottomContainer = styled.div`
   gap: 16px;
 `;
 
-const TrackLink = styled.a`
+const TrackLink = styled.button`
   position: relative;
   width: 48px;
   height: 48px;
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
+  }
 `;
 
-const TrackSpotifyOverlay = styled.button`
+const TrackSpotifyOverlay = styled.div`
   position: absolute;
   left: 0;
   top: 0;
@@ -145,7 +161,7 @@ const SpotifyLogo = styled.img`
   width: 24px;
 `;
 
-const TrackTitle = styled.div`
+const TrackTitle = styled.button`
   flex: 1;
   /* min-width: 160px; */
 
@@ -153,6 +169,15 @@ const TrackTitle = styled.div`
   flex-direction: column;
   gap: 8px;
   justify-content: center;
+
+  &:hover,
+  &:focus {
+    color: var(--color-orange-accent);
+  }
+
+  &:focus {
+    outline: auto var(--color-orange-accent);
+  }
 `;
 
 const TrackName = styled.p``;

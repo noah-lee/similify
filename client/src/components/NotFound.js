@@ -1,13 +1,14 @@
+// Libraries
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const NotFound = () => {
   return (
     <Wrapper>
-      <LargeText>
+      <SectionTitle>
         4<Accent>0</Accent>4
-      </LargeText>
-      <MediumText>Oops! Page not found 😓</MediumText>
+      </SectionTitle>
+      <Text>Oops! Page not found 😓</Text>
       <HomeLink to="/">Return Home</HomeLink>
     </Wrapper>
   );
@@ -22,7 +23,7 @@ const Wrapper = styled.div`
   gap: 64px;
 `;
 
-const LargeText = styled.h2`
+const SectionTitle = styled.h2`
   font-size: 12rem;
   font-weight: bold;
 `;
@@ -31,7 +32,7 @@ const Accent = styled.span`
   color: var(--color-orange-accent);
 `;
 
-const MediumText = styled.h3`
+const Text = styled.h3`
   font-size: 2rem;
   font-weight: bold;
   color: gray;

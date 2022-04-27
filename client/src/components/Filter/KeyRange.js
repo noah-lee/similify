@@ -1,6 +1,8 @@
+// Libraries
 import styled from "styled-components";
-
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+
+// Misc.
 import { toLetterKey } from "../../utils/key";
 
 const KeyRange = ({
@@ -42,19 +44,21 @@ const KeyRange = ({
         </CustomSlider>
       </SliderContainer>
       <TextContainer>
-        <Text style={{ textAlign: "left" }}>
+        <Text
+          style={{ color: "var(--color-orange-accent)", textAlign: "left" }}
+        >
           {keyRange < 6
             ? toLetterKey(seedFeatures.key - keyRange, seedFeatures.mode)
             : "All"}
         </Text>
         <FiArrowLeft />
-        <Text
-          style={{ color: "var(--color-orange-accent)", textAlign: "center" }}
-        >
+        <Text style={{ textAlign: "center" }}>
           {toLetterKey(seedFeatures.key, seedFeatures.mode)}
         </Text>
         <FiArrowRight />
-        <Text style={{ textAlign: "right" }}>
+        <Text
+          style={{ color: "var(--color-orange-accent)", textAlign: "right" }}
+        >
           {keyRange < 6
             ? toLetterKey(seedFeatures.key + keyRange, seedFeatures.mode)
             : "All"}

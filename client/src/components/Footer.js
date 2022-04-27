@@ -1,8 +1,9 @@
+// Libraries
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FiInfo, FiGithub } from "react-icons/fi";
 
-import spotifyIconGreen from "../assets/Spotify_Icon_RGB_Green.png";
+// Misc.
 import spotifyLogoGreen from "../assets/Spotify_Logo_RGB_Green.png";
 
 const Footer = () => {
@@ -10,10 +11,10 @@ const Footer = () => {
     <Wrapper className="footer">
       <FooterContainer>
         <FooterLinks>
-          <StyledLink to="/about">
+          {/* <StyledLink to="/about">
             <FiInfo />
             <p>About</p>
-          </StyledLink>
+          </StyledLink> */}
           <StyledA href="https://github.com/noah-lee/similify" target="_blank">
             <FiGithub />
             <p>GitHub</p>
@@ -22,9 +23,7 @@ const Footer = () => {
         <FooterTextContainer>
           <FooterText>Created by Noah Lee, powered by</FooterText>
           <SpotifyA href="http://spotify.com/" target="_blank">
-            {/* <img src={spotifyIconGreen} height="12px" />
-            Spotify */}
-            <img src={spotifyLogoGreen} width="70px" />
+            <img src={spotifyLogoGreen} width="70px" alt="Spotify logo" />
           </SpotifyA>
         </FooterTextContainer>
       </FooterContainer>

@@ -1,5 +1,5 @@
+// Libraries
 import styled from "styled-components";
-
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 
 const BpmRange = ({
@@ -41,19 +41,21 @@ const BpmRange = ({
         </CustomSlider>
       </SliderContainer>
       <TextContainer>
-        <Text style={{ textAlign: "left" }}>
+        <Text
+          style={{ color: "var(--color-orange-accent)", textAlign: "left" }}
+        >
           {bpmRange < 20
             ? `${+seedFeatures.tempo.toFixed() - bpmRange}`
             : "All"}
         </Text>
         <FiArrowLeft />
-        <Text
-          style={{ color: "var(--color-orange-accent)", textAlign: "center" }}
-        >
+        <Text style={{ textAlign: "center" }}>
           {+seedFeatures.tempo.toFixed()}
         </Text>
         <FiArrowRight />
-        <Text style={{ textAlign: "right" }}>
+        <Text
+          style={{ color: "var(--color-orange-accent)", textAlign: "right" }}
+        >
           {bpmRange < 20
             ? `${+seedFeatures.tempo.toFixed() + bpmRange}`
             : "All"}

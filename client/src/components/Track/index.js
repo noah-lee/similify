@@ -113,6 +113,7 @@ const Track = ({
           keyStyle={keyStyle}
           heartStyle={heartStyle}
           handleHeartClick={handleHeartClick}
+          localIsSaved={localIsSaved}
         />
       ) : (
         <MobileTrack
@@ -125,6 +126,7 @@ const Track = ({
           keyStyle={keyStyle}
           heartStyle={heartStyle}
           handleHeartClick={handleHeartClick}
+          localIsSaved={localIsSaved}
         />
       )}
     </>

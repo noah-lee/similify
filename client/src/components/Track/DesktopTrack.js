@@ -1,10 +1,13 @@
+// Libraries
 import { useContext } from "react";
 import styled from "styled-components";
+import { FiHeart } from "react-icons/fi";
 
+// Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
+// Misc.
 import spotifyIconWhite from "../../assets/Spotify_Icon_RGB_White.png";
-import { FiHeart } from "react-icons/fi";
 import { msToMinSec } from "../../utils/time";
 import { toLetterKey, toCamelotKey } from "../../utils/key";
 
@@ -18,28 +21,17 @@ const DesktopTrack = ({
   keyStyle,
   heartStyle,
   handleHeartClick,
+  localIsSaved,
 }) => {
   const { userAuthHeaders } = useContext(SpotifyContext);
 
   return (
-    <TrackArea
-      isSeed={isSeed}
-      aria-label={`Click to search using this track: ${
-        track.name
-      } by ${track.artists
-        .map((artist) => artist.name)
-        .join(", ")}, Time: ${msToMinSec(
-        track.duration_ms
-      )}, BPM: ${features.tempo.toFixed()}, Key: ${
-        showCamelot
-          ? toCamelotKey(features.key, features.mode)
-          : toLetterKey(features.key, features.mode)
-      }`}
-    >
+    <TrackArea isSeed={isSeed}>
       <TrackLink
         onClick={handleArtClick}
-        target="_blank"
-        aria-labe="Open song on Spotify website and play if connected"
+        aria-label={`Open ${track.name} by ${track.artists
+          .map((artist) => artist.name)
+          .join(", ")} on Spotify website and play if connected`}
       >
         <TrackArt
           src={track.album.images[2].url}
@@ -50,8 +42,18 @@ const DesktopTrack = ({
           <SpotifyLogo src={spotifyIconWhite} />
         </TrackSpotifyOverlay>
       </TrackLink>
-
-      <TrackTitle onClick={handleTrackClick} tabIndex={isSeed ? "-1" : "auto"}>
+      <TrackTitle
+        onClick={handleTrackClick}
+        tabIndex={isSeed ? "-1" : "auto"}
+        style={{ pointerEvents: isSeed ? "none" : "inherit" }}
+        aria-label={
+          isSeed
+            ? "Searched track"
+            : `Search using ${track.name} by ${track.artists
+                .map((artist) => artist.name)
+                .join(", ")}`
+        }
+      >
         <TrackName>{track.name}</TrackName>
         <TrackArtists>
           {track.artists.map((artist) => artist.name).join(", ")}
@@ -67,8 +69,11 @@ const DesktopTrack = ({
       <TrackIsSaved
         onClick={handleHeartClick}
         style={{ pointerEvents: userAuthHeaders ? "inherit" : "none" }}
-        aria-label="Add or remove song from Spotify saved list, if connected"
         tabIndex={userAuthHeaders ? "auto" : "-1"}
+        aria-label={`${
+          localIsSaved ? "Remove song from" : "Add song to"
+        } your Spotify saved list`}
+        aria-hidden={userAuthHeaders ? false : true}
       >
         <FiHeart size="20px" style={heartStyle} />
       </TrackIsSaved>

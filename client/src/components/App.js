@@ -7,7 +7,6 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./Header";
 import Homepage from "./Homepage";
 import Result from "./Result";
-import About from "./About";
 import Footer from "./Footer";
 import NotFound from "./NotFound";
 
@@ -20,7 +19,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/result" element={<Result />} />
-            <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Main>

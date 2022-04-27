@@ -1,7 +1,9 @@
+// Libraries
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
+// Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
 const DisplayName = () => {

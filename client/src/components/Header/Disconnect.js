@@ -1,13 +1,14 @@
+// Libraries
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+// Components
 import { SpotifyContext } from "../../contexts/SpotifyContext";
 
+// Misc.
 import spotifyLogoPath from "../../assets/Spotify_Icon_RGB_Green.png";
 
 const Disconnect = () => {
-  const navigate = useNavigate();
   const { setUserAuthHeaders } = useContext(SpotifyContext);
 
   // Reset Spotify access token

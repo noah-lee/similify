@@ -1,6 +1,6 @@
+// Libraries
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-
 import { FiChevronUp } from "react-icons/fi";
 
 const ScrollUp = () => {

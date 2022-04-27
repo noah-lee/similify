@@ -10,8 +10,9 @@ import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import Logo from "../Logo";
 import Search from "../Search";
 import Filter from "../Filter";
-import Recommendations from "./Recommendations";
 import ResultHeader from "./ResultHeader";
+import RecommendationsHeader from "./RecommendationsHeader";
+import Recommendations from "./Recommendations";
 import Track from "../Track";
 import ScrollUp from "./ScrollUp";
 
@@ -100,7 +101,12 @@ const Result = () => {
             showCamelot={showCamelot}
             isSeed={true}
           />
-          <HeaderTitle>Recommendations</HeaderTitle>
+          <RecommendationsHeader
+            seedFeatures={seedFeatures}
+            bpmRange={bpmRange}
+            keyRange={keyRange}
+            refresh={refresh}
+          />
           <Recommendations
             seed={seed}
             seedFeatures={seedFeatures}
@@ -141,12 +147,6 @@ const ResultContainer = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 8px;
-`;
-
-const HeaderTitle = styled.h2`
-  width: 100%;
-  font-weight: bold;
-  padding: 16px;
 `;
 
 export default Result;

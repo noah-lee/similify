@@ -1,4 +1,7 @@
+// Libraries
 import styled, { keyframes } from "styled-components";
+
+// Misc
 import { ReactComponent as SimilifyLoader } from "../assets/similify_loader.svg";
 
 const Loader = ({ size, padding }) => {
