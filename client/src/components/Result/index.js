@@ -9,9 +9,9 @@ import { SpotifyContext } from "../../contexts/SpotifyContext";
 import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import Logo from "../Logo";
 import Search from "../Search";
-import Filter from "./Filter";
-import ResultHeader from "./ResultHeader";
+import Filter from "../Filter";
 import Recommendations from "./Recommendations";
+import ResultHeader from "./ResultHeader";
 import Track from "../Track";
 import ScrollUp from "./ScrollUp";
 

@@ -26,7 +26,6 @@ const Recommendations = ({
   const { userAuthHeaders, setUserAuthHeaders } = useContext(SpotifyContext);
 
   const [recommendations, setRecommendations] = useState("");
-  const [recIds, setRecIds] = useState("");
   const [recommendationFeatures, setRecommendationFeatures] = useState("");
   const [isSavedList, setIsSavedList] = useState("");
   const [load, setLoad] = useState(10);
@@ -97,7 +96,6 @@ const Recommendations = ({
         const recommendationIds = sortedRecommendations.map(
           (track) => track.id
         );
-        setRecIds(recommendationIds);
         // If used connected
         if (userAuthHeaders) {
           // Split IDs to groups of 50

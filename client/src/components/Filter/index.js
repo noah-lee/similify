@@ -3,9 +3,9 @@ import { useContext } from "react";
 import styled from "styled-components";
 
 // Components
-import { ResponsiveContext } from '../../contexts/ResponsiveContext';
+import { ResponsiveContext } from "../../contexts/ResponsiveContext";
 import BpmRange from "./BpmRange";
-import KeyRange from "./KeyRange";
+import KeyRange from "./KeyRange"
 
 const Filter = ({
   seedFeatures,
