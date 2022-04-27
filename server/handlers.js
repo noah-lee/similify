@@ -2,17 +2,10 @@
 
 // PACKAGES 📦
 const axios = require("axios");
-const { MongoClient } = require("mongodb");
 require("dotenv").config();
 
 // SECRET 🤫
-const { MONGO_URI, CLIENT_SECRET } = process.env;
-
-// MONGODB CONFIG ⚙️
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+const { CLIENT_SECRET } = process.env;
 
 // SPOTIFY CLIENT CONFIG ⚙️
 const CLIENT_ID = "8c2bf61fb7774277acea438120202d71";

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FiInfo, FiGithub } from "react-icons/fi";
 
 import spotifyIconGreen from "../assets/Spotify_Icon_RGB_Green.png";
+import spotifyLogoGreen from "../assets/Spotify_Logo_RGB_Green.png"
 
 const Footer = () => {
   return (
@@ -21,8 +22,9 @@ const Footer = () => {
         <FooterTextContainer>
           <FooterText>Created by Noah Lee, powered by</FooterText>
           <SpotifyA href="http://spotify.com/" target="_blank">
-            <img src={spotifyIconGreen} height="12px" />
-            Spotify
+            {/* <img src={spotifyIconGreen} height="12px" />
+            Spotify */}
+            <img src={spotifyLogoGreen} width="70px"/>
           </SpotifyA>
         </FooterTextContainer>
       </FooterContainer>
