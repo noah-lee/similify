@@ -180,9 +180,12 @@ const TrackTitle = styled.button`
   }
 `;
 
-const TrackName = styled.p``;
+const TrackName = styled.p`
+  text-align: left;
+`;
 
 const TrackArtists = styled.p`
+  text-align: left;
   font-weight: 400;
   color: gray;
 `;

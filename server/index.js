@@ -40,5 +40,12 @@ app.put("/api/save-track", saveTrack);
 app.delete("/api/remove-track", removeTrack);
 app.put("/api/play/", startPlayback);
 
+// if (process.nextTick.NODE_ENV === "production") {
+//   app.use(express.static('client/build'));
+//   app.get("*", (req, res)=>{
+//     req.sendFile(path.resolve(__dirname,"../client", "build", "index.html"))
+//   })
+// }
+
 // LISTEN 👂
 app.listen(process.env.PORT || 8000, () => console.log(`🌎 Listening on 8000`));
