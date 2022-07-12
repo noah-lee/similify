@@ -1,17 +1,17 @@
 // Libraries
-import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import axios from "axios";
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import axios from 'axios';
 
 // Components
-import { SpotifyContext } from "../../contexts/SpotifyContext";
-import Track from "../Track";
-import Loader from "../Loader";
+import { SpotifyContext } from '../../contexts/SpotifyContext';
+import Track from '../Track';
+import Loading from '../../components/Loading';
 
 // Misc.
-import { toKeySubRanges } from "../../utils/key";
-import { splitArray } from "../../utils/misc";
+import { toKeySubRanges } from '../../utils/key';
+import { splitArray } from '../../utils/misc';
 
 const Recommendations = ({
   seed,
@@ -25,16 +25,16 @@ const Recommendations = ({
   const navigate = useNavigate();
   const { userAuthHeaders, setUserAuthHeaders } = useContext(SpotifyContext);
 
-  const [recommendations, setRecommendations] = useState("");
-  const [recommendationFeatures, setRecommendationFeatures] = useState("");
-  const [isSavedList, setIsSavedList] = useState("");
+  const [recommendations, setRecommendations] = useState('');
+  const [recommendationFeatures, setRecommendationFeatures] = useState('');
+  const [isSavedList, setIsSavedList] = useState('');
   const [load, setLoad] = useState(10);
 
   //Get recommendations tracks
   useEffect(() => {
     const getRecommendations = async () => {
       // Reset recommendations
-      setRecommendations("");
+      setRecommendations('');
       // Reset Load to 10
       setLoad(10);
       const defaultRecommendationsParams = new URLSearchParams({
@@ -70,9 +70,9 @@ const Recommendations = ({
         );
         for (let range of keySubRanges) {
           const recommendationsRes = await axios(
-            "/api/recommendations?" +
+            '/api/recommendations?' +
               defaultRecommendationsParams +
-              "&" +
+              '&' +
               new URLSearchParams({
                 min_key: range.minKey,
                 max_key: range.maxKey,
@@ -104,9 +104,9 @@ const Recommendations = ({
           const isSavedSplit = [];
           for (let batch of splitIds) {
             const savedRes = await axios(
-              "/api/check-saved-tracks?" +
+              '/api/check-saved-tracks?' +
                 new URLSearchParams({
-                  ids: batch.join(","),
+                  ids: batch.join(','),
                 }),
               userAuthHeaders
             );
@@ -114,23 +114,23 @@ const Recommendations = ({
           }
           setIsSavedList(isSavedSplit);
         } else {
-          setIsSavedList("");
+          setIsSavedList('');
         }
         // Get recommendations audio features
         const featuresRes = await axios(
-          "/api/audio-features?" +
+          '/api/audio-features?' +
             new URLSearchParams({
-              ids: recommendationIds.join(","),
+              ids: recommendationIds.join(','),
             })
         );
         setRecommendations(sortedRecommendations);
         setRecommendationFeatures(featuresRes.data.audio_features);
         // If user is connected
       } catch (err) {
-        console.log("Get recommendations");
+        console.log('Get recommendations');
         console.log(err.response.status, err.response.statusText);
-        setUserAuthHeaders("");
-        navigate("/");
+        setUserAuthHeaders('');
+        navigate('/');
       }
     };
     getRecommendations();
@@ -168,7 +168,7 @@ const Recommendations = ({
           )}
         </>
       ) : (
-        <Loader size="64" padding="64px" />
+        <Loading size="64" padding="64px" />
       )}
     </Wrapper>
   );
@@ -193,7 +193,8 @@ const LoadMore = styled.button`
   font-weight: bold;
   background-color: var(--color-dark-contrast);
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: var(--color-dark-light);
     color: var(--color-orange-accent);
   }

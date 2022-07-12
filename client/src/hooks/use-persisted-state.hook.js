@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const usePersistedState = (initial, key) => {
-  const [value, setValue] = useState(
-    () => JSON.parse(sessionStorage.getItem(key)) || initial
-  );
+  const persistedValue =
+    localStorage.getItem(key) || localStorage.getItem(key) === 0
+      ? () => JSON.parse(localStorage.getItem(key))
+      : initial;
+  const [value, setValue] = useState(persistedValue);
 
   useEffect(() => {
-    sessionStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, JSON.stringify(value));
   }, [value, key]);
 
   return [value, setValue];

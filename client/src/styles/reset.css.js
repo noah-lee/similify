@@ -1,7 +1,6 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
-
   /* CSS Reset */
 
   /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -26,7 +25,7 @@ export default createGlobalStyle`
     padding: 0;
     border: 0;
     font-size: 100%;
-    font: inherit;
+    /* font: inherit; */
     vertical-align: baseline;
     box-sizing: border-box;
   }
@@ -52,37 +51,5 @@ export default createGlobalStyle`
   table {
     border-collapse: collapse;
     border-spacing: 0;
-  }
-
-  /* Global Styles */
-
-  :root {
-    --color-orange-accent: #ffaf41;
-    --color-dark-main: #0b0b0b;
-    --color-dark-contrast: #121212;
-    --color-dark-light: #282828;
-  }
-
-  body {
-    /* font-family: 'Open Sans', sans-serif; */
-    font-family: 'Nunito', sans-serif;
-    background-color: var(--color-dark-main);
-    color: white;
-  }
-
-  #root {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  button {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
   }
 `;

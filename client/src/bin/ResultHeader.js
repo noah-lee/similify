@@ -1,9 +1,9 @@
 // Libraries
-import { useContext } from "react";
-import styled from "styled-components";
+import { useContext } from 'react';
+import styled from 'styled-components';
 
 // Components
-import { ResponsiveContext } from "../../contexts/ResponsiveContext";
+import { ResponsiveContext } from '../contexts/ResponsiveContext';
 
 const ResultHeader = () => {
   const { width, breakpointX } = useContext(ResponsiveContext);

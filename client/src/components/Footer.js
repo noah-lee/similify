@@ -1,32 +1,30 @@
 // Libraries
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { FiInfo, FiGithub } from "react-icons/fi";
+import styled from 'styled-components';
+import { FiGithub } from 'react-icons/fi';
 
 // Misc.
-import spotifyLogoGreen from "../assets/Spotify_Logo_RGB_Green.png";
+import spotifyLogoGreen from '../assets/Spotify_Logo_RGB_Green.png';
 
 const Footer = () => {
   return (
     <Wrapper className="footer">
-      <FooterContainer>
-        <FooterLinks>
-          {/* <StyledLink to="/about">
-            <FiInfo />
-            <p>About</p>
-          </StyledLink> */}
-          <StyledA href="https://github.com/noah-lee/similify" target="_blank">
+      <Container>
+        <Links>
+          <StyledLink
+            href="https://github.com/noah-lee/similify"
+            target="_blank"
+          >
             <FiGithub />
             <p>GitHub</p>
-          </StyledA>
-        </FooterLinks>
-        <FooterTextContainer>
-          <FooterText>Created by Noah Lee, powered by</FooterText>
-          <SpotifyA href="http://spotify.com/" target="_blank">
+          </StyledLink>
+        </Links>
+        <Notes>
+          <Text>Created by Noah Lee, powered by</Text>
+          <SpotifyLink href="http://spotify.com/" target="_blank">
             <img src={spotifyLogoGreen} width="70px" alt="Spotify logo" />
-          </SpotifyA>
-        </FooterTextContainer>
-      </FooterContainer>
+          </SpotifyLink>
+        </Notes>
+      </Container>
     </Wrapper>
   );
 };
@@ -35,7 +33,7 @@ const Wrapper = styled.footer`
   background-color: var(--color-dark-contrast);
 `;
 
-const FooterContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   max-width: 1280px;
   height: 96px;
@@ -49,7 +47,7 @@ const FooterContainer = styled.div`
   gap: 16px;
 `;
 
-const FooterLinks = styled.div`
+const Links = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,25 +56,7 @@ const FooterLinks = styled.div`
   font-weight: bold;
 `;
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-
-  display: flex;
-  align-items: center;
-  gap: 4px;
-
-  &:hover,
-  &:focus {
-    color: var(--color-orange-accent);
-  }
-
-  &:focus {
-    outline: auto var(--color-orange-accent);
-  }
-`;
-
-const StyledA = styled.a`
+const StyledLink = styled.a`
   text-decoration: none;
   color: inherit;
   cursor: pointer;
@@ -95,18 +75,18 @@ const StyledA = styled.a`
   }
 `;
 
-const FooterTextContainer = styled.div`
+const Notes = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
 `;
 
-const FooterText = styled.p`
+const Text = styled.p`
   color: gray;
-  font-size: 12px;
+  font-size: 14px;
 `;
 
-const SpotifyA = styled.a`
+const SpotifyLink = styled.a`
   display: flex;
   align-items: center;
   gap: 4px;

@@ -1,15 +1,18 @@
-// Libraries
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+// Packages
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-// Misc.
-import { ReactComponent as SimilifyLogo } from "../assets/similify_logo.svg";
+// Styled Components
+import { H1 } from '../styles/global.css';
 
-const Logo = () => {
+// Assets
+import { ReactComponent as Icon } from '../assets/similify_logo.svg';
+
+const Logo = ({ size }) => {
   return (
-    <StyledLink to="/" aria-label='Link back to homepage'>
-      <SimilifyLogo width="64" height="64" aria-label="Similify icon"/>
-      <Name aria-label="Website name">Similify</Name>
+    <StyledLink to="/">
+      <Icon width={size} height={size} aria-label="Similify icon" />
+      <StyledH1 size={size}>Similify</StyledH1>
     </StyledLink>
   );
 };
@@ -27,9 +30,8 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Name = styled.h1`
-  font-weight: bold;
-  font-size: 3.6rem;
+const StyledH1 = styled(H1)`
+  font-size: ${({ size }) => `${size}px`};
 `;
 
 export default Logo;

@@ -1,54 +1,54 @@
 const keyDict = {
-  0: "C",
-  1: "Db",
-  2: "D",
-  3: "Eb",
-  4: "E",
-  5: "F",
-  6: "F#",
-  7: "G",
-  8: "Ab",
-  9: "A",
-  10: "Bb",
-  11: "B",
+  0: 'C',
+  1: 'Db',
+  2: 'D',
+  3: 'Eb',
+  4: 'E',
+  5: 'F',
+  6: 'F#',
+  7: 'G',
+  8: 'Ab',
+  9: 'A',
+  10: 'Bb',
+  11: 'B',
 };
 
 const colorDict = {
-  0: "#36e7f4",
-  1: "#3688f4",
-  2: "#4336f4",
-  3: "#a236f4",
-  4: "#f436e7",
-  5: "#f43688",
-  6: "#f44336",
-  7: "#f4a236",
-  8: "#e7f436",
-  9: "#88f436",
-  10: "#36f443",
-  11: "#36f4a2",
+  0: '#36e7f4',
+  1: '#3688f4',
+  2: '#4336f4',
+  3: '#a236f4',
+  4: '#f436e7',
+  5: '#f43688',
+  6: '#f44336',
+  7: '#f4a236',
+  8: '#e7f436',
+  9: '#88f436',
+  10: '#36f443',
+  11: '#36f4a2',
 };
 
-const toLetterKey = (key, mode) => {
-  const resultKey = (key + 12) % 12;
-  return `${keyDict[resultKey]}${mode === 0 ? "min" : "maj"}`;
+export const convertToKey = (key, mode) => {
+  // const resultKey = (key + 12) % 12;
+  return `${keyDict[key]}${mode === 0 ? 'min' : 'maj'}`;
 };
 
-const toCamelotKey = (key, mode) => {
+export const convertToCamelot = (key, mode) => {
   const convertedKey = mode === 1 ? key : (key + 3) % 12;
-  const letter = mode === 1 ? "B" : "A";
+  const letter = mode === 1 ? 'B' : 'A';
   return convertedKey % 2 === 0
     ? `${(convertedKey + 8) % 12}${letter}`
     : `${(convertedKey + 2) % 12}${letter}`;
 };
 
-const toColor = (key, mode) => {
+export const convertToColor = (key, mode) => {
   const convertedKey = mode === 1 ? key : (key + 3) % 12;
   return colorDict[
     convertedKey % 2 === 0 ? (convertedKey + 8) % 12 : (convertedKey + 2) % 12
   ];
 };
 
-const toCamelotMatches = (key, mode) => {
+export const convertToCamelotMatches = (key, mode) => {
   const matches = [{ key: key, mode: mode }];
   matches.push({
     key: (key + 5) % 12,
@@ -66,7 +66,7 @@ const toCamelotMatches = (key, mode) => {
   return matches;
 };
 
-const toKeySubRanges = (key, mode, range) => {
+export const convertToKeyRanges = (key, mode, range) => {
   // Sub ranges if key range is ALL
   if (range >= 6) {
     return [
@@ -133,4 +133,12 @@ const toKeySubRanges = (key, mode, range) => {
   return result;
 };
 
-export { toLetterKey, toCamelotKey, toColor, toCamelotMatches, toKeySubRanges };
+export const convertToBpmRange = (bpm, range) => {
+  const minBpm = range === 20 ? 0 : +bpm.toFixed() - range - 0.5;
+  const maxBpm = range === 20 ? 300 : +bpm.toFixed() + range + 0.49;
+  return [minBpm, maxBpm];
+};
+
+export const isCamelotMatch = (key, mode, matches) => {
+  return matches.some((match) => match.key === key && match.mode === mode);
+};

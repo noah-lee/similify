@@ -1,12 +1,12 @@
 // Libraries
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components';
 
 // Misc
-import { ReactComponent as SimilifyLoader } from "../assets/similify_loader.svg";
+import { ReactComponent as SimilifyLoader } from '../assets/similify_loader.svg';
 
-const Loader = ({ size, padding }) => {
+const LoadingIcon = ({ size, padding }) => {
   return (
-    <Wrapper padding={padding} >
+    <Wrapper padding={padding}>
       <SimilifyLoader width={size} height={size} />
     </Wrapper>
   );
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${props => props.padding} 0;
+  padding: ${(props) => props.padding} 0;
 `;
 
-export default Loader;
+export default LoadingIcon;
