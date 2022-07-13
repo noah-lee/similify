@@ -19,7 +19,7 @@ const Homepage = () => {
         </Text>
       </div>
       <SearchBar />
-      <TopSearches />
+      {/* <TopSearches /> */}
     </Wrapper>
   );
 };

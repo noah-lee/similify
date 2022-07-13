@@ -1,5 +1,5 @@
 // Libraries
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 // Components
@@ -15,7 +15,7 @@ import Error from './pages/Error';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ResetCSS />
       <GlobalCSS />
       <Header />
@@ -27,7 +27,7 @@ function App() {
         </Routes>
       </Main>
       <Footer />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

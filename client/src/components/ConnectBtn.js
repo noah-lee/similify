@@ -64,7 +64,7 @@ const ConnectBtn = () => {
 
   // Set user Spotify auth headers
   useEffect(() => {
-    if (window.location.hash) {
+    if (window.location.hash.includes('access_token')) {
       const { access_token, expires_in } = getHashParams(window.location.hash);
       const headers = {
         headers: {

@@ -3,21 +3,25 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 // Server 🖥️
 const app = express();
 
 // MIDDLEWARE 🧑‍💼
 app.use(morgan('tiny'));
-app.use(helmet());
-const corsOptions = {
-  // origin: 'http://localhost:3000',
-  origin: true,
-  credentials: true,
-};
-app.use(cors(corsOptions));
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      'img-src': ["'self'", 'https://i.scdn.co'],
+    },
+  })
+);
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, '../', 'client', 'build')));
 
 // IMPORT HANDLERS ⬇️
 const {
@@ -57,13 +61,6 @@ app.put('/api/me/player/play', startPlayback);
 // MONGODB ENDPOINTS
 app.post('/api/db/top', addTopSearch);
 app.get('/api/db/top', getTopSearched);
-
-// if (process.nextTick.NODE_ENV === "production") {
-//   app.use(express.static('client/build'));
-//   app.get("*", (req, res)=>{
-//     req.sendFile(path.resolve(__dirname,"../client", "build", "index.html"))
-//   })
-// }
 
 // LISTEN 👂
 app.listen(process.env.PORT || 8000, () => console.log(`🌎 Listening on 8000`));
