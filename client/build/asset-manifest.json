@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.js": "/static/js/main.0b203c14.js",
+    "static/media/Spotify_Logo_RGB_Green.png": "/static/media/Spotify_Logo_RGB_Green.0c4ae91bae23217d39c9.png",
+    "static/media/Spotify_Icon_RGB_Green.png": "/static/media/Spotify_Icon_RGB_Green.cd66b8f63f6566194c7e.png",
+    "static/media/Spotify_Icon_RGB_White.png": "/static/media/Spotify_Icon_RGB_White.ecd5405176643e26f9f8.png",
+    "static/media/similify_logo.svg": "/static/media/similify_logo.e2dabfa13f567e1879748733a24d2cad.svg",
+    "index.html": "/index.html",
+    "static/media/similify_loader.svg": "/static/media/similify_loader.8720ab000d230d13ad5d66f5c177014b.svg",
+    "main.0b203c14.js.map": "/static/js/main.0b203c14.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.0b203c14.js"
+  ]
+}
